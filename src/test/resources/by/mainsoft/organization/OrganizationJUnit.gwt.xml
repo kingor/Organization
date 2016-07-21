@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module rename-to="Organization">
+  <!-- Inherit our applications main module.                      -->
+  <inherits name='by.mainsoft.organization.Organization' />
+
+  <!-- Specify the path to any remote services.                   -->
+  <servlet path="/Organization/greet" class="by.mainsoft.organization.server.GreetingServiceImpl" />
+
+</module>
