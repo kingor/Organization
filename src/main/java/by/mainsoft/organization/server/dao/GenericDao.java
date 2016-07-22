@@ -13,6 +13,6 @@ public interface GenericDao<T, PK extends Serializable> {
 
 	void delete(T persistentObject);
 
-	List<T> getAll(Class<T> classT, String sort, String orderType);
+	List<T> getAll(Class<T> classT);
 
 }
