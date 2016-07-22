@@ -5,20 +5,34 @@
 
 <web-app>
 
-  <!-- Servlets -->
-  <servlet>
-    <servlet-name>greetServlet</servlet-name>
-    <servlet-class>by.mainsoft.organization.server.GreetingServiceImpl</servlet-class>
-  </servlet>
+	<!-- Servlets -->
+	<!-- <servlet> -->
+	<!-- <servlet-name>greetServlet</servlet-name> -->
+	<!-- <servlet-class>by.mainsoft.organization.server.GreetingServiceImpl</servlet-class> -->
+	<!-- </servlet> -->
 
-  <servlet-mapping>
-    <servlet-name>greetServlet</servlet-name>
-    <url-pattern>/Organization/greet</url-pattern>
-  </servlet-mapping>
+	<!-- <servlet-mapping> -->
+	<!-- <servlet-name>greetServlet</servlet-name> -->
+	<!-- <url-pattern>/Organization/greet</url-pattern> -->
+	<!-- </servlet-mapping> -->
 
-  <!-- Default page to serve -->
-  <welcome-file-list>
-    <welcome-file>Organization.html</welcome-file>
-  </welcome-file-list>
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	<!-- Servlets -->
+	<servlet>
+		<servlet-name>springGwtRemoteServiceServlet</servlet-name>
+		<servlet-class>org.spring4gwt.server.SpringGwtRemoteServiceServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>springGwtRemoteServiceServlet</servlet-name>
+		<url-pattern>/organization/springGwtServices/*</url-pattern>
+	</servlet-mapping>
+
+	<!-- Default page to serve -->
+	<welcome-file-list>
+		<welcome-file>Organization.html</welcome-file>
+	</welcome-file-list>
 
 </web-app>
