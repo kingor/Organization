@@ -46,4 +46,9 @@ public class UserServiceImpl implements UserService {
 		return userDao.getAll(User.class);
 	}
 
+	@Override
+	public List<User> searchByString(String searchParameter) {
+		return userDao.searchByString(searchParameter);
+	}
+
 }

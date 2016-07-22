@@ -18,4 +18,6 @@ public interface UserService extends RemoteService {
 	void delete(User persistentObject);
 
 	public List<User> getAll();
+
+	public List<User> searchByString(String searchParameter);
 }

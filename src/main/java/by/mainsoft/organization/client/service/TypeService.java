@@ -19,4 +19,6 @@ public interface TypeService extends RemoteService {
 
 	public List<Type> getAll();
 
+	public List<Type> searchByString(String searchParameter);
+
 }

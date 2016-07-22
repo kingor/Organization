@@ -46,4 +46,10 @@ public class TypeServiceImpl implements TypeService {
 		return typeDao.getAll(Type.class);
 	}
 
+	@Override
+	@Transactional
+	public List<Type> searchByString(String searchParameter) {
+		return typeDao.searchByString(searchParameter);
+	}
+
 }
