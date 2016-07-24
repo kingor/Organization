@@ -5,17 +5,6 @@
 
 <web-app>
 
-	<!-- Servlets -->
-	<!-- <servlet> -->
-	<!-- <servlet-name>greetServlet</servlet-name> -->
-	<!-- <servlet-class>by.mainsoft.organization.server.GreetingServiceImpl</servlet-class> -->
-	<!-- </servlet> -->
-
-	<!-- <servlet-mapping> -->
-	<!-- <servlet-name>greetServlet</servlet-name> -->
-	<!-- <url-pattern>/Organization/greet</url-pattern> -->
-	<!-- </servlet-mapping> -->
-
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
