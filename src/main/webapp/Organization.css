@@ -9,7 +9,9 @@ h1 {
   margin: 40px 0px 70px;
   text-align: center;
 }
-
+.gwt-Button {
+	border-radius: 10px;  
+}
 .sendButton {
   display: block;
   font-size: 16pt;
