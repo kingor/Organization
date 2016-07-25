@@ -168,7 +168,7 @@
 				<!-- Plugin configuration. There are many available options, see gwt-maven-plugin 
 					documentation at codehaus.org -->
 				<configuration>
-					<runTarget>Organization.html</runTarget>
+					<runTarget>organization.html</runTarget>
 					<modules>
 						<module>by.mainsoft.organization.organization</module>
 					</modules>

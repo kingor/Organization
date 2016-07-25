@@ -4,12 +4,18 @@ import java.util.List;
 
 import by.mainsoft.organization.client.service.CompanyService;
 import by.mainsoft.organization.client.service.CompanyServiceAsync;
+import by.mainsoft.organization.client.service.TypeService;
+import by.mainsoft.organization.client.service.TypeServiceAsync;
 import by.mainsoft.organization.shared.FieldVerifier;
 import by.mainsoft.organization.shared.domain.Company;
+import by.mainsoft.organization.shared.domain.Type;
+import by.mainsoft.organization.shared.domain.User;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.KeyPressEvent;
+import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -21,11 +27,15 @@ import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.datepicker.client.DateBox;
 
 public class OrganizationTabView extends Composite {
 
 	private CompanyServiceAsync companyService = GWT.create(CompanyService.class);
+	private TypeServiceAsync typeService = GWT.create(TypeService.class);
 	private static OrganizationTabViewUiBinder uiBinder = GWT.create(OrganizationTabViewUiBinder.class);
+
+	private List<Company> companyAll;
 
 	@UiField
 	ListBox organizationList;
@@ -35,20 +45,6 @@ public class OrganizationTabView extends Composite {
 
 	public OrganizationTabView() {
 		initWidget(uiBinder.createAndBindUi(this));
-		organizationList.addItem("12345678912345678900");
-		organizationList.addItem("dfgdfg");
-		organizationList.addItem("12345678912345678900");
-		organizationList.addItem("dfgdfg");
-		organizationList.addItem("12345678912345678900");
-		organizationList.addItem("dfgdfg");
-		organizationList.addItem("12345678912345678900");
-		organizationList.addItem("dfgdfg");
-		organizationList.addItem("12345678912345678900");
-		organizationList.addItem("dfgdfg");
-		organizationList.addItem("12345678912345678900");
-		organizationList.addItem("dfgdfg");
-		organizationList.addItem("12345678912345678900");
-
 		refreshCompanyList();
 	}
 
@@ -77,6 +73,8 @@ public class OrganizationTabView extends Composite {
 	TextBox managerField;
 	@UiField
 	Button managerButton;
+	@UiField
+	DateBox dateField;
 
 	@UiField
 	Button saveButton;
@@ -92,6 +90,11 @@ public class OrganizationTabView extends Composite {
 			Window.alert("Поле название должно быть заполнено!");
 			return;
 		}
+	}
+
+	@UiHandler("organizationList")
+	void onOrganizationChange(ChangeEvent event) {
+		selectOrganization(organizationList.getSelectedIndex());
 	}
 
 	@UiHandler("employeeField")
@@ -118,8 +121,42 @@ public class OrganizationTabView extends Composite {
 
 	private void fillCompanyList(List<Company> companyList) {
 		organizationList.clear();
+		companyAll = companyList;
 		for (Company company : companyList) {
 			organizationList.addItem(company.getName());
 		}
+		if (companyList.size() > 0) {
+			organizationList.setSelectedIndex(0);
+			selectOrganization(0);
+		}
+	}
+
+	private void selectOrganization(int selectedRow) {
+		if (!companyAll.isEmpty()) {
+			Company company = companyAll.get(selectedRow);
+			nameField.setText(company.getName());
+			dataField.setText(company.getData());
+			addressField.setText(company.getAddress());
+			phoneField.setText(company.getPhone());
+			employeeField.setText("0");
+			infoField.setText(company.getInfo());
+
+			dateField.setValue(company.getDate());
+			DateTimeFormat dateFormat = DateTimeFormat.getFormat("dd/MM/yyyy");
+			dateField.setFormat(new DateBox.DefaultFormat(dateFormat));
+
+			Type type = company.getType();
+			if (!(type == null)) {
+				typeField.setText(type.getName());
+			} else
+				typeField.setText("");
+			User manager = company.getManager();
+			if (!(manager == null)) {
+				managerField.setText(manager.getShortName());
+			} else
+				managerField.setText("");
+
+		} else
+			Window.alert("Нет организаций в базе");
 	}
 }

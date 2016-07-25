@@ -53,7 +53,7 @@
 					<g:Label>управляющий</g:Label>
 					<g:TextBox ui:field="managerField"></g:TextBox>
 					<g:Button ui:field="managerButton">... </g:Button>
-					<dp:DateBox></dp:DateBox>
+					<dp:DateBox ui:field="dateField"></dp:DateBox>
 				</g:HorizontalPanel>
 				<g:Button ui:field="saveButton">сохранить</g:Button>
 			</g:VerticalPanel>

@@ -63,6 +63,22 @@ public class User implements Serializable {
 		this.patronymic = patronymic;
 	}
 
+	public String getShortName() {
+		StringBuilder builder = new StringBuilder();
+		if (!(surname == null))
+			builder.append(surname);
+		if (!(name == null)) {
+			builder.append(" ");
+			builder.append(name.substring(0, 1).toUpperCase());
+		}
+		if (!(patronymic == null)) {
+			builder.append(". ");
+			builder.append(patronymic.substring(0, 1).toUpperCase());
+			builder.append(".");
+		}
+		return builder.toString();
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
