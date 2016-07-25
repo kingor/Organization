@@ -3,8 +3,8 @@
 	<!-- Inherit the core Web Toolkit stuff. -->
 	<inherits name='com.google.gwt.user.User' />
 	<inherits name="com.google.gwt.logging.Logging" />
-	<inherits name="com.google.gwt.i18n.I18N"/>
-	<extend-property name="locale" values="ru"/>
+	<inherits name="com.google.gwt.i18n.I18N" />
+	<extend-property name="locale" values="ru" />
 	<set-property name="locale" value="ru" />
 	<set-property name="gwt.logging.enabled" value="TRUE" />
 	<!-- Inherit the default GWT style sheet. You can change -->
@@ -12,11 +12,13 @@
 	<!-- any one of the following lines. -->
 	<!-- <inherits name='com.google.gwt.user.theme.clean.Clean' /> -->
 	<!-- <inherits name='com.google.gwt.user.theme.standard.Standard' /> -->
-	<inherits name='com.google.gwt.user.theme.chrome.Chrome' />
+	<!-- <inherits name='com.google.gwt.user.theme.chrome.Chrome' /> -->
 	<!-- <inherits name='com.google.gwt.user.theme.dark.Dark'/> -->
 
 	<!-- Other module inherits -->
-
+	<inherits name='com.sencha.gxt.ui.GXT' />
+	<!-- GXT Stylesheet -->
+	<stylesheet src="reset.css" />
 	<!-- Specify the app entry point class. -->
 	<entry-point class='by.mainsoft.organization.client.Organization' />
 

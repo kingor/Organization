@@ -4,8 +4,8 @@ import by.mainsoft.organization.client.ui.OrganizationTabView;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.sencha.gxt.widget.core.client.TabPanel;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -24,7 +24,7 @@ public class Organization implements EntryPoint {
 		organizationPanel.add(organizationTabView);
 		tabPanel.add(organizationPanel, "Организации");
 		tabPanel.add(catalogPanel, "Справочники");
-		tabPanel.selectTab(0);
+		// tabPanel.selectTab(0);
 		RootPanel.get("organizationPanel").add(tabPanel);
 	}
 }
