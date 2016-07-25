@@ -35,7 +35,7 @@ public class GenericDaoImpl<T, PK extends Serializable> implements GenericDao<T,
 	@Override
 	public void update(T transientObject) {
 		Session session = sessionFactory.getCurrentSession();
-		session.update(transientObject);
+		session.saveOrUpdate(transientObject);
 	}
 
 	@Override

@@ -81,7 +81,9 @@ public class OrganizationTabView extends Composite {
 
 	@UiHandler("addButton")
 	void onAddClick(ClickEvent e) {
-		Window.alert("Hello!");
+		Company company = new Company();
+		companyAll.add(company);
+		organizationList.addItem("");
 	}
 
 	@UiHandler("saveButton")
@@ -90,6 +92,46 @@ public class OrganizationTabView extends Composite {
 			Window.alert("Поле название должно быть заполнено!");
 			return;
 		}
+
+		Company company = companyAll.get(organizationList.getSelectedIndex());
+		company.setName(nameField.getText());
+		company.setData(dataField.getText());
+		company.setAddress(addressField.getText());
+		company.setPhone(phoneField.getText());
+		// if(employeeField.getText())
+		company.setInfo(infoField.getText());
+		company.setDate(dateField.getValue());
+
+		companyService.create(company, new AsyncCallback<Long>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				Window.alert("create Async callback не работает!");
+				caught.printStackTrace();
+
+			}
+
+			@Override
+			public void onSuccess(Long result) {
+				refreshCompanyList();
+
+			}
+		});
+	}
+
+	@UiHandler("deleteButton")
+	void onDeleteClick(ClickEvent e) {
+		Company company = companyAll.get(organizationList.getSelectedIndex());
+		companyService.delete(company, new AsyncCallback<Void>() {
+			public void onFailure(Throwable caught) {
+				Window.alert("delete Async callback не работает!");
+				caught.printStackTrace();
+			}
+
+			public void onSuccess(Void result) {
+				organizationList.removeItem(organizationList.getSelectedIndex());
+			}
+		});
 	}
 
 	@UiHandler("organizationList")
@@ -138,7 +180,7 @@ public class OrganizationTabView extends Composite {
 			dataField.setText(company.getData());
 			addressField.setText(company.getAddress());
 			phoneField.setText(company.getPhone());
-			employeeField.setText("0");
+			employeeField.setText(String.valueOf(company.getEmployee()));
 			infoField.setText(company.getInfo());
 
 			dateField.setValue(company.getDate());
