@@ -4,6 +4,6 @@
   <inherits name='by.mainsoft.organization.Organization' />
 
   <!-- Specify the path to any remote services.                   -->
-  <servlet path="/Organization/greet" class="by.mainsoft.organization.server.GreetingServiceImpl" />
+<!--  <servlet path="/Organization/greet" class="by.mainsoft.organization.server.GreetingServiceImpl" />  -->
 
 </module>

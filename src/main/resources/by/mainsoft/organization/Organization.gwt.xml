@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module rename-to='Organization'>
+<module rename-to='organization'>
 	<!-- Inherit the core Web Toolkit stuff. -->
 	<inherits name='com.google.gwt.user.User' />
-
+	<inherits name="com.google.gwt.logging.Logging" />
+	<inherits name="com.google.gwt.i18n.I18N"/>
+	<extend-property name="locale" values="ru"/>
+	<set-property name="locale" value="ru" />
+	<set-property name="gwt.logging.enabled" value="TRUE" />
 	<!-- Inherit the default GWT style sheet. You can change -->
 	<!-- the theme of your GWT application by uncommenting -->
 	<!-- any one of the following lines. -->

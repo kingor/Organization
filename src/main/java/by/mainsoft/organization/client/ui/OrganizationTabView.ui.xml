@@ -21,41 +21,41 @@
 		</g:west>
 		<g:center>
 			<g:VerticalPanel height="300px">
-				<g:TextBox></g:TextBox>
+				<g:TextBox ui:field="nameField"></g:TextBox>
 				<g:HorizontalPanel>
 					<g:Label>сведения</g:Label>
-					<g:TextArea></g:TextArea>
+					<g:TextArea ui:field="dataField"></g:TextArea>
 					<g:VerticalPanel>
 						<g:HorizontalPanel>
 							<g:Label>адрес</g:Label>
-							<g:TextBox></g:TextBox>
+							<g:TextBox ui:field="addressField"></g:TextBox>
 						</g:HorizontalPanel>
 						<g:HorizontalPanel>
 							<g:Label>телефон</g:Label>
-							<g:TextBox></g:TextBox>
+							<g:TextBox  ui:field="phoneField"></g:TextBox>
 						</g:HorizontalPanel>
 					</g:VerticalPanel>
 				</g:HorizontalPanel>
 				<g:HorizontalPanel>
 					<g:Label>кол.сотр</g:Label>
-					<g:TextBox></g:TextBox>
+					<g:TextBox ui:field="employeeField"></g:TextBox>
 				</g:HorizontalPanel>
 				<g:HorizontalPanel>
 					<g:Label>доп. информация</g:Label>
-					<g:TextArea></g:TextArea>
+					<g:TextArea ui:field="infoField"></g:TextArea>
 				</g:HorizontalPanel>
 				<g:HorizontalPanel>
 					<g:Label>тип</g:Label>
-					<g:TextBox></g:TextBox>
-					<g:Button>...</g:Button>
+					<g:TextBox ui:field="typeField"></g:TextBox>
+					<g:Button ui:field="typeButton">...</g:Button>
 				</g:HorizontalPanel>
 				<g:HorizontalPanel>
 					<g:Label>управляющий</g:Label>
-					<g:TextBox></g:TextBox>
-					<g:Button>...</g:Button>
+					<g:TextBox ui:field="managerField"></g:TextBox>
+					<g:Button ui:field="managerButton">... </g:Button>
 					<dp:DateBox></dp:DateBox>
 				</g:HorizontalPanel>
-				<g:Button>сохранить</g:Button>
+				<g:Button ui:field="saveButton">сохранить</g:Button>
 			</g:VerticalPanel>
 		</g:center>
 	</g:DockLayoutPanel>

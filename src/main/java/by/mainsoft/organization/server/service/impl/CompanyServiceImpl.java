@@ -2,6 +2,7 @@ package by.mainsoft.organization.server.service.impl;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +16,8 @@ public class CompanyServiceImpl implements CompanyService {
 
 	@Autowired
 	CompanyDao companyDao;
+
+	private static final Logger logger = Logger.getLogger(CompanyService.class.getName());
 
 	@Override
 	@Transactional
@@ -43,6 +46,7 @@ public class CompanyServiceImpl implements CompanyService {
 	@Override
 	@Transactional
 	public List<Company> getAll() {
+		logger.info("SERVICE - caused getAll()");
 		return companyDao.getAll(Company.class);
 	}
 

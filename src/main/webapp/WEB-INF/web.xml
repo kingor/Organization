@@ -4,7 +4,14 @@
     "http://java.sun.com/dtd/web-app_2_3.dtd">
 
 <web-app>
-
+	<!-- location of log4j config file -->
+	<context-param>
+		<param-name>log4jConfigLocation</param-name>
+		<param-value>/WEB-INF/log4j.xml</param-value>
+	</context-param>
+	<listener>
+		<listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
+	</listener>
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
@@ -21,7 +28,7 @@
 
 	<!-- Default page to serve -->
 	<welcome-file-list>
-		<welcome-file>Organization.html</welcome-file>
+		<welcome-file>organization.html</welcome-file>
 	</welcome-file-list>
 
 </web-app>
