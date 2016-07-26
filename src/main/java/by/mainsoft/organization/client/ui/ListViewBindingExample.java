@@ -2,7 +2,11 @@ package by.mainsoft.organization.client.ui;
 
 import java.util.List;
 
-import by.mainsoft.organization.client.ui.ListViewBindingExample.StockExchange;
+import by.mainsoft.organization.client.service.CompanyService;
+import by.mainsoft.organization.client.service.CompanyServiceAsync;
+import by.mainsoft.organization.client.ui.ListViewBindingExample.CompanyExchange;
+import by.mainsoft.organization.shared.domain.Company;
+import by.mainsoft.organization.shared.domain.CompanyProperties;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.editor.client.Editor;
@@ -26,23 +30,25 @@ import com.sencha.gxt.widget.core.client.selection.SelectionChangedEvent.Selecti
  * Demonstrates using the ListStoreEditor, and some concept of building multiple editors. Note that as currently written, when a Stock object is saved, it will modify the StockExchange's instances, instead of cloning models before editing them.
  */
 
-public class ListViewBindingExample implements /* EntryPoint, */IsWidget, Editor<StockExchange> {
-	public static class StockExchange {
-		private List<Stock> stocks = TestData.getStocks();
+public class ListViewBindingExample implements /* EntryPoint, */IsWidget, Editor<CompanyExchange> {
+	private CompanyServiceAsync companyService = GWT.create(CompanyService.class);
 
-		public List<Stock> getStocks() {
+	public static class CompanyExchange {
+		private List<Company> stocks = TestData.getComps();
+
+		public List<Company> getStocks() {
 			return stocks;
 		}
 
-		public void setStocks(List<Stock> stocks) {
+		public void setStocks(List<Company> stocks) {
 			this.stocks = stocks;
 		}
 	}
 
-	interface ListDriver extends SimpleBeanEditorDriver<StockExchange, ListViewBindingExample> {
+	interface ListDriver extends SimpleBeanEditorDriver<CompanyExchange, ListViewBindingExample> {
 	}
 
-	interface StockDriver extends SimpleBeanEditorDriver<Stock, StockEditor> {
+	interface StockDriver extends SimpleBeanEditorDriver<Company, StockEditor> {
 	}
 
 	private ListDriver driver = GWT.create(ListDriver.class);
@@ -51,8 +57,8 @@ public class ListViewBindingExample implements /* EntryPoint, */IsWidget, Editor
 
 	private FramedPanel panel;
 
-	ListView<Stock, String> stockList;
-	ListStoreEditor<Stock> stocks;
+	ListView<Company, String> stockList;
+	ListStoreEditor<Company> stocks;
 
 	@Ignore
 	StockEditor stockEditor;
@@ -69,17 +75,17 @@ public class ListViewBindingExample implements /* EntryPoint, */IsWidget, Editor
 
 			VerticalLayoutContainer c = new VerticalLayoutContainer();
 
-			final StockProperties props = GWT.create(StockProperties.class);
+			final CompanyProperties props = GWT.create(CompanyProperties.class);
 
-			stockList = new ListView<Stock, String>(new ListStore<Stock>(props.key()), props.name());
+			stockList = new ListView<Company, String>(new ListStore<Company>(props.key()), props.name());
 			stockList.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 
-			stocks = new ListStoreEditor<Stock>(stockList.getStore());
+			stocks = new ListStoreEditor<Company>(stockList.getStore());
 
 			c.add(stockList, new VerticalLayoutData(1, 1));
-			stockList.getSelectionModel().addSelectionChangedHandler(new SelectionChangedHandler<Stock>() {
+			stockList.getSelectionModel().addSelectionChangedHandler(new SelectionChangedHandler<Company>() {
 				@Override
-				public void onSelectionChanged(SelectionChangedEvent<Stock> event) {
+				public void onSelectionChanged(SelectionChangedEvent<Company> event) {
 					if (event.getSelection().size() > 0) {
 						edit(event.getSelection().get(0));
 					} else {
@@ -105,7 +111,7 @@ public class ListViewBindingExample implements /* EntryPoint, */IsWidget, Editor
 			driver.initialize(this);
 		}
 
-		driver.edit(new StockExchange());
+		driver.edit(new CompanyExchange());
 		return panel;
 	}
 
@@ -113,13 +119,13 @@ public class ListViewBindingExample implements /* EntryPoint, */IsWidget, Editor
 	 * @Override public void onModuleLoad() { RootPanel.get().add(this); }
 	 */
 
-	protected void edit(Stock stock) {
+	protected void edit(Company stock) {
 		itemDriver.edit(stock);
 		stockEditor.setSaveEnabled(true);
 	}
 
 	protected void saveCurrentStock() {
-		Stock edited = itemDriver.flush();
+		Company edited = itemDriver.flush();
 		if (!itemDriver.hasErrors()) {
 			stockEditor.setSaveEnabled(false);
 
