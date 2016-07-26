@@ -129,7 +129,9 @@ public class OrganizationTabView extends Composite {
 			}
 
 			public void onSuccess(Void result) {
+				companyAll.remove(organizationList.getSelectedIndex());
 				organizationList.removeItem(organizationList.getSelectedIndex());
+				refreshCompanyList();
 			}
 		});
 	}

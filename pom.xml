@@ -62,7 +62,6 @@
 			<artifactId>gxt</artifactId>
 			<version>${gxt.version}</version>
 		</dependency>
-
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
