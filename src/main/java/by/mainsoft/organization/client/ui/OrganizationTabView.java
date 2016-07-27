@@ -23,6 +23,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.IntegerBox;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
@@ -62,7 +63,7 @@ public class OrganizationTabView extends Composite {
 	@UiField
 	TextBox phoneField;
 	@UiField
-	TextBox employeeField;
+	IntegerBox employeeField;
 	@UiField
 	TextArea infoField;
 	@UiField

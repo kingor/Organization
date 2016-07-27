@@ -44,7 +44,7 @@
 				</g:HorizontalPanel>
 				<g:HorizontalPanel>
 					<g:Label>кол.сотр</g:Label>
-					<g:TextBox ui:field="employeeField"></g:TextBox>
+					<g:IntegerBox ui:field="employeeField"></g:IntegerBox>
 				</g:HorizontalPanel>
 				<g:HorizontalPanel>
 					<g:Label>доп. информация</g:Label>

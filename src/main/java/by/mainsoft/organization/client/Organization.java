@@ -1,5 +1,6 @@
 package by.mainsoft.organization.client;
 
+import by.mainsoft.organization.client.ui.DirectoryTabView;
 import by.mainsoft.organization.client.ui.OrganizationTabView;
 
 import com.google.gwt.core.client.EntryPoint;
@@ -18,16 +19,17 @@ public class Organization implements EntryPoint {
 		PlainTabPanel tabPanel = new PlainTabPanel();
 
 		OrganizationTabView organizationTabView = new OrganizationTabView();
-		// ListViewBindingExample formExample = new ListViewBindingExample();
+		DirectoryTabView directoryTabView = new DirectoryTabView();
 
 		VerticalPanel organizationPanel = new VerticalPanel();
-		VerticalPanel catalogPanel = new VerticalPanel();
+		VerticalPanel directoryPanel = new VerticalPanel();
 
 		organizationPanel.add(organizationTabView);
+		directoryPanel.add(directoryTabView);
 		tabPanel.setWidth(800);
 		tabPanel.setHeight(500);
 		tabPanel.add(organizationPanel, "Организации");
-		tabPanel.add(catalogPanel, "Справочники");
+		tabPanel.add(directoryPanel, "Справочники");
 		// tabPanel.selectTab(0);
 		RootPanel.get("organizationPanel").add(tabPanel);
 	}
