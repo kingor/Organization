@@ -52,6 +52,7 @@ public class DirectoryTabView extends Composite {
 	public DirectoryTabView() {
 		initWidget(uiBinder.createAndBindUi(this));
 		initList();
+		chooseSelectedDirectory(0);
 	}
 
 	private void initList() {
@@ -141,7 +142,7 @@ public class DirectoryTabView extends Composite {
 	void onDeleteRow(ClickEvent event) {
 
 		if (directoryList.getSelectedIndex() == 1) {
-			if (selectedTableRow > 0) {
+			if (selectedTableRow > -1) {
 				User user = userAll.get(selectedTableRow);
 				Window.alert(user.getName());
 				userService.delete(user, new AsyncCallback<Void>() {
