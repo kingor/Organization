@@ -150,7 +150,7 @@ public class OrganizationTabView extends Composite {
 		}
 	}
 
-	void refreshCompanyList() {
+	public void refreshCompanyList() {
 		companyService.getAll(new AsyncCallback<List<Company>>() {
 			public void onFailure(Throwable caught) {
 				Window.alert("refresh Async callback не работает!");

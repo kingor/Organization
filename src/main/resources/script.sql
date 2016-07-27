@@ -31,7 +31,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'Иванов','Семен','Петрович'),(2,'Иван','Владимирович','Петров'),(3,'Александр','Семенович','Семенов');
+INSERT INTO `user` VALUES (1,'Семен','Петрович','Иванов'),(2,'Иван','Владимирович','Петров'),(3,'Александр','Семенович','Семенов');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 --

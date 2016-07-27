@@ -142,7 +142,7 @@ public class DirectoryTabView extends Composite {
 
 		if (directoryList.getSelectedIndex() == 1) {
 			if (selectedTableRow > 0) {
-				User user = userAll.get(selectedTableRow - 1);
+				User user = userAll.get(selectedTableRow);
 				Window.alert(user.getName());
 				userService.delete(user, new AsyncCallback<Void>() {
 					public void onFailure(Throwable caught) {
