@@ -11,13 +11,16 @@ import by.mainsoft.organization.shared.domain.User;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.HTMLTable.Cell;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -35,6 +38,16 @@ public class DirectoryTabView extends Composite {
 
 	@UiField
 	FlexTable flexTable;
+
+	@UiField
+	Button addButton;
+
+	@UiField
+	Button deleteButton;
+
+	private List<User> userAll;
+	private List<Type> typeAll;
+	private int selectedTableRow = -1;
 
 	public DirectoryTabView() {
 		initWidget(uiBinder.createAndBindUi(this));
@@ -91,6 +104,7 @@ public class DirectoryTabView extends Composite {
 				@Override
 				public void onSuccess(List<Type> typeList) {
 					setTypeContext(typeList);
+					typeAll = typeList;
 				}
 			});
 		} else if (selectedRow == 1) {
@@ -102,6 +116,7 @@ public class DirectoryTabView extends Composite {
 				@Override
 				public void onSuccess(List<User> userList) {
 					setUserContext(userList);
+					userAll = userList;
 				}
 			});
 		}
@@ -110,6 +125,70 @@ public class DirectoryTabView extends Composite {
 	@UiHandler("directoryList")
 	void onOrganizationChange(ChangeEvent event) {
 		chooseSelectedDirectory(directoryList.getSelectedIndex());
+	}
+
+	@UiHandler("flexTable")
+	void onTableClicked(ClickEvent event) {
+		// Select the row that was clicked (-1 to account for header row).
+		Cell cell = flexTable.getCellForEvent(event);
+		if (cell != null) {
+			int row = cell.getRowIndex() - 1;
+			selectRow(row);
+		}
+	}
+
+	@UiHandler("deleteButton")
+	void onDeleteRow(ClickEvent event) {
+
+		if (directoryList.getSelectedIndex() == 1) {
+			if (selectedTableRow > 0) {
+				User user = userAll.get(selectedTableRow - 1);
+				Window.alert(user.getName());
+				userService.delete(user, new AsyncCallback<Void>() {
+					public void onFailure(Throwable caught) {
+						Window.alert("delete Async callback не работает!");
+						caught.printStackTrace();
+					}
+
+					public void onSuccess(Void result) {
+						userAll.remove(selectedTableRow - 1);
+						chooseSelectedDirectory(1);
+					}
+				});
+			} else {
+				Window.alert("don`t selected table" + selectedTableRow);
+			}
+		} else {
+			Window.alert("don`t selected directoryList");
+		}
+
+	}
+
+	private void selectRow(int row) {
+		// When a row (other than the first one, which is used as a header) is
+		// selected, display its associated MailItem.
+		User item = userAll.get(row);
+		if (item == null) {
+			return;
+		}
+
+		selectedTableRow = row;
+		Window.alert(item.getName());
+		styleRow(selectedTableRow, false);
+		styleRow(row, true);
+		flexTable.getRowFormatter().setStyleName(row, "selectedRow");
+	}
+
+	private void styleRow(int row, boolean selected) {
+		if (row != -1) {
+			String style = "selectedRow";
+
+			if (selected) {
+				flexTable.getRowFormatter().setStyleName(row, style);
+			} else {
+				flexTable.getRowFormatter().removeStyleName(row, style);
+			}
+		}
 	}
 
 }

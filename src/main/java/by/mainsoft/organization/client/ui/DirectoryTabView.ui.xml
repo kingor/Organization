@@ -5,7 +5,14 @@
 	xmlns:form="urn:import:com.sencha.gxt.widget.core.client.form"
 	xmlns:button="urn:import:com.sencha.gxt.widget.core.client.button">
 	<ui:style>
-	
+		.selectedRow {
+			background: #adcce7;
+		}
+		
+		.selectedRow td {
+			border-top: 1px solid #88a4d6;
+			border-bottom: 1px solid #7b97d0;
+		}
 	</ui:style>
 	<g:DockLayoutPanel unit="EM" width="800px" height="400px">
 		<g:west size="15">
@@ -23,7 +30,7 @@
 					<g:Button ui:field="deleteButton">удалить</g:Button>
 				</g:HorizontalPanel>
 				<g:VerticalPanel>
-				<g:FlexTable borderWidth="1" ui:field="flexTable" />
+					<g:FlexTable borderWidth="1" ui:field="flexTable" />
 				</g:VerticalPanel>
 			</g:VerticalPanel>
 		</g:center>
