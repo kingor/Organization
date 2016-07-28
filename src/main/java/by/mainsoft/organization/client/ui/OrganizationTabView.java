@@ -6,6 +6,8 @@ import by.mainsoft.organization.client.service.CompanyService;
 import by.mainsoft.organization.client.service.CompanyServiceAsync;
 import by.mainsoft.organization.client.service.TypeService;
 import by.mainsoft.organization.client.service.TypeServiceAsync;
+import by.mainsoft.organization.client.service.UserService;
+import by.mainsoft.organization.client.service.UserServiceAsync;
 import by.mainsoft.organization.shared.FieldVerifier;
 import by.mainsoft.organization.shared.domain.Company;
 import by.mainsoft.organization.shared.domain.Type;
@@ -34,26 +36,19 @@ public class OrganizationTabView extends Composite {
 
 	private CompanyServiceAsync companyService = GWT.create(CompanyService.class);
 	private TypeServiceAsync typeService = GWT.create(TypeService.class);
+	private UserServiceAsync userService = GWT.create(UserService.class);
 	private static OrganizationTabViewUiBinder uiBinder = GWT.create(OrganizationTabViewUiBinder.class);
 
 	private List<Company> companyAll;
+	private List<Type> typeAll;
+	private List<User> userAll;
 
 	@UiField
 	ListBox organizationList;
-
-	interface OrganizationTabViewUiBinder extends UiBinder<Widget, OrganizationTabView> {
-	}
-
-	public OrganizationTabView() {
-		initWidget(uiBinder.createAndBindUi(this));
-		refreshCompanyList();
-	}
-
 	@UiField
 	Button addButton;
 	@UiField
 	Button deleteButton;
-
 	@UiField
 	TextBox nameField;
 	@UiField
@@ -76,9 +71,16 @@ public class OrganizationTabView extends Composite {
 	Button managerButton;
 	@UiField
 	DateBox dateField;
-
 	@UiField
 	Button saveButton;
+
+	interface OrganizationTabViewUiBinder extends UiBinder<Widget, OrganizationTabView> {
+	}
+
+	public OrganizationTabView() {
+		initWidget(uiBinder.createAndBindUi(this));
+		refreshCompanyList();
+	}
 
 	@UiHandler("addButton")
 	void onAddClick(ClickEvent e) {
@@ -89,8 +91,8 @@ public class OrganizationTabView extends Composite {
 
 	@UiHandler("saveButton")
 	void onSaveClick(ClickEvent e) {
-		if (!FieldVerifier.isValidName(nameField.getText())) {
-			Window.alert("Поле название должно быть заполнено!");
+		if (!FieldVerifier.isValidName(nameField.getText()) || !FieldVerifier.isValidName(employeeField.getText())) {
+			Window.alert("Поля название и количество сотрудников должны быть заполнены!");
 			return;
 		}
 
@@ -151,6 +153,22 @@ public class OrganizationTabView extends Composite {
 		}
 	}
 
+	@UiHandler("typeButton")
+	void onTypeButtonClick(ClickEvent e) {
+		refreshTypeList();
+		Company company = companyAll.get(organizationList.getSelectedIndex());
+		company.setType(typeAll.get(0));
+		typeField.setText(company.getType().getName());
+	}
+
+	@UiHandler("managerButton")
+	void onManagerButtonClick(ClickEvent e) {
+		refreshUserList();
+		Company company = companyAll.get(organizationList.getSelectedIndex());
+		company.setManager(userAll.get(0));
+		managerField.setText(company.getManager().getShortName());
+	}
+
 	public void refreshCompanyList() {
 		companyService.getAll(new AsyncCallback<List<Company>>() {
 			public void onFailure(Throwable caught) {
@@ -159,10 +177,61 @@ public class OrganizationTabView extends Composite {
 			}
 
 			public void onSuccess(List<Company> companyList) {
-				// logger.info("Async callback is working");
 				fillCompanyList(companyList);
 			}
 		});
+	}
+
+	public void refreshTypeList() {
+		typeService.searchByString("Прода", new AsyncCallback<List<Type>>() {
+			public void onFailure(Throwable caught) {
+				Window.alert("refresh Async callback не работает!");
+				caught.printStackTrace();
+			}
+
+			public void onSuccess(List<Type> typeList) {
+				fillTypeList(typeList);
+			}
+		});
+	}
+
+	public void refreshUserList() {
+		String searchConvonions = "смиР";
+		userService.searchByString(searchConvonions, new AsyncCallback<List<User>>() {
+			public void onFailure(Throwable caught) {
+				Window.alert("refresh Async callback не работает!");
+				caught.printStackTrace();
+			}
+
+			public void onSuccess(List<User> userList) {
+				fillUserList(userList);
+				Window.alert(userList.toString());
+			}
+		});
+	}
+
+	private void fillTypeList(List<Type> typeList) {
+		// organizationList.clear();
+		typeAll = typeList;
+		// for (Type type : typeAll) {
+		// organizationList.addItem(type.getName());
+		// }
+		// if (typeList.size() > 0) {
+		// organizationList.setSelectedIndex(0);
+		// selectOrganization(0);
+		// }
+	}
+
+	private void fillUserList(List<User> userList) {
+		// organizationList.clear();
+		userAll = userList;
+		// for (Type type : typeAll) {
+		// organizationList.addItem(type.getName());
+		// }
+		// if (typeList.size() > 0) {
+		// organizationList.setSelectedIndex(0);
+		// selectOrganization(0);
+		// }
 	}
 
 	private void fillCompanyList(List<Company> companyList) {

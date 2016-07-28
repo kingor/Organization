@@ -22,24 +22,28 @@ public class CompanyServiceImpl implements CompanyService {
 	@Override
 	@Transactional
 	public Long create(Company newInstance) {
+		logger.info("SERVICE - caused create()");
 		return companyDao.create(newInstance);
 	}
 
 	@Override
 	@Transactional
 	public Company read(Long id) {
+		logger.info("SERVICE - caused read()");
 		return companyDao.read(Company.class, id);
 	}
 
 	@Override
 	@Transactional
 	public void update(Company transientObject) {
+		logger.info("SERVICE - caused update()");
 		companyDao.update(transientObject);
 	}
 
 	@Override
 	@Transactional
 	public void delete(Company persistentObject) {
+		logger.info("SERVICE - caused delete()");
 		companyDao.delete(persistentObject);
 	}
 
