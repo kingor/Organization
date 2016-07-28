@@ -165,6 +165,45 @@ public class DirectoryTabView extends Composite {
 
 	}
 
+	@UiHandler("addButton")
+	void onAddRow(ClickEvent event) {
+
+		if (directoryList.getSelectedIndex() == 1) {
+			User user = new User();
+			user.setSurname("uiop");
+			user.setName("rtyrt");
+			user.setPatronymic("wer");
+			Window.alert(user.getName());
+			userService.create(user, new AsyncCallback<Long>() {
+				public void onFailure(Throwable caught) {
+					Window.alert("add Async callback не работает!");
+					caught.printStackTrace();
+				}
+
+				public void onSuccess(Long result) {
+					chooseSelectedDirectory(1);
+				}
+			});
+		} else if (directoryList.getSelectedIndex() == 0) {
+			Type type = new Type();
+			type.setName("rtyrt");
+			Window.alert(type.getName());
+			typeService.create(type, new AsyncCallback<Long>() {
+				public void onFailure(Throwable caught) {
+					Window.alert("add Async callback не работает!");
+					caught.printStackTrace();
+				}
+
+				public void onSuccess(Long result) {
+					chooseSelectedDirectory(0);
+				}
+			});
+		} else {
+			Window.alert("don`t selected directoryList");
+		}
+
+	}
+
 	private void selectRow(int row) {
 		// When a row (other than the first one, which is used as a header) is
 		// selected, display its associated MailItem.

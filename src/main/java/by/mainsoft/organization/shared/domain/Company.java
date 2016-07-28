@@ -24,7 +24,8 @@ public class Company implements Serializable {
 	private String data;
 	private String address;
 	private String phone;
-	private Integer employee;
+
+	private Integer employee = 0;
 	private String info;
 
 	@ManyToOne

@@ -100,6 +100,7 @@ public class OrganizationTabView extends Composite {
 		company.setAddress(addressField.getText());
 		company.setPhone(phoneField.getText());
 		// if(employeeField.getText())
+		company.setEmployee(employeeField.getValue());
 		company.setInfo(infoField.getText());
 		company.setDate(dateField.getValue());
 
