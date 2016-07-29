@@ -1,12 +1,15 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-	xmlns:g="urn:import:com.google.gwt.user.client.ui" 
-	xmlns:dp="urn:import:com.google.gwt.user.datepicker.client"	>
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:dp="urn:import:com.google.gwt.user.datepicker.client"
+	xmlns:gxt="urn:import:com.sencha.gxt.widget.core.client"
+	xmlns:container="urn:import:com.sencha.gxt.widget.core.client.container"
+	xmlns:button="urn:import:com.sencha.gxt.widget.core.client.button">
 	<ui:style>
 	.important {
 		font-weight: bold;
 	}
 	</ui:style>
+
 	<g:DockLayoutPanel unit="EM" width="800px" height="400px">
 		<g:west size="15">
 			<g:DecoratorPanel>
@@ -33,7 +36,7 @@
 						</g:HorizontalPanel>
 						<g:HorizontalPanel>
 							<g:Label>телефон</g:Label>
-							<g:TextBox  ui:field="phoneField"></g:TextBox>
+							<g:TextBox ui:field="phoneField"></g:TextBox>
 						</g:HorizontalPanel>
 					</g:VerticalPanel>
 				</g:HorizontalPanel>

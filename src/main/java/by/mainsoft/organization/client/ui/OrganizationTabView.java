@@ -274,4 +274,5 @@ public class OrganizationTabView extends Composite {
 		} else
 			Window.alert("Нет организаций в базе");
 	}
+
 }
