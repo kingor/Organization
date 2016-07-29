@@ -10,8 +10,6 @@ import by.mainsoft.organization.shared.domain.CompanyProperties;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.editor.client.Editor;
 import com.google.gwt.editor.client.SimpleBeanEditorDriver;
-import com.google.gwt.event.logical.shared.SelectionEvent;
-import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -19,9 +17,10 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.sencha.gxt.cell.core.client.form.ComboBoxCell.TriggerAction;
+import com.sencha.gxt.core.client.Style.SelectionMode;
 import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.widget.core.client.FramedPanel;
+import com.sencha.gxt.widget.core.client.ListView;
 import com.sencha.gxt.widget.core.client.box.MessageBox;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.CssFloatLayoutContainer;
@@ -29,12 +28,13 @@ import com.sencha.gxt.widget.core.client.container.CssFloatLayoutContainer.CssFl
 import com.sencha.gxt.widget.core.client.container.MarginData;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.event.SelectEvent.SelectHandler;
-import com.sencha.gxt.widget.core.client.form.ComboBox;
 import com.sencha.gxt.widget.core.client.form.FieldLabel;
 import com.sencha.gxt.widget.core.client.form.FormPanelHelper;
 import com.sencha.gxt.widget.core.client.form.IntegerField;
 import com.sencha.gxt.widget.core.client.form.TextField;
 import com.sencha.gxt.widget.core.client.form.validator.MinNumberValidator;
+import com.sencha.gxt.widget.core.client.selection.SelectionChangedEvent;
+import com.sencha.gxt.widget.core.client.selection.SelectionChangedEvent.SelectionChangedHandler;
 
 public class CompanyBinding implements IsWidget, Editor<Company> {
 
@@ -45,7 +45,7 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 
 	private FramedPanel panel;
 	private Company company;
-	private ComboBox<Company> nameCombo;
+	private ListView<Company, String> companyListView;
 
 	// editor fields
 	TextField address;
@@ -82,7 +82,7 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 			// hp.setCellWidth(updateDisplay(), "200");
 
 			driver.initialize(this);
-			nameCombo.setValue(company);
+			// nameCombo.setValue(company);
 			driver.edit(company);
 		}
 
@@ -91,33 +91,62 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 
 	private Widget createEditor() {
 		// ContentPanel panel = new ContentPanel();
+		HorizontalPanel buttonPanel = new HorizontalPanel();
+		VerticalPanel listPanel = new VerticalPanel();
+		HorizontalPanel horPanel = new HorizontalPanel();
 		VerticalPanel panel = new VerticalPanel();
+		VerticalPanel vartPan = new VerticalPanel();
 		// panel.setWidth(400);
 		// panel.setBodyStyle("padding: 5px;");
 		// panel.setHeaderVisible(false);
 
 		CssFloatLayoutContainer outer = new CssFloatLayoutContainer();
 
-		nameCombo = new ComboBox<Company>(companyStore, props.nameLabel());
-		nameCombo.setForceSelection(true);
-		nameCombo.setTypeAhead(true);
-		nameCombo.setName("company");
-		nameCombo.setTriggerAction(TriggerAction.ALL);
-		nameCombo.setEditable(false);
+		companyListView = new ListView<Company, String>(companyStore, props.name());// new ComboBox<Company>(companyStore, props.nameLabel());
+		companyListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 
-		nameCombo.addSelectionHandler(new SelectionHandler<Company>() {
-
+		companyListView.getSelectionModel().addSelectionChangedHandler(new SelectionChangedHandler<Company>() {
 			@Override
-			public void onSelection(SelectionEvent<Company> event) {
-				address.clearInvalid();
+			public void onSelectionChanged(SelectionChangedEvent<Company> event) {
+				if (event.getSelection().size() > 0) {
+					// edit(event.getSelection().get(0));
+					address.clearInvalid();
 
-				company = event.getSelectedItem();
-				driver.edit(company);
-				// updateDisplay();
+					company = event.getSelection().get(0);
+					driver.edit(company);
+				} else {
+					// stockEditor.setSaveEnabled(false);
+				}
 			}
 		});
 
-		outer.add(new FieldLabel(nameCombo, "Select Company"), new CssFloatData(1));
+		TextButton addButton = new TextButton("Добавить");
+		addButton.addSelectHandler(new SelectHandler() {
+
+			@Override
+			public void onSelect(SelectEvent event) {
+				companyStore.add(new Company());
+				companyListView.getSelectionModel().select(companyListView.getItemCount() - 1, true);
+			}
+		});
+
+		TextButton deleteButton = new TextButton("Удалить");
+		deleteButton.addSelectHandler(new SelectHandler() {
+
+			@Override
+			public void onSelect(SelectEvent event) {
+				deleteCompany();
+			}
+		});
+
+		buttonPanel.add(addButton);
+		buttonPanel.add(deleteButton);
+		listPanel.add(buttonPanel);
+
+		// outer.add(new FieldLabel(nameCombo, "Select Company"), new CssFloatData(1));
+		listPanel.add(companyListView);
+
+		horPanel.add(listPanel);
 
 		final CssFloatLayoutContainer inner = new CssFloatLayoutContainer();
 
@@ -151,7 +180,7 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 			}
 		});
 
-		panel.add(reset);// addButton(reset);
+		vartPan.add(reset);// addButton(reset);
 
 		TextButton save = new TextButton("Сохранить");
 		save.addSelectHandler(new SelectHandler() {
@@ -168,9 +197,11 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 				refreshCompanyList();
 			}
 		});
-		panel.add(save);// addButton(save);
+		vartPan.add(save);// addButton(save);
 
-		panel.add(outer);
+		vartPan.add(outer);
+		horPanel.add(vartPan);
+		panel.add(horPanel);
 		return panel;
 	}
 
@@ -182,15 +213,16 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 			}
 
 			public void onSuccess(List<Company> companyList) {
+				companyStore.clear();
 				companyStore.addAll(companyList);
 				company = companyStore.get(0);
-				nameCombo.clear();
+				companyListView.refresh();
 			}
 		});
 	}
 
 	void updateCompany(Company company) {
-		companyService.create(company, new AsyncCallback<Long>() {
+		companyService.update(company, new AsyncCallback<Void>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -200,14 +232,26 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 			}
 
 			@Override
-			public void onSuccess(Long result) {
+			public void onSuccess(Void result) {
 				refreshCompanyList();
-
 			}
 		});
 	}
 
 	private void fillCompanyList(List<Company> companyList) {
 
+	}
+
+	void deleteCompany() {
+		companyService.delete(company, new AsyncCallback<Void>() {
+			public void onFailure(Throwable caught) {
+				Window.alert("delete Async callback не работает!");
+				caught.printStackTrace();
+			}
+
+			public void onSuccess(Void result) {
+				refreshCompanyList();
+			}
+		});
 	}
 }
