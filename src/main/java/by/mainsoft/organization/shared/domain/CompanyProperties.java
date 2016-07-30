@@ -1,5 +1,7 @@
 package by.mainsoft.organization.shared.domain;
 
+import java.util.Date;
+
 import com.google.gwt.editor.client.Editor.Path;
 import com.sencha.gxt.core.client.ValueProvider;
 import com.sencha.gxt.data.shared.LabelProvider;
@@ -20,5 +22,11 @@ public interface CompanyProperties extends PropertyAccess<Company> {
 	ValueProvider<Company, String> data();
 
 	ValueProvider<Company, Integer> employee();
+
+	ValueProvider<Company, String> phone();
+
+	ValueProvider<Company, String> info();
+
+	ValueProvider<Company, Date> date();
 
 }
