@@ -2,6 +2,7 @@ package by.mainsoft.organization.client;
 
 import by.mainsoft.organization.client.ui.ButtonAlignExample;
 import by.mainsoft.organization.client.ui.CompanyBinding;
+import by.mainsoft.organization.client.ui.DirectoryBinding;
 import by.mainsoft.organization.client.ui.DirectoryTabView;
 import by.mainsoft.organization.client.ui.OrganizationTabView;
 
@@ -49,7 +50,8 @@ public class Organization implements IsWidget, EntryPoint {
 			tabPanel.setHeight(500);
 			tabPanel.add(organizationPanel, "Организации");
 			tabPanel.add(directoryPanel, "Справочники");
-			tabPanel.add(new CompanyBinding(), "Example");
+			tabPanel.add(new CompanyBinding(), "Организации");
+			tabPanel.add(new DirectoryBinding(), "Справочники");
 
 			tabPanel.addSelectionHandler(new SelectionHandler<Widget>() {
 

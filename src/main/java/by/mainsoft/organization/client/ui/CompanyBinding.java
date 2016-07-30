@@ -11,7 +11,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.editor.client.Editor;
 import com.google.gwt.editor.client.SimpleBeanEditorDriver;
 import com.google.gwt.i18n.client.NumberFormat;
-import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -21,8 +20,6 @@ import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.core.client.Style.SelectionMode;
 import com.sencha.gxt.core.client.util.Margins;
 import com.sencha.gxt.data.shared.ListStore;
-import com.sencha.gxt.theme.base.client.field.FieldLabelDefaultAppearance.FieldLabelResources;
-import com.sencha.gxt.theme.base.client.field.FieldLabelDefaultAppearance.Style;
 import com.sencha.gxt.widget.core.client.Dialog;
 import com.sencha.gxt.widget.core.client.Dialog.PredefinedButton;
 import com.sencha.gxt.widget.core.client.FramedPanel;
@@ -50,15 +47,6 @@ import com.sencha.gxt.widget.core.client.selection.SelectionChangedEvent.Selecti
 public class CompanyBinding implements IsWidget, Editor<Company> {
 
 	interface CompanyDriver extends SimpleBeanEditorDriver<Company, CompanyBinding> {
-	}
-
-	public interface RtJstFieldLabelResources extends FieldLabelResources, ClientBundle {
-
-		@Source({ "com/sencha/gxt/theme/base/client/field/FieldLabel.css", "RightJustifiedFieldLabel.css" })
-		MyStyle css();
-	}
-
-	public interface MyStyle extends Style {
 	}
 
 	private CompanyServiceAsync companyService = GWT.create(CompanyService.class);
@@ -202,7 +190,6 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 		employee.setAllowNegative(false);
 		employee.addValidator(new MinNumberValidator<Integer>(0));
 		FieldLabel emplFieldLabel = new FieldLabel(employee, "кол. сотрудников");
-		emplFieldLabel.setWidth(200);
 		emplFieldLabel.setLabelSeparator("");
 		inner.add(emplFieldLabel, new CssFloatData(0.35, new Margins(10, 300, 0, 0)));
 
