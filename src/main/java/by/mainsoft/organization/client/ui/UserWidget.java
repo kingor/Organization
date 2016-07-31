@@ -3,10 +3,10 @@ package by.mainsoft.organization.client.ui;
 import java.util.ArrayList;
 import java.util.List;
 
-import by.mainsoft.organization.client.service.TypeService;
-import by.mainsoft.organization.client.service.TypeServiceAsync;
-import by.mainsoft.organization.shared.domain.Type;
-import by.mainsoft.organization.shared.domain.TypeProperties;
+import by.mainsoft.organization.client.service.UserService;
+import by.mainsoft.organization.client.service.UserServiceAsync;
+import by.mainsoft.organization.shared.domain.User;
+import by.mainsoft.organization.shared.domain.UserProperties;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
@@ -40,20 +40,22 @@ import com.sencha.gxt.widget.core.client.info.Info;
 import com.sencha.gxt.widget.core.client.selection.SelectionChangedEvent;
 import com.sencha.gxt.widget.core.client.selection.SelectionChangedEvent.SelectionChangedHandler;
 
-public class TypeWidget implements IsWidget, Editor<Type> {
+public class UserWidget implements IsWidget, Editor<User> {
 
-	interface TypeDriver extends SimpleBeanEditorDriver<Type, TypeWidget> {
+	interface UserDriver extends SimpleBeanEditorDriver<User, UserWidget> {
 	}
 
-	TypeServiceAsync typeService = GWT.create(TypeService.class);
-	private ListStore<Type> typeStore;
-	private TypeDriver driver = GWT.create(TypeDriver.class);
-	private TypeProperties props;
-	private Type type;
-	private Grid<Type> grid;
-	private Window typeWindow;
+	UserServiceAsync userService = GWT.create(UserService.class);
+	private ListStore<User> userStore;
+	private UserDriver driver = GWT.create(UserDriver.class);
+	private UserProperties props;
+	private User user;
+	private Grid<User> grid;
+	private Window userWindow;
 	// editor fields
+	TextField surname;
 	TextField name;
+	TextField patronymic;
 
 	private VerticalLayoutContainer container;
 
@@ -61,19 +63,14 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 	public Widget asWidget() {
 		if (container == null) {
 			container = new VerticalLayoutContainer();
-			// panel.setHeadingText("Model with List Property");
-			// panel.setBodyBorder(false);
-			// panel.setWidth(400);
-			// panel.addStyleName("margin-10");
-			props = GWT.create(TypeProperties.class);
-			typeStore = new ListStore<Type>(props.key());
+			props = GWT.create(UserProperties.class);
+			userStore = new ListStore<User>(props.key());
 			refreshTypeList();
 
 			container.add(createEditor());
 
 			driver.initialize(this);
-			// nameCombo.setValue(company);
-			driver.edit(type);
+			driver.edit(user);
 
 		}
 		return container;
@@ -83,24 +80,28 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 
 		ButtonBar buttons = new ButtonBar();
 		VerticalLayoutContainer outer = new VerticalLayoutContainer();
-		ColumnConfig<Type, String> nameColumn = new ColumnConfig<Type, String>(props.name(), 200, "Name");
-		List<ColumnConfig<Type, ?>> columns = new ArrayList<ColumnConfig<Type, ?>>();
+		ColumnConfig<User, String> surnameColumn = new ColumnConfig<User, String>(props.surname(), 200, "Фамилия");
+		ColumnConfig<User, String> nameColumn = new ColumnConfig<User, String>(props.name(), 200, "Имя");
+		ColumnConfig<User, String> patronymicColumn = new ColumnConfig<User, String>(props.patronymic(), 200, "Отчество");
+		List<ColumnConfig<User, ?>> columns = new ArrayList<ColumnConfig<User, ?>>();
+		columns.add(surnameColumn);
 		columns.add(nameColumn);
-		grid = new Grid<Type>(typeStore, new ColumnModel<Type>(columns));
+		columns.add(patronymicColumn);
+
+		grid = new Grid<User>(userStore, new ColumnModel<User>(columns));
 
 		grid.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 		grid.getView().setForceFit(true);
 		grid.getView().setAutoExpandColumn(nameColumn);
-		grid.setHideHeaders(true);
 		grid.setBorders(true);
 		grid.getView().setStripeRows(true);
-		grid.getSelectionModel().addSelectionChangedHandler(new SelectionChangedHandler<Type>() {
+		grid.getSelectionModel().addSelectionChangedHandler(new SelectionChangedHandler<User>() {
 
 			@Override
-			public void onSelectionChanged(SelectionChangedEvent<Type> event) {
+			public void onSelectionChanged(SelectionChangedEvent<User> event) {
 				if (event.getSelection().size() > 0) {
-					type = event.getSelection().get(0);
-					driver.edit(type);
+					user = event.getSelection().get(0);
+					driver.edit(user);
 				}
 
 			}
@@ -113,9 +114,9 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 
 			@Override
 			public void onSelect(SelectEvent event) {
-				typeStore.add(new Type());
-				grid.getSelectionModel().select(typeStore.size() - 1, true);
-				typeWindow.show();
+				userStore.add(new User());
+				grid.getSelectionModel().select(userStore.size() - 1, true);
+				userWindow.show();
 			}
 		});
 		TextButton deleteButton = new TextButton("удалить");
@@ -123,7 +124,7 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 
 			@Override
 			public void onSelect(SelectEvent event) {
-				deleteType();
+				deleteUser();
 			}
 		});
 		buttons.add(addButton);
@@ -136,25 +137,25 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 	}
 
 	public void refreshTypeList() {
-		typeService.getAll(new AsyncCallback<List<Type>>() {
+		userService.getAll(new AsyncCallback<List<User>>() {
 			public void onFailure(Throwable caught) {
 				Info.display("Ошибка", "Данные не обновлены");
 				caught.printStackTrace();
 			}
 
-			public void onSuccess(List<Type> companyList) {
-				typeStore.clear();
-				typeStore.addAll(companyList);
-				type = typeStore.get(0);
-				Info.display("Ура!", type.getName());
+			public void onSuccess(List<User> companyList) {
+				userStore.clear();
+				userStore.addAll(companyList);
+				user = userStore.get(0);
+				Info.display("Ура!", user.getName());
 				grid.getView().refresh(true);
 				// companyListView.getSelectionModel().select(0, true);
 			}
 		});
 	}
 
-	void deleteType() {
-		typeService.delete(type, new AsyncCallback<Void>() {
+	void deleteUser() {
+		userService.delete(user, new AsyncCallback<Void>() {
 			public void onFailure(Throwable caught) {
 				Info.display("Ошибка", "Данные не обновлены");
 				caught.printStackTrace();
@@ -167,8 +168,8 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 		});
 	}
 
-	void updateType(Type type) {
-		typeService.update(type, new AsyncCallback<Void>() {
+	void updateUser(User user) {
+		userService.update(user, new AsyncCallback<Void>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -185,43 +186,58 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 	void createWindow() {
 		CssFloatLayoutContainer outerPanel = new CssFloatLayoutContainer();
 		CssFloatLayoutContainer innerPanel = new CssFloatLayoutContainer();
-		typeWindow = new Window();
-		typeWindow.setPixelSize(300, 120);
-		typeWindow.setResizable(false);
-		typeWindow.setModal(true);
-		typeWindow.setBlinkModal(true);
-		typeWindow.setHeadingText("добавить тип");
-		typeWindow.setExpanded(true);
-		typeWindow.addHideHandler(new HideHandler() {
+		userWindow = new Window();
+		userWindow.setPixelSize(300, 150);
+		userWindow.setResizable(false);
+		userWindow.setModal(true);
+		userWindow.setBlinkModal(true);
+		userWindow.setHeadingText("добавить сотрудника");
+		userWindow.setExpanded(true);
+		userWindow.addHideHandler(new HideHandler() {
 			@Override
 			public void onHide(HideEvent event) {
-				deleteType();
+				deleteUser();
 			}
 		});
+
 		name = new TextField();
 		name.setAllowBlank(false);
-		FieldLabel nameFieldLabel = new FieldLabel(name, "тип");
+		FieldLabel nameFieldLabel = new FieldLabel(name, "имя");
 		nameFieldLabel.setLabelSeparator("");
-		nameFieldLabel.setLabelWidth(20);
-		innerPanel.add(nameFieldLabel, new CssFloatData(1, new Margins(0, 0, 20, 0)));
+		nameFieldLabel.setLabelWidth(40);
+		innerPanel.add(nameFieldLabel, new CssFloatData(1));
+
+		surname = new TextField();
+		surname.setAllowBlank(false);
+		FieldLabel surnameFieldLabel = new FieldLabel(surname, "фамилия");
+		surnameFieldLabel.setLabelSeparator("");
+		surnameFieldLabel.setLabelWidth(40);
+		innerPanel.add(surnameFieldLabel, new CssFloatData(1));
+
+		patronymic = new TextField();
+		patronymic.setAllowBlank(false);
+		FieldLabel patronymicFieldLabel = new FieldLabel(patronymic, "отчество");
+		patronymicFieldLabel.setLabelSeparator("");
+		patronymicFieldLabel.setLabelWidth(40);
+		innerPanel.add(patronymicFieldLabel, new CssFloatData(1));
 
 		TextButton addTypeButton = new TextButton("добавить");
 		addTypeButton.addSelectHandler(new SelectHandler() {
 			@Override
 			public void onSelect(SelectEvent event) {
-				type = driver.flush();
+				user = driver.flush();
 				if (driver.hasErrors()) {
 					new MessageBox("Исправьте ошибки перед сохранением").show();
 					return;
 				}
-				updateType(type);
-				typeWindow.hide();
+				updateUser(user);
+				userWindow.hide();
 			}
 		});
 		innerPanel.setStyleFloat(Style.Float.RIGHT);
 		innerPanel.add(addTypeButton);
 		outerPanel.add(innerPanel, new CssFloatData(0.9, new Margins(10)));
-		typeWindow.add(outerPanel);
+		userWindow.add(outerPanel);
 
 	}
 }

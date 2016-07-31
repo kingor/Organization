@@ -5,7 +5,7 @@ import com.sencha.gxt.core.client.ValueProvider;
 import com.sencha.gxt.data.shared.ModelKeyProvider;
 import com.sencha.gxt.data.shared.PropertyAccess;
 
-public interface UserProperty extends PropertyAccess<User> {
+public interface UserProperties extends PropertyAccess<User> {
 	@Path("id")
 	ModelKeyProvider<User> key();
 
@@ -13,5 +13,5 @@ public interface UserProperty extends PropertyAccess<User> {
 
 	ValueProvider<User, String> name();
 
-	ValueProvider<User, String> patronimic();
+	ValueProvider<User, String> patronymic();
 }
