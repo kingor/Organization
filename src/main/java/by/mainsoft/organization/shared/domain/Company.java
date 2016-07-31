@@ -117,6 +117,22 @@ public class Company implements Serializable {
 		return type;
 	}
 
+	public String getTypeName() {
+		if (type == null) {
+			return "";
+		} else
+			return type.getName();
+
+	}
+
+	public String getUserShortName() {
+		if (manager == null) {
+			return "";
+		} else
+			return manager.getShortName();
+
+	}
+
 	public void setType(Type type) {
 		this.type = type;
 	}

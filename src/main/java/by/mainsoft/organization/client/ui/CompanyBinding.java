@@ -13,22 +13,19 @@ import com.google.gwt.editor.client.SimpleBeanEditorDriver;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.core.client.Style.SelectionMode;
 import com.sencha.gxt.core.client.util.Margins;
 import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.widget.core.client.Dialog;
 import com.sencha.gxt.widget.core.client.Dialog.PredefinedButton;
-import com.sencha.gxt.widget.core.client.FramedPanel;
 import com.sencha.gxt.widget.core.client.ListView;
 import com.sencha.gxt.widget.core.client.box.MessageBox;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.CssFloatLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.CssFloatLayoutContainer.CssFloatData;
-import com.sencha.gxt.widget.core.client.container.MarginData;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
@@ -50,8 +47,9 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 	}
 
 	private CompanyServiceAsync companyService = GWT.create(CompanyService.class);
+	private static final int HEIGHT = 450;
 
-	private FramedPanel panel;
+	private CssFloatLayoutContainer panel;
 	private Company company;
 	private ListView<Company, String> companyListView;
 
@@ -66,7 +64,8 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 	TextField phone;
 	IntegerField employee;
 	TextArea info = new TextArea();
-	// TextField type;
+	TextField typeName;
+	TextField userShortName;
 	DateField date;
 
 	private ListStore<Company> companyStore;
@@ -81,19 +80,12 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 
 			company = companyStore.get(0);
 
-			HorizontalPanel hp = new HorizontalPanel();
-			// hp.setSpacing(10);
+			panel = new CssFloatLayoutContainer();
+			panel.setHeight(HEIGHT);
 
-			panel = new FramedPanel();
-			// panel.setWidth(600);
-			panel.setLayoutData(new MarginData(0));
-			// hp.add(updateDisplay());
-			hp.add(createEditor());
-
-			panel.add(hp);
+			panel.add(createEditor(), new CssFloatData(1));
 
 			driver.initialize(this);
-			// nameCombo.setValue(company);
 			driver.edit(company);
 		}
 
@@ -105,9 +97,7 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 		CssFloatLayoutContainer buttonPanel = new CssFloatLayoutContainer();
 		CssFloatLayoutContainer listPanel = new CssFloatLayoutContainer();
 
-		VerticalPanel panel = new VerticalPanel();
-		VerticalPanel vartPan = new VerticalPanel();
-		VerticalLayoutContainer vc = new VerticalLayoutContainer();
+		// VerticalLayoutContainer verticalListpanel = new VerticalLayoutContainer();
 
 		CssFloatLayoutContainer outer = new CssFloatLayoutContainer();
 
@@ -127,7 +117,7 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 			}
 		});
 
-		TextButton addButton = new TextButton("Добавить");
+		TextButton addButton = new TextButton("добавить");
 		addButton.addSelectHandler(new SelectHandler() {
 
 			@Override
@@ -137,7 +127,7 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 			}
 		});
 
-		TextButton deleteButton = new TextButton("Удалить");
+		TextButton deleteButton = new TextButton("удалить");
 		deleteButton.addSelectHandler(new SelectHandler() {
 
 			@Override
@@ -149,11 +139,14 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 		buttonPanel.add(addButton);
 		buttonPanel.add(deleteButton);
 		listPanel.add(buttonPanel, new CssFloatData(1, new Margins(15, 0, 10, 0)));
-		vc.add(companyListView, new VerticalLayoutData(1, 1));
-		listPanel.add(vc, new CssFloatData(1));
+		listPanel.add(companyListView, new CssFloatData(1));
 		listPanel.setBorders(true);
 
 		outer.add(listPanel, new CssFloatData(0.2));
+
+		/*
+		 * Form
+		 */
 
 		final CssFloatLayoutContainer inner = new CssFloatLayoutContainer();
 
@@ -161,7 +154,9 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 		name.setEmptyText("наименование организации");
 		name.setAllowBlank(false);
 
-		inner.add(name, new CssFloatData(1, new Margins(15, 0, 30, 20)));
+		VerticalLayoutContainer nameRow = new VerticalLayoutContainer();
+		nameRow.add(name, new VerticalLayoutData(1, -1, new Margins(0, 0, 0, 20)));
+		inner.add(nameRow, new CssFloatData(1, new Margins(0, 0, 30, 0)));
 
 		data = new TextArea();
 		data.setName("data");
@@ -188,16 +183,19 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 		employee.addValidator(new MinNumberValidator<Integer>(0));
 		FieldLabel emplFieldLabel = new FieldLabel(employee, "кол. сотрудников");
 		emplFieldLabel.setLabelSeparator("");
-		inner.add(emplFieldLabel, new CssFloatData(0.35, new Margins(10, 300, 0, 0)));
+		inner.add(emplFieldLabel, new CssFloatData(0.35, new Margins(10, 300, 10, 0)));
 
 		info = new TextArea();
 		info.setName("info");
 		info.setHeight(70);
-		inner.add(new FieldLabel(info, "доп. информация"), new CssFloatData(1));
+		inner.add(new FieldLabel(info, "доп. информация"), new CssFloatData(1, new Margins(0, 0, 10, 0)));
 
-		// type = new TextField();
-		// type.setName("type.toString");
-		// inner.add(new FieldLabel(type, "тип"), new CssFloatData(0.35));
+		HTML html = new HTML("<hr  style=\"width:100%;\" />");
+		inner.add(html, new CssFloatData(1));
+
+		typeName = new TextField();
+		typeName.setName("typeName");
+		inner.add(new FieldLabel(typeName, "тип"), new CssFloatData(0.35));
 		TextButton typeButton = new TextButton("...");
 
 		typeButton.addSelectHandler(new SelectHandler() {
@@ -208,8 +206,14 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 				typeWindow.show();
 			}
 		});
+		inner.add(typeButton, new CssFloatData(0.05, new Margins(0, 300, 0, 0)));
 
-		inner.add(typeButton, new CssFloatData(0.05, new Margins(0, 600, 0, 0)));
+		CssFloatLayoutContainer userPanel = new CssFloatLayoutContainer();
+
+		userShortName = new TextField();
+		userShortName.setName("userShortName");
+		userPanel.add(new FieldLabel(userShortName, "тип"), new CssFloatData(0.35));
+
 		TextButton managerButton = new TextButton("...");
 
 		managerButton.addSelectHandler(new SelectHandler() {
@@ -221,14 +225,13 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 			}
 		});
 
-		inner.add(managerButton, new CssFloatData(0.05, new Margins(0, 50, 0, 0)));
+		userPanel.add(managerButton, new CssFloatData(0.05, new Margins(0, 30, 0, 0)));
+
 		date = new DateField(new DateTimePropertyEditor("MM/dd/yyyy"));
 		date.setName("date");
 		date.setAutoValidate(true);
-		inner.add(date, new CssFloatData(0.15));
-
-		outer.add(inner, new CssFloatData(0.8, new Margins(0, 0, 0, 0)));
-
+		userPanel.add(date, new CssFloatData(0.15, new Margins(0, 20, 0, 0)));
+		inner.add(userPanel, new CssFloatData(1));
 		TextButton save = new TextButton("Сохранить");
 		save.addSelectHandler(new SelectHandler() {
 
@@ -243,12 +246,14 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 				refreshCompanyList();
 			}
 		});
-		outer.add(save, new CssFloatData(0.1, new Margins(10, 0, 0, 550)));// addButton(save);
-		vartPan.add(outer);
+		inner.add(save, new CssFloatData(0.1, new Margins(10, 0, 0, 0)));// addButton(save);
+		VerticalLayoutContainer container = new VerticalLayoutContainer();
+		container.add(inner, new VerticalLayoutData(1, -1, new Margins(15, 10, 10, 10)));
+		outer.add(container, new CssFloatData(0.8));
 
 		// horPanel.add(vartPan);
-		panel.add(outer);
-		return panel;
+		// verticalListpanel.add(outer, new VerticalLayoutData(1, 1));
+		return outer;
 	}
 
 	public void refreshCompanyList() {

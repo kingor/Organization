@@ -29,4 +29,8 @@ public interface CompanyProperties extends PropertyAccess<Company> {
 
 	ValueProvider<Company, Date> date();
 
+	ValueProvider<Company, String> typeName(); // provides access to .type().getName()
+
+	ValueProvider<Company, String> userShortName(); // provides access to .user().getShortName()
+
 }
