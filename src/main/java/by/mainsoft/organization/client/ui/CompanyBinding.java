@@ -8,9 +8,11 @@ import by.mainsoft.organization.shared.domain.Company;
 import by.mainsoft.organization.shared.domain.CompanyProperties;
 
 import com.google.gwt.core.client.GWT;
+//import com.google.gwt.dom.client.Style;
 import com.google.gwt.editor.client.Editor;
 import com.google.gwt.editor.client.SimpleBeanEditorDriver;
 import com.google.gwt.i18n.client.NumberFormat;
+import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HTML;
@@ -19,6 +21,8 @@ import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.core.client.Style.SelectionMode;
 import com.sencha.gxt.core.client.util.Margins;
 import com.sencha.gxt.data.shared.ListStore;
+import com.sencha.gxt.theme.base.client.field.FieldLabelDefaultAppearance.FieldLabelResources;
+import com.sencha.gxt.theme.base.client.field.FieldLabelDefaultAppearance.Style;
 import com.sencha.gxt.widget.core.client.Dialog;
 import com.sencha.gxt.widget.core.client.Dialog.PredefinedButton;
 import com.sencha.gxt.widget.core.client.ListView;
@@ -42,6 +46,14 @@ import com.sencha.gxt.widget.core.client.selection.SelectionChangedEvent;
 import com.sencha.gxt.widget.core.client.selection.SelectionChangedEvent.SelectionChangedHandler;
 
 public class CompanyBinding implements IsWidget, Editor<Company> {
+
+	public interface RtJstFieldLabelResources extends FieldLabelResources, ClientBundle {
+		@Source({ "com/sencha/gxt/theme/base/client/field/FieldLabel.css", "RightJustifiedFieldLabel.css" })
+		MyStyle css();
+	}
+
+	public interface MyStyle extends Style {
+	}
 
 	interface CompanyDriver extends SimpleBeanEditorDriver<Company, CompanyBinding> {
 	}
@@ -81,7 +93,7 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 			company = companyStore.get(0);
 
 			panel = new CssFloatLayoutContainer();
-			panel.setHeight(HEIGHT);
+			// panel.setHeight(HEIGHT);
 
 			panel.add(createEditor(), new CssFloatData(1));
 
@@ -96,8 +108,6 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 
 		CssFloatLayoutContainer buttonPanel = new CssFloatLayoutContainer();
 		CssFloatLayoutContainer listPanel = new CssFloatLayoutContainer();
-
-		// VerticalLayoutContainer verticalListpanel = new VerticalLayoutContainer();
 
 		CssFloatLayoutContainer outer = new CssFloatLayoutContainer();
 
@@ -142,7 +152,7 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 		listPanel.add(companyListView, new CssFloatData(1));
 		listPanel.setBorders(true);
 
-		outer.add(listPanel, new CssFloatData(0.2));
+		outer.add(listPanel, new CssFloatData(0.25));
 
 		/*
 		 * Form
@@ -150,6 +160,9 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 
 		final CssFloatLayoutContainer inner = new CssFloatLayoutContainer();
 
+		/*
+		 * Name row
+		 */
 		name = new TextField();
 		name.setEmptyText("наименование организации");
 		name.setAllowBlank(false);
@@ -158,6 +171,10 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 		nameRow.add(name, new VerticalLayoutData(1, -1, new Margins(0, 0, 0, 20)));
 		inner.add(nameRow, new CssFloatData(1, new Margins(0, 0, 30, 0)));
 
+		/*
+		 * Data row
+		 */
+
 		data = new TextArea();
 		data.setName("data");
 		data.setHeight(70);
@@ -165,16 +182,29 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 		dataLabel.setLabelSeparator("");
 		inner.add(dataLabel, new CssFloatData(0.5));
 
+		/*
+		 * Address field
+		 */
+
 		address = new TextField();
 		address.setName("address");
 		FieldLabel addressLabel = new FieldLabel(address, "адрес");
 		addressLabel.setLabelSeparator("");
 		inner.add(addressLabel, new CssFloatData(0.5));
 
+		/*
+		 * Phone field
+		 */
+
 		phone = new TextField();
 		phone.setName("phone");
-		inner.add(new FieldLabel(phone, "телефон"), new CssFloatData(0.5));
+		inner.add(new FieldLabel(phone, "телефон"), new CssFloatData(0.5, new Margins(5, 0, 0, 0)));
 
+		/*
+		 * Employee field
+		 */
+
+		CssFloatLayoutContainer employeePanel = new CssFloatLayoutContainer();
 		employee = new IntegerField();
 		employee.setName("employee");
 		name.setAllowBlank(false);
@@ -183,15 +213,27 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 		employee.addValidator(new MinNumberValidator<Integer>(0));
 		FieldLabel emplFieldLabel = new FieldLabel(employee, "кол. сотрудников");
 		emplFieldLabel.setLabelSeparator("");
-		inner.add(emplFieldLabel, new CssFloatData(0.35, new Margins(10, 300, 10, 0)));
+		employeePanel.add(emplFieldLabel, new CssFloatData(0.35));
+		inner.add(employeePanel, new CssFloatData(1, new Margins(10, 0, 10, 0)));
 
+		/*
+		 * Info field
+		 */
 		info = new TextArea();
 		info.setName("info");
 		info.setHeight(70);
 		inner.add(new FieldLabel(info, "доп. информация"), new CssFloatData(1, new Margins(0, 0, 10, 0)));
 
+		/*
+		 * Line
+		 */
+
 		HTML html = new HTML("<hr  style=\"width:100%;\" />");
-		inner.add(html, new CssFloatData(1));
+		inner.add(html, new CssFloatData(1, new Margins(0, 0, 10, 0)));
+
+		/*
+		 * Type row
+		 */
 
 		typeName = new TextField();
 		typeName.setName("typeName");
@@ -206,10 +248,13 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 				typeWindow.show();
 			}
 		});
-		inner.add(typeButton, new CssFloatData(0.05, new Margins(0, 300, 0, 0)));
+		inner.add(typeButton, new CssFloatData(0.05));
+
+		/*
+		 * User row
+		 */
 
 		CssFloatLayoutContainer userPanel = new CssFloatLayoutContainer();
-
 		userShortName = new TextField();
 		userShortName.setName("userShortName");
 		userPanel.add(new FieldLabel(userShortName, "тип"), new CssFloatData(0.35));
@@ -224,14 +269,22 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 				userWindow.show();
 			}
 		});
-
 		userPanel.add(managerButton, new CssFloatData(0.05, new Margins(0, 30, 0, 0)));
+
+		/*
+		 * Date field
+		 */
 
 		date = new DateField(new DateTimePropertyEditor("MM/dd/yyyy"));
 		date.setName("date");
 		date.setAutoValidate(true);
-		userPanel.add(date, new CssFloatData(0.15, new Margins(0, 20, 0, 0)));
-		inner.add(userPanel, new CssFloatData(1));
+		userPanel.add(date, new CssFloatData(0.15));
+		inner.add(userPanel, new CssFloatData(1, new Margins(10, 30, 20, 0)));
+
+		/*
+		 * Save button
+		 */
+
 		TextButton save = new TextButton("Сохранить");
 		save.addSelectHandler(new SelectHandler() {
 
@@ -246,10 +299,13 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 				refreshCompanyList();
 			}
 		});
-		inner.add(save, new CssFloatData(0.1, new Margins(10, 0, 0, 0)));// addButton(save);
-		VerticalLayoutContainer container = new VerticalLayoutContainer();
-		container.add(inner, new VerticalLayoutData(1, -1, new Margins(15, 10, 10, 10)));
-		outer.add(container, new CssFloatData(0.8));
+		CssFloatLayoutContainer savePanel = new CssFloatLayoutContainer();
+		savePanel.setStyleFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
+		savePanel.add(save);// addButton(save);
+		inner.add(savePanel, new CssFloatData(0.95));
+		CssFloatLayoutContainer container = new CssFloatLayoutContainer();
+		container.add(inner, new CssFloatData(0.95, new Margins(15, 0, 10, 10)));
+		outer.add(container, new CssFloatData(0.75));
 
 		// horPanel.add(vartPan);
 		// verticalListpanel.add(outer, new VerticalLayoutData(1, 1));
