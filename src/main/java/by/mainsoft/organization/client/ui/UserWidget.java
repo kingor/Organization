@@ -21,7 +21,6 @@ import com.sencha.gxt.core.client.util.Margins;
 import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.widget.core.client.Window;
 import com.sencha.gxt.widget.core.client.box.MessageBox;
-import com.sencha.gxt.widget.core.client.button.ButtonBar;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.CssFloatLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.CssFloatLayoutContainer.CssFloatData;
@@ -52,6 +51,7 @@ public class UserWidget implements IsWidget, Editor<User> {
 	private User user;
 	private Grid<User> grid;
 	private Window userWindow;
+
 	// editor fields
 	TextField surname;
 	TextField name;
@@ -78,7 +78,7 @@ public class UserWidget implements IsWidget, Editor<User> {
 
 	public Widget createEditor() {
 
-		ButtonBar buttons = new ButtonBar();
+		CssFloatLayoutContainer buttons = new CssFloatLayoutContainer();
 		VerticalLayoutContainer outer = new VerticalLayoutContainer();
 		ColumnConfig<User, String> surnameColumn = new ColumnConfig<User, String>(props.surname(), 200, "Фамилия");
 		ColumnConfig<User, String> nameColumn = new ColumnConfig<User, String>(props.name(), 200, "Имя");
@@ -94,6 +94,7 @@ public class UserWidget implements IsWidget, Editor<User> {
 		grid.getView().setForceFit(true);
 		grid.getView().setAutoExpandColumn(nameColumn);
 		grid.setBorders(true);
+		grid.setHeight(270);
 		grid.getView().setStripeRows(true);
 		grid.getSelectionModel().addSelectionChangedHandler(new SelectionChangedHandler<User>() {
 
@@ -129,7 +130,7 @@ public class UserWidget implements IsWidget, Editor<User> {
 		});
 		buttons.add(addButton);
 		buttons.add(deleteButton);
-		outer.add(buttons, new VerticalLayoutData(1, -1));
+		outer.add(buttons, new VerticalLayoutData(1, -1, new Margins(10, 0, 0, 0)));
 
 		outer.add(grid, new VerticalLayoutData(1, 1));
 		outer.setScrollMode(ScrollMode.AUTOY);
@@ -204,21 +205,21 @@ public class UserWidget implements IsWidget, Editor<User> {
 		name.setAllowBlank(false);
 		FieldLabel nameFieldLabel = new FieldLabel(name, "имя");
 		nameFieldLabel.setLabelSeparator("");
-		nameFieldLabel.setLabelWidth(40);
+		nameFieldLabel.setLabelWidth(50);
 		innerPanel.add(nameFieldLabel, new CssFloatData(1));
 
 		surname = new TextField();
 		surname.setAllowBlank(false);
 		FieldLabel surnameFieldLabel = new FieldLabel(surname, "фамилия");
 		surnameFieldLabel.setLabelSeparator("");
-		surnameFieldLabel.setLabelWidth(40);
+		surnameFieldLabel.setLabelWidth(50);
 		innerPanel.add(surnameFieldLabel, new CssFloatData(1));
 
 		patronymic = new TextField();
 		patronymic.setAllowBlank(false);
 		FieldLabel patronymicFieldLabel = new FieldLabel(patronymic, "отчество");
 		patronymicFieldLabel.setLabelSeparator("");
-		patronymicFieldLabel.setLabelWidth(40);
+		patronymicFieldLabel.setLabelWidth(50);
 		innerPanel.add(patronymicFieldLabel, new CssFloatData(1));
 
 		TextButton addTypeButton = new TextButton("добавить");

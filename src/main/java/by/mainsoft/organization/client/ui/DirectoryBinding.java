@@ -15,6 +15,7 @@ import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.Verti
 
 public class DirectoryBinding implements IsWidget, Editor<Type> {
 
+	private static final int HEIGHT = 300;
 	private CssFloatLayoutContainer panel;
 	CssFloatLayoutContainer typePanel;
 	CssFloatLayoutContainer userPanel;
@@ -26,9 +27,10 @@ public class DirectoryBinding implements IsWidget, Editor<Type> {
 	public Widget asWidget() {
 		if (panel == null) {
 			panel = new CssFloatLayoutContainer();
+			panel.setHeight(HEIGHT);
 			VerticalLayoutContainer choosePanel = new VerticalLayoutContainer();
-			typePanel = new CssFloatLayoutContainer();
 
+			typePanel = new CssFloatLayoutContainer();
 			typeWidget = new TypeWidget();
 			typePanel.add(typeWidget, new CssFloatData(1));
 
@@ -42,6 +44,7 @@ public class DirectoryBinding implements IsWidget, Editor<Type> {
 			directoryList.setVisibleItemCount(3);
 			choosePanel.add(directoryList, new VerticalLayoutData(1, 1));
 			choosePanel.setBorders(true);
+			choosePanel.setHeight(HEIGHT);
 			panel.add(choosePanel, new CssFloatData(0.2));
 			panel.add(typePanel, new CssFloatData(0.8));
 			panel.add(userPanel, new CssFloatData(0.8));

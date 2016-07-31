@@ -21,7 +21,6 @@ import com.sencha.gxt.core.client.util.Margins;
 import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.widget.core.client.Window;
 import com.sencha.gxt.widget.core.client.box.MessageBox;
-import com.sencha.gxt.widget.core.client.button.ButtonBar;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.CssFloatLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.CssFloatLayoutContainer.CssFloatData;
@@ -81,7 +80,7 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 
 	public Widget createEditor() {
 
-		ButtonBar buttons = new ButtonBar();
+		CssFloatLayoutContainer buttons = new CssFloatLayoutContainer();
 		VerticalLayoutContainer outer = new VerticalLayoutContainer();
 		ColumnConfig<Type, String> nameColumn = new ColumnConfig<Type, String>(props.name(), 200, "Name");
 		List<ColumnConfig<Type, ?>> columns = new ArrayList<ColumnConfig<Type, ?>>();
@@ -92,6 +91,7 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 		grid.getView().setForceFit(true);
 		grid.getView().setAutoExpandColumn(nameColumn);
 		grid.setHideHeaders(true);
+		grid.setHeight(270);
 		grid.setBorders(true);
 		grid.getView().setStripeRows(true);
 		grid.getSelectionModel().addSelectionChangedHandler(new SelectionChangedHandler<Type>() {
@@ -128,7 +128,7 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 		});
 		buttons.add(addButton);
 		buttons.add(deleteButton);
-		outer.add(buttons, new VerticalLayoutData(1, -1));
+		outer.add(buttons, new VerticalLayoutData(1, -1, new Margins(10, 0, 0, 0)));
 
 		outer.add(grid, new VerticalLayoutData(1, 1));
 		outer.setScrollMode(ScrollMode.AUTOY);
@@ -148,7 +148,6 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 				type = typeStore.get(0);
 				Info.display("Ура!", type.getName());
 				grid.getView().refresh(true);
-				// companyListView.getSelectionModel().select(0, true);
 			}
 		});
 	}

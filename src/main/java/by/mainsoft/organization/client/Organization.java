@@ -47,10 +47,10 @@ public class Organization implements IsWidget, EntryPoint {
 			directoryPanel.add(directoryTabView);
 
 			tabPanel.setWidth(800);
-			tabPanel.setHeight(500);
 			tabPanel.add(organizationPanel, "Организации");
 			tabPanel.add(directoryPanel, "Справочники");
-			tabPanel.add(new CompanyBinding(), "Организации");
+			CompanyBinding companyBinding = new CompanyBinding();
+			tabPanel.add(companyBinding, "Организации");
 			tabPanel.add(new DirectoryBinding(), "Справочники");
 
 			tabPanel.addSelectionHandler(new SelectionHandler<Widget>() {

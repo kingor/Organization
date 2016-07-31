@@ -101,16 +101,13 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 	}
 
 	private Widget createEditor() {
-		// ContentPanel panel = new ContentPanel();
+
 		CssFloatLayoutContainer buttonPanel = new CssFloatLayoutContainer();
 		CssFloatLayoutContainer listPanel = new CssFloatLayoutContainer();
 
 		VerticalPanel panel = new VerticalPanel();
 		VerticalPanel vartPan = new VerticalPanel();
 		VerticalLayoutContainer vc = new VerticalLayoutContainer();
-		// panel.setWidth(400);
-		// panel.setBodyStyle("padding: 5px;");
-		// panel.setHeaderVisible(false);
 
 		CssFloatLayoutContainer outer = new CssFloatLayoutContainer();
 
