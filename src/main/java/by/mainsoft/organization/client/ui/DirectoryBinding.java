@@ -15,7 +15,7 @@ import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.Verti
 
 public class DirectoryBinding implements IsWidget, Editor<Type> {
 
-	private static final int HEIGHT = 300;
+	public static final int HEIGHT = 300;
 	private CssFloatLayoutContainer panel;
 	CssFloatLayoutContainer typePanel;
 	CssFloatLayoutContainer userPanel;

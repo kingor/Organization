@@ -1,6 +1,5 @@
 package by.mainsoft.organization.client;
 
-import by.mainsoft.organization.client.ui.ButtonAlignExample;
 import by.mainsoft.organization.client.ui.CompanyBinding;
 import by.mainsoft.organization.client.ui.DirectoryBinding;
 import by.mainsoft.organization.client.ui.DirectoryTabView;
@@ -26,7 +25,6 @@ public class Organization implements IsWidget, EntryPoint {
 
 	final OrganizationTabView organizationTabView = new OrganizationTabView();
 	final DirectoryTabView directoryTabView = new DirectoryTabView();
-	final ButtonAlignExample buttonAlignExample = new ButtonAlignExample();
 
 	public void onModuleLoad() {
 
@@ -47,8 +45,6 @@ public class Organization implements IsWidget, EntryPoint {
 			directoryPanel.add(directoryTabView);
 
 			tabPanel.setWidth(800);
-			// tabPanel.add(organizationPanel, "Организации");
-			// tabPanel.add(directoryPanel, "Справочники");
 			CompanyBinding companyBinding = new CompanyBinding();
 			tabPanel.add(companyBinding, "Организации");
 			tabPanel.add(new DirectoryBinding(), "Справочники");

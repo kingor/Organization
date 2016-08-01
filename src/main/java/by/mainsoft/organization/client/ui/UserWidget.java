@@ -63,6 +63,7 @@ public class UserWidget implements IsWidget, Editor<User> {
 	public Widget asWidget() {
 		if (container == null) {
 			container = new VerticalLayoutContainer();
+			container.setHeight(DirectoryBinding.HEIGHT);
 			props = GWT.create(UserProperties.class);
 			userStore = new ListStore<User>(props.key());
 			refreshTypeList();
@@ -80,6 +81,7 @@ public class UserWidget implements IsWidget, Editor<User> {
 
 		CssFloatLayoutContainer buttons = new CssFloatLayoutContainer();
 		VerticalLayoutContainer outer = new VerticalLayoutContainer();
+		CssFloatLayoutContainer gridPanel = new CssFloatLayoutContainer();
 		ColumnConfig<User, String> surnameColumn = new ColumnConfig<User, String>(props.surname(), 200, "Фамилия");
 		ColumnConfig<User, String> nameColumn = new ColumnConfig<User, String>(props.name(), 200, "Имя");
 		ColumnConfig<User, String> patronymicColumn = new ColumnConfig<User, String>(props.patronymic(), 200, "Отчество");
@@ -132,8 +134,9 @@ public class UserWidget implements IsWidget, Editor<User> {
 		buttons.add(deleteButton);
 		outer.add(buttons, new VerticalLayoutData(1, -1, new Margins(10, 0, 0, 0)));
 
-		outer.add(grid, new VerticalLayoutData(1, 1));
-		outer.setScrollMode(ScrollMode.AUTOY);
+		gridPanel.setScrollMode(ScrollMode.AUTOY);
+		gridPanel.add(grid, new CssFloatData(1));
+		outer.add(gridPanel, new VerticalLayoutData(1, -1));
 		return outer;
 	}
 

@@ -12,8 +12,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.editor.client.Editor;
 import com.google.gwt.editor.client.SimpleBeanEditorDriver;
 import com.google.gwt.i18n.client.NumberFormat;
-import com.google.gwt.resources.client.ClientBundle;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -21,11 +19,9 @@ import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.core.client.Style.SelectionMode;
 import com.sencha.gxt.core.client.util.Margins;
 import com.sencha.gxt.data.shared.ListStore;
-import com.sencha.gxt.theme.base.client.field.FieldLabelDefaultAppearance.FieldLabelResources;
-import com.sencha.gxt.theme.base.client.field.FieldLabelDefaultAppearance.Style;
 import com.sencha.gxt.widget.core.client.Dialog;
-import com.sencha.gxt.widget.core.client.Dialog.PredefinedButton;
 import com.sencha.gxt.widget.core.client.ListView;
+import com.sencha.gxt.widget.core.client.Window;
 import com.sencha.gxt.widget.core.client.box.MessageBox;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.CssFloatLayoutContainer;
@@ -47,14 +43,6 @@ import com.sencha.gxt.widget.core.client.selection.SelectionChangedEvent.Selecti
 
 public class CompanyBinding implements IsWidget, Editor<Company> {
 
-	public interface RtJstFieldLabelResources extends FieldLabelResources, ClientBundle {
-		@Source({ "com/sencha/gxt/theme/base/client/field/FieldLabel.css", "RightJustifiedFieldLabel.css" })
-		MyStyle css();
-	}
-
-	public interface MyStyle extends Style {
-	}
-
 	interface CompanyDriver extends SimpleBeanEditorDriver<Company, CompanyBinding> {
 	}
 
@@ -64,10 +52,8 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 	private CssFloatLayoutContainer panel;
 	private Company company;
 	private ListView<Company, String> companyListView;
-
-	final Dialog typeWindow = new Dialog();
-
-	final Dialog userWindow = new Dialog();
+	Window typeWindow;
+	private final Dialog userWindow = new Dialog();
 
 	// editor fields
 	TextField address;
@@ -87,14 +73,14 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 	public Widget asWidget() {
 		if (panel == null) {
 			props = GWT.create(CompanyProperties.class);
+
 			companyStore = new ListStore<Company>(props.key());
 			refreshCompanyList();
 
 			company = companyStore.get(0);
 
 			panel = new CssFloatLayoutContainer();
-			// panel.setHeight(HEIGHT);
-
+			panel.setHeight(HEIGHT);
 			panel.add(createEditor(), new CssFloatData(1));
 
 			driver.initialize(this);
@@ -105,10 +91,9 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 	}
 
 	private Widget createEditor() {
-
 		CssFloatLayoutContainer buttonPanel = new CssFloatLayoutContainer();
 		CssFloatLayoutContainer listPanel = new CssFloatLayoutContainer();
-
+		CssFloatLayoutContainer scrollPanel = new CssFloatLayoutContainer();
 		CssFloatLayoutContainer outer = new CssFloatLayoutContainer();
 
 		companyListView = new ListView<Company, String>(companyStore, props.name());
@@ -151,7 +136,6 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 		listPanel.add(buttonPanel, new CssFloatData(1, new Margins(15, 0, 10, 0)));
 		listPanel.add(companyListView, new CssFloatData(1));
 		listPanel.setBorders(true);
-
 		outer.add(listPanel, new CssFloatData(0.25));
 
 		/*
@@ -244,7 +228,26 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 
 			@Override
 			public void onSelect(SelectEvent event) {
-				createTypeDialogWindow();
+				final ChooseType chooseType = new ChooseType();
+				typeWindow = new Window();
+				typeWindow.setPixelSize(300, 200);
+				typeWindow.setResizable(false);
+				typeWindow.setModal(true);
+				typeWindow.setBlinkModal(true);
+				typeWindow.setHeadingText("выбрать тип");
+				typeWindow.setExpanded(true);
+				HTML line = new HTML("<hr  style=\"width:100%;\" />");
+				typeWindow.add(line);
+				typeWindow.add(chooseType);
+				chooseType.getSaveButton().addSelectHandler(new SelectHandler() {
+
+					@Override
+					public void onSelect(SelectEvent event) {
+						company.setType(chooseType.getType());
+						typeWindow.hide();
+						typeName.setText(chooseType.getType().getName());
+					}
+				});
 				typeWindow.show();
 			}
 		});
@@ -307,8 +310,6 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 		container.add(inner, new CssFloatData(0.95, new Margins(15, 0, 10, 10)));
 		outer.add(container, new CssFloatData(0.75));
 
-		// horPanel.add(vartPan);
-		// verticalListpanel.add(outer, new VerticalLayoutData(1, 1));
 		return outer;
 	}
 
@@ -347,7 +348,7 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 	void deleteCompany() {
 		companyService.delete(company, new AsyncCallback<Void>() {
 			public void onFailure(Throwable caught) {
-				Window.alert("delete Async callback не работает!");
+				Info.display("Ошибка", "Данные  компании не обновлены");
 				caught.printStackTrace();
 			}
 
@@ -355,19 +356,6 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 				refreshCompanyList();
 			}
 		});
-	}
-
-	void createTypeDialogWindow() {
-
-		typeWindow.setHeadingText("выбрать тип");
-		typeWindow.setWidth(300);
-		typeWindow.setHeight(300);
-		typeWindow.setResizable(false);
-		typeWindow.setHideOnButtonClick(true);
-		typeWindow.setPredefinedButtons(PredefinedButton.YES);
-		typeWindow.setBodyStyleName("pad-text");
-		typeWindow.getBody().addClassName("pad-text");
-		typeWindow.add(new TextButton());
 	}
 
 	void createUserDialogWindow() {

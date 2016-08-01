@@ -60,14 +60,11 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 	public Widget asWidget() {
 		if (container == null) {
 			container = new VerticalLayoutContainer();
-			// panel.setHeadingText("Model with List Property");
-			// panel.setBodyBorder(false);
-			// panel.setWidth(400);
-			// panel.addStyleName("margin-10");
+			container.setHeight(DirectoryBinding.HEIGHT);
 			props = GWT.create(TypeProperties.class);
 			typeStore = new ListStore<Type>(props.key());
 			refreshTypeList();
-
+			typeWindow = new Window();
 			container.add(createEditor());
 
 			driver.initialize(this);
@@ -82,6 +79,7 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 
 		CssFloatLayoutContainer buttons = new CssFloatLayoutContainer();
 		VerticalLayoutContainer outer = new VerticalLayoutContainer();
+		CssFloatLayoutContainer gridPanel = new CssFloatLayoutContainer();
 		ColumnConfig<Type, String> nameColumn = new ColumnConfig<Type, String>(props.name(), 200, "Name");
 		List<ColumnConfig<Type, ?>> columns = new ArrayList<ColumnConfig<Type, ?>>();
 		columns.add(nameColumn);
@@ -129,9 +127,10 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 		buttons.add(addButton);
 		buttons.add(deleteButton);
 		outer.add(buttons, new VerticalLayoutData(1, -1, new Margins(10, 0, 0, 0)));
-
-		outer.add(grid, new VerticalLayoutData(1, 1));
-		outer.setScrollMode(ScrollMode.AUTOY);
+		gridPanel.setScrollMode(ScrollMode.AUTOY);
+		gridPanel.add(grid, new CssFloatData(1));
+		outer.add(gridPanel, new VerticalLayoutData(1, -1));
+		// outer.setScrollMode(ScrollMode.AUTOY);
 		return outer;
 	}
 
@@ -184,8 +183,7 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 	void createWindow() {
 		CssFloatLayoutContainer outerPanel = new CssFloatLayoutContainer();
 		CssFloatLayoutContainer innerPanel = new CssFloatLayoutContainer();
-		typeWindow = new Window();
-		typeWindow.setPixelSize(300, 120);
+		typeWindow.setPixelSize(250, 120);
 		typeWindow.setResizable(false);
 		typeWindow.setModal(true);
 		typeWindow.setBlinkModal(true);
