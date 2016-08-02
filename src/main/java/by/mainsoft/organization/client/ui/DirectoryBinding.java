@@ -28,7 +28,6 @@ public class DirectoryBinding implements IsWidget, Editor<Type> {
 		if (panel == null) {
 			panel = new CssFloatLayoutContainer();
 			panel.setHeight(HEIGHT);
-			VerticalLayoutContainer choosePanel = new VerticalLayoutContainer();
 
 			typePanel = new CssFloatLayoutContainer();
 			typeWidget = new TypeWidget();
@@ -42,9 +41,12 @@ public class DirectoryBinding implements IsWidget, Editor<Type> {
 			directoryList.addItem("Типы организаций");
 			directoryList.addItem("Пользователи");
 			directoryList.setVisibleItemCount(3);
+
+			VerticalLayoutContainer choosePanel = new VerticalLayoutContainer();
 			choosePanel.add(directoryList, new VerticalLayoutData(1, 1));
 			choosePanel.setBorders(true);
 			choosePanel.setHeight(HEIGHT);
+
 			panel.add(choosePanel, new CssFloatData(0.2));
 			panel.add(typePanel, new CssFloatData(0.8));
 			panel.add(userPanel, new CssFloatData(0.8));

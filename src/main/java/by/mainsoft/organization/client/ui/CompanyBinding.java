@@ -17,6 +17,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.core.client.Style.SelectionMode;
+import com.sencha.gxt.core.client.dom.ScrollSupport.ScrollMode;
 import com.sencha.gxt.core.client.util.Margins;
 import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.widget.core.client.ListView;
@@ -46,7 +47,7 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 	}
 
 	private CompanyServiceAsync companyService = GWT.create(CompanyService.class);
-	private static final int HEIGHT = 450;
+	private static final int HEIGHT = 420;
 
 	private CssFloatLayoutContainer panel;
 	private Company company;
@@ -81,7 +82,8 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 
 			panel = new CssFloatLayoutContainer();
 			panel.setHeight(HEIGHT);
-			panel.add(createEditor(), new CssFloatData(1));
+			panel.add(createList(), new CssFloatData(0.25));
+			panel.add(createEditor(), new CssFloatData(0.75));
 
 			driver.initialize(this);
 			driver.edit(company);
@@ -90,15 +92,14 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 		return panel;
 	}
 
-	private Widget createEditor() {
+	private Widget createList() {
 		CssFloatLayoutContainer buttonPanel = new CssFloatLayoutContainer();
-		CssFloatLayoutContainer listPanel = new CssFloatLayoutContainer();
-		CssFloatLayoutContainer scrollPanel = new CssFloatLayoutContainer();
-		CssFloatLayoutContainer outer = new CssFloatLayoutContainer();
-
+		VerticalLayoutContainer listPanel = new VerticalLayoutContainer();
+		VerticalLayoutContainer selectPanel = new VerticalLayoutContainer();
+		CssFloatLayoutContainer scrollListPanel = new CssFloatLayoutContainer();
 		companyListView = new ListView<Company, String>(companyStore, props.name());
 		companyListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-
+		companyListView.setHeight(HEIGHT - 50);
 		companyListView.getSelectionModel().addSelectionChangedHandler(new SelectionChangedHandler<Company>() {
 			@Override
 			public void onSelectionChanged(SelectionChangedEvent<Company> event) {
@@ -133,10 +134,21 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 
 		buttonPanel.add(addButton);
 		buttonPanel.add(deleteButton);
-		listPanel.add(buttonPanel, new CssFloatData(1, new Margins(15, 0, 10, 0)));
-		listPanel.add(companyListView, new CssFloatData(1));
+		scrollListPanel.setScrollMode(ScrollMode.AUTOY);
+		scrollListPanel.add(companyListView, new CssFloatData(1));
+		selectPanel.add(scrollListPanel, new VerticalLayoutData(1, -1));
+		listPanel.setHeight(HEIGHT);
+		listPanel.add(buttonPanel, new VerticalLayoutData(1, -1, new Margins(15, 0, 10, 0)));
+		listPanel.add(selectPanel, new VerticalLayoutData(1, -1));
 		listPanel.setBorders(true);
-		outer.add(listPanel, new CssFloatData(0.25));
+		listPanel.setHeight(HEIGHT);
+		// outer.add(listPanel, new CssFloatData(0.25));
+		return listPanel;
+	}
+
+	private Widget createEditor() {
+
+		CssFloatLayoutContainer outer = new CssFloatLayoutContainer();
 
 		/*
 		 * Form
@@ -301,7 +313,7 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 		date = new DateField(new DateTimePropertyEditor("MM/dd/yyyy"));
 		date.setName("date");
 		date.setAutoValidate(true);
-		userPanel.add(date, new CssFloatData(0.2));
+		userPanel.add(date, new CssFloatData(0.16));
 		inner.add(userPanel, new CssFloatData(1, new Margins(10, 30, 20, 0)));
 
 		/*
@@ -329,9 +341,10 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 		CssFloatLayoutContainer container = new CssFloatLayoutContainer();
 		container.add(inner, new CssFloatData(0.95, new Margins(15, 0, 10, 10)));
 		container.setBorders(true);
-		outer.add(container, new CssFloatData(0.75));
+		// outer.add(container, new CssFloatData(0.75));
+		// outer.setHeight(HEIGHT);
 
-		return outer;
+		return container;// outer;
 	}
 
 	public void refreshCompanyList() {

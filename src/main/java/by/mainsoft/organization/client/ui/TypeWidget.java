@@ -170,7 +170,7 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				Info.display("Ошибка", "Данные  компании не обновлены");
+				Info.display("Ошибка", "Данные  не обновлены");
 			}
 
 			@Override
