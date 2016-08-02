@@ -23,20 +23,15 @@ public class UserDaoImpl extends GenericDaoImpl<User, Long> implements UserDao {
 	@Override
 	public List<User> searchByString(String searchParameter) {
 		logger.info("DAO - caused searchByString()");
-		logger.info(searchParameter);
-
 		Session session = sessionFactory.getCurrentSession();
-
-		/*
-		 * Disjunction disc = Restrictions.disjunction(); disc.add(Restrictions.like("name", "%" + searchParameter + "%")); disc.add(Restrictions.like("surname", "%" + searchParameter + "%")); disc.add(Restrictions.like("patronimic", "%" + searchParameter + "%"));
-		 */
-
-		// @SuppressWarnings("unchecked")
-		logger.info(searchParameter);
-		List<User> userList = (List<User>) session.createCriteria(User.class)
-				.add(Restrictions.like("surname", "%" + searchParameter + "%").ignoreCase()).list();
-		logger.info(userList);
+		@SuppressWarnings("unchecked")
+		List<User> userList = (List<User>) session.createCriteria(User.class).add(Restrictions.like("name", "%" + searchParameter + "%").ignoreCase()).list();
+		// logger.info(userList);
 		return userList;
 	}
+	/*
+	 * Disjunction disc = Restrictions.disjunction(); disc.add(Restrictions.like("name", "%" + searchParameter + "%")); disc.add(Restrictions.like("surname", "%" + searchParameter + "%")); disc.add(Restrictions.like("patronimic", "%" + searchParameter + "%"));
+	 */
 
+	// logger.info(searchParameter);
 }

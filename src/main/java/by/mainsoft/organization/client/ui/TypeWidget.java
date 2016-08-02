@@ -68,7 +68,7 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 			container.add(createEditor());
 
 			driver.initialize(this);
-			// nameCombo.setValue(company);
+
 			driver.edit(type);
 
 		}

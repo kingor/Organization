@@ -19,7 +19,6 @@ import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.core.client.Style.SelectionMode;
 import com.sencha.gxt.core.client.util.Margins;
 import com.sencha.gxt.data.shared.ListStore;
-import com.sencha.gxt.widget.core.client.Dialog;
 import com.sencha.gxt.widget.core.client.ListView;
 import com.sencha.gxt.widget.core.client.Window;
 import com.sencha.gxt.widget.core.client.box.MessageBox;
@@ -52,8 +51,8 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 	private CssFloatLayoutContainer panel;
 	private Company company;
 	private ListView<Company, String> companyListView;
-	Window typeWindow;
-	private final Dialog userWindow = new Dialog();
+	private Window typeWindow;
+	private Window userWindow;
 
 	// editor fields
 	TextField address;
@@ -73,7 +72,8 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 	public Widget asWidget() {
 		if (panel == null) {
 			props = GWT.create(CompanyProperties.class);
-
+			typeWindow = new Window();
+			userWindow = new Window();
 			companyStore = new ListStore<Company>(props.key());
 			refreshCompanyList();
 
@@ -182,7 +182,9 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 
 		phone = new TextField();
 		phone.setName("phone");
-		inner.add(new FieldLabel(phone, "телефон"), new CssFloatData(0.5, new Margins(5, 0, 0, 0)));
+		FieldLabel phoneFieldLabel = new FieldLabel(phone, "телефон");
+		phoneFieldLabel.setLabelSeparator("");
+		inner.add(phoneFieldLabel, new CssFloatData(0.5, new Margins(5, 0, 0, 0)));
 
 		/*
 		 * Employee field
@@ -206,7 +208,8 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 		info = new TextArea();
 		info.setName("info");
 		info.setHeight(70);
-		inner.add(new FieldLabel(info, "доп. информация"), new CssFloatData(1, new Margins(0, 0, 10, 0)));
+		FieldLabel infoFieldLabel = new FieldLabel(info, "доп. информация");
+		inner.add(infoFieldLabel, new CssFloatData(1, new Margins(0, 0, 10, 0)));
 
 		/*
 		 * Line
@@ -229,15 +232,13 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 			@Override
 			public void onSelect(SelectEvent event) {
 				final ChooseType chooseType = new ChooseType();
-				typeWindow = new Window();
+
 				typeWindow.setPixelSize(300, 200);
 				typeWindow.setResizable(false);
 				typeWindow.setModal(true);
 				typeWindow.setBlinkModal(true);
 				typeWindow.setHeadingText("выбрать тип");
 				typeWindow.setExpanded(true);
-				HTML line = new HTML("<hr  style=\"width:100%;\" />");
-				typeWindow.add(line);
 				typeWindow.add(chooseType);
 				chooseType.getSaveButton().addSelectHandler(new SelectHandler() {
 
@@ -245,7 +246,8 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 					public void onSelect(SelectEvent event) {
 						company.setType(chooseType.getType());
 						typeWindow.hide();
-						typeName.setText(chooseType.getType().getName());
+						if (chooseType.getType() != null)
+							typeName.setText(chooseType.getType().getName());
 					}
 				});
 				typeWindow.show();
@@ -260,7 +262,7 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 		CssFloatLayoutContainer userPanel = new CssFloatLayoutContainer();
 		userShortName = new TextField();
 		userShortName.setName("userShortName");
-		userPanel.add(new FieldLabel(userShortName, "тип"), new CssFloatData(0.35));
+		userPanel.add(new FieldLabel(userShortName, "сотрудник"), new CssFloatData(0.35));
 
 		TextButton managerButton = new TextButton("...");
 
@@ -268,7 +270,25 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 
 			@Override
 			public void onSelect(SelectEvent event) {
-				createUserDialogWindow();
+				final ChooseUser chooseUser = new ChooseUser();
+
+				userWindow.setPixelSize(300, 200);
+				userWindow.setResizable(false);
+				userWindow.setModal(true);
+				userWindow.setBlinkModal(true);
+				userWindow.setHeadingText("выбрать сотрудника");
+				userWindow.setExpanded(true);
+				userWindow.add(chooseUser);
+				chooseUser.getSaveButton().addSelectHandler(new SelectHandler() {
+
+					@Override
+					public void onSelect(SelectEvent event) {
+						company.setManager(chooseUser.getUser());
+						userWindow.hide();
+						if (chooseUser.getUser() != null)
+							userShortName.setText(chooseUser.getUser().getShortName());
+					}
+				});
 				userWindow.show();
 			}
 		});
@@ -281,7 +301,7 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 		date = new DateField(new DateTimePropertyEditor("MM/dd/yyyy"));
 		date.setName("date");
 		date.setAutoValidate(true);
-		userPanel.add(date, new CssFloatData(0.15));
+		userPanel.add(date, new CssFloatData(0.2));
 		inner.add(userPanel, new CssFloatData(1, new Margins(10, 30, 20, 0)));
 
 		/*
@@ -308,6 +328,7 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 		inner.add(savePanel, new CssFloatData(0.95));
 		CssFloatLayoutContainer container = new CssFloatLayoutContainer();
 		container.add(inner, new CssFloatData(0.95, new Margins(15, 0, 10, 10)));
+		container.setBorders(true);
 		outer.add(container, new CssFloatData(0.75));
 
 		return outer;
@@ -360,13 +381,5 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 
 	void createUserDialogWindow() {
 
-		userWindow.setHeadingText("выбрать сотрудника");
-		userWindow.setWidth(300);
-		userWindow.setHeight(300);
-		userWindow.setResizable(false);
-		userWindow.setHideOnButtonClick(true);
-		userWindow.setBodyStyleName("pad-text");
-		userWindow.getBody().addClassName("pad-text");
-		userWindow.add(new TextButton());
 	}
 }

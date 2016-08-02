@@ -3,10 +3,10 @@ package by.mainsoft.organization.client.ui;
 import java.util.ArrayList;
 import java.util.List;
 
-import by.mainsoft.organization.client.service.TypeService;
-import by.mainsoft.organization.client.service.TypeServiceAsync;
-import by.mainsoft.organization.shared.domain.Type;
-import by.mainsoft.organization.shared.domain.TypeProperties;
+import by.mainsoft.organization.client.service.UserService;
+import by.mainsoft.organization.client.service.UserServiceAsync;
+import by.mainsoft.organization.shared.domain.User;
+import by.mainsoft.organization.shared.domain.UserProperties;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
@@ -34,13 +34,13 @@ import com.sencha.gxt.widget.core.client.info.Info;
 import com.sencha.gxt.widget.core.client.selection.SelectionChangedEvent;
 import com.sencha.gxt.widget.core.client.selection.SelectionChangedEvent.SelectionChangedHandler;
 
-public class ChooseType implements IsWidget, Editor<Type> {
+public class ChooseUser implements IsWidget, Editor<User> {
 
-	TypeServiceAsync typeService = GWT.create(TypeService.class);
-	private ListStore<Type> typeStore;
-	private TypeProperties props;
-	private Type type;
-	private Grid<Type> grid;
+	UserServiceAsync userService = GWT.create(UserService.class);
+	private ListStore<User> userStore;
+	private UserProperties props;
+	private User user;
+	private Grid<User> grid;
 	private TextButton selectButton;
 
 	private VerticalLayoutContainer container;
@@ -49,8 +49,8 @@ public class ChooseType implements IsWidget, Editor<Type> {
 	public Widget asWidget() {
 		if (container == null) {
 			container = new VerticalLayoutContainer();
-			props = GWT.create(TypeProperties.class);
-			typeStore = new ListStore<Type>(props.key());
+			props = GWT.create(UserProperties.class);
+			userStore = new ListStore<User>(props.key());
 			refreshTypeList("");
 
 			container.add(createEditor());
@@ -61,30 +61,33 @@ public class ChooseType implements IsWidget, Editor<Type> {
 
 	public Widget createEditor() {
 		CssFloatLayoutContainer inner = new CssFloatLayoutContainer();
-		ColumnConfig<Type, String> nameColumn = new ColumnConfig<Type, String>(props.name(), 100, "Name");
-		List<ColumnConfig<Type, ?>> columns = new ArrayList<ColumnConfig<Type, ?>>();
+		ColumnConfig<User, String> surnameColumn = new ColumnConfig<User, String>(props.surname(), 100, "Фамилия");
+		ColumnConfig<User, String> nameColumn = new ColumnConfig<User, String>(props.name(), 100, "Имя");
+		ColumnConfig<User, String> patronymicColumn = new ColumnConfig<User, String>(props.patronymic(), 100, "Отчество");
+		List<ColumnConfig<User, ?>> columns = new ArrayList<ColumnConfig<User, ?>>();
+		columns.add(surnameColumn);
 		columns.add(nameColumn);
-		grid = new Grid<Type>(typeStore, new ColumnModel<Type>(columns));
+		columns.add(patronymicColumn);
+		grid = new Grid<User>(userStore, new ColumnModel<User>(columns));
 		grid.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 		grid.getView().setForceFit(true);
 		grid.getView().setAutoExpandColumn(nameColumn);
-		grid.setHideHeaders(true);
+		grid.setHideHeaders(false);
 		grid.setHeight(100);
 		grid.setBorders(true);
 		grid.getView().setStripeRows(true);
-		grid.getSelectionModel().addSelectionChangedHandler(new SelectionChangedHandler<Type>() {
+		grid.getSelectionModel().addSelectionChangedHandler(new SelectionChangedHandler<User>() {
 
 			@Override
-			public void onSelectionChanged(SelectionChangedEvent<Type> event) {
+			public void onSelectionChanged(SelectionChangedEvent<User> event) {
 				if (event.getSelection().size() > 0) {
-					type = event.getSelection().get(0);
+					user = event.getSelection().get(0);
 				}
 			}
 		});
 
 		CssFloatLayoutContainer searchPanel = new CssFloatLayoutContainer();
 		final TextBox searchBox = new TextBox();
-		// outer.add(searchBox, new CssFloatData(0.6, new Margins(10, 0, 0, 0)));
 		TextButton searchButton = new TextButton("Найти");
 		searchButton.addSelectHandler(new SelectHandler() {
 
@@ -112,23 +115,23 @@ public class ChooseType implements IsWidget, Editor<Type> {
 	}
 
 	public void refreshTypeList(String searchParameter) {
-		typeService.searchByString(searchParameter, new AsyncCallback<List<Type>>() {
+		userService.searchByString(searchParameter, new AsyncCallback<List<User>>() {
 			public void onFailure(Throwable caught) {
 				Info.display("Ошибка", "Данные не обновлены");
 			}
 
-			public void onSuccess(List<Type> companyList) {
-				typeStore.clear();
-				typeStore.addAll(companyList);
-				type = typeStore.get(0);
-				Info.display("Ура!", type.getName());
+			public void onSuccess(List<User> companyList) {
+				userStore.clear();
+				userStore.addAll(companyList);
+				user = userStore.get(0);
+				Info.display("Ура!", user.getName());
 				grid.getView().refresh(true);
 			}
 		});
 	}
 
-	public Type getType() {
-		return type;
+	public User getUser() {
+		return user;
 	}
 
 	public HasSelectHandlers getSaveButton() {

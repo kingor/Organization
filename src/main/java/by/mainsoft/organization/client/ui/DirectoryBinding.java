@@ -17,11 +17,11 @@ public class DirectoryBinding implements IsWidget, Editor<Type> {
 
 	public static final int HEIGHT = 300;
 	private CssFloatLayoutContainer panel;
-	CssFloatLayoutContainer typePanel;
-	CssFloatLayoutContainer userPanel;
-	ListBox directoryList;
-	TypeWidget typeWidget;
-	UserWidget userWidget;
+	private CssFloatLayoutContainer typePanel;
+	private CssFloatLayoutContainer userPanel;
+	private ListBox directoryList;
+	private TypeWidget typeWidget;
+	private UserWidget userWidget;
 
 	@Override
 	public Widget asWidget() {
