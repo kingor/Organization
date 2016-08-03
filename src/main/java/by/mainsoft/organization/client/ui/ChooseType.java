@@ -84,8 +84,8 @@ public class ChooseType implements IsWidget, Editor<Type> {
 
 		CssFloatLayoutContainer searchPanel = new CssFloatLayoutContainer();
 		final TextBox searchBox = new TextBox();
-		// outer.add(searchBox, new CssFloatData(0.6, new Margins(10, 0, 0, 0)));
-		TextButton searchButton = new TextButton("Найти");
+		searchBox.setStyleName("searchBox");
+		TextButton searchButton = new TextButton("найти");
 		searchButton.addSelectHandler(new SelectHandler() {
 
 			@Override
@@ -94,7 +94,7 @@ public class ChooseType implements IsWidget, Editor<Type> {
 			}
 		});
 
-		searchPanel.add(searchBox, new CssFloatData(0.6, new Margins(0, 20, 0, 10)));
+		searchPanel.add(searchBox, new CssFloatData(0.7, new Margins(0, 20, 0, 10)));
 		searchPanel.add(searchButton);
 		inner.add(searchPanel, new CssFloatData(0.9, new Margins(10, 0, 10, 0)));
 		CssFloatLayoutContainer gridPanel = new CssFloatLayoutContainer();
@@ -121,7 +121,6 @@ public class ChooseType implements IsWidget, Editor<Type> {
 				typeStore.clear();
 				typeStore.addAll(companyList);
 				type = typeStore.get(0);
-				Info.display("Ура!", type.getName());
 				grid.getView().refresh(true);
 			}
 		});

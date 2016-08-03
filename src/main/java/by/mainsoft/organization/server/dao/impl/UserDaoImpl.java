@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -24,14 +25,17 @@ public class UserDaoImpl extends GenericDaoImpl<User, Long> implements UserDao {
 	public List<User> searchByString(String searchParameter) {
 		logger.info("DAO - caused searchByString()");
 		Session session = sessionFactory.getCurrentSession();
+
+		Disjunction disc = Restrictions.disjunction();
+		disc.add(Restrictions.like("name", "%" + searchParameter + "%").ignoreCase());
+		disc.add(Restrictions.like("surname", "%" + searchParameter + "%").ignoreCase());
+		disc.add(Restrictions.like("patronymic", "%" + searchParameter + "%").ignoreCase());
+
 		@SuppressWarnings("unchecked")
-		List<User> userList = (List<User>) session.createCriteria(User.class).add(Restrictions.like("name", "%" + searchParameter + "%").ignoreCase()).list();
+		List<User> userList = (List<User>) session.createCriteria(User.class).add(disc).list();// .add(Restrictions.like("name", "%" + searchParameter + "%").ignoreCase()).list();
 		// logger.info(userList);
 		return userList;
 	}
-	/*
-	 * Disjunction disc = Restrictions.disjunction(); disc.add(Restrictions.like("name", "%" + searchParameter + "%")); disc.add(Restrictions.like("surname", "%" + searchParameter + "%")); disc.add(Restrictions.like("patronimic", "%" + searchParameter + "%"));
-	 */
 
 	// logger.info(searchParameter);
 }

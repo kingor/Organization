@@ -51,7 +51,7 @@ public class ChooseUser implements IsWidget, Editor<User> {
 			container = new VerticalLayoutContainer();
 			props = GWT.create(UserProperties.class);
 			userStore = new ListStore<User>(props.key());
-			refreshTypeList("");
+			refreshUserList("");
 
 			container.add(createEditor());
 
@@ -88,12 +88,13 @@ public class ChooseUser implements IsWidget, Editor<User> {
 
 		CssFloatLayoutContainer searchPanel = new CssFloatLayoutContainer();
 		final TextBox searchBox = new TextBox();
-		TextButton searchButton = new TextButton("Найти");
+		searchBox.setStyleName("searchBox");
+		TextButton searchButton = new TextButton("найти");
 		searchButton.addSelectHandler(new SelectHandler() {
 
 			@Override
 			public void onSelect(SelectEvent event) {
-				refreshTypeList(searchBox.getText());
+				refreshUserList(searchBox.getText());
 			}
 		});
 
@@ -114,7 +115,7 @@ public class ChooseUser implements IsWidget, Editor<User> {
 		return outer;
 	}
 
-	public void refreshTypeList(String searchParameter) {
+	public void refreshUserList(String searchParameter) {
 		userService.searchByString(searchParameter, new AsyncCallback<List<User>>() {
 			public void onFailure(Throwable caught) {
 				Info.display("Ошибка", "Данные не обновлены");
@@ -124,7 +125,6 @@ public class ChooseUser implements IsWidget, Editor<User> {
 				userStore.clear();
 				userStore.addAll(companyList);
 				user = userStore.get(0);
-				Info.display("Ура!", user.getName());
 				grid.getView().refresh(true);
 			}
 		});
