@@ -84,7 +84,7 @@ public class ChooseType implements IsWidget, Editor<Type> {
 
 		CssFloatLayoutContainer searchPanel = new CssFloatLayoutContainer();
 		final TextBox searchBox = new TextBox();
-		searchBox.setStyleName("searchBox");
+		// searchBox.setStyleName("searchBox");
 		searchBox.getElement().setPropertyString("placeholder", "поиск по вхождению");
 		TextButton searchButton = new TextButton("найти");
 		searchButton.addSelectHandler(new SelectHandler() {
