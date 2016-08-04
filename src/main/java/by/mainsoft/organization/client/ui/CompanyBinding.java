@@ -245,7 +245,7 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 			public void onSelect(SelectEvent event) {
 				final ChooseType chooseType = new ChooseType();
 
-				typeWindow.setPixelSize(300, 200);
+				typeWindow.setPixelSize(300, 210);
 				typeWindow.setResizable(false);
 				typeWindow.setModal(true);
 				typeWindow.setBlinkModal(true);
@@ -284,7 +284,7 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 			public void onSelect(SelectEvent event) {
 				final ChooseUser chooseUser = new ChooseUser();
 
-				userWindow.setPixelSize(300, 200);
+				userWindow.setPixelSize(300, 210);
 				userWindow.setResizable(false);
 				userWindow.setModal(true);
 				userWindow.setBlinkModal(true);
@@ -369,7 +369,7 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				Info.display("Ошибка", "Данные  компании не обновлены");
+				Info.display("Ошибка", "Данные не обновлены");
 			}
 
 			@Override
@@ -382,7 +382,7 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 	void deleteCompany() {
 		companyService.delete(company, new AsyncCallback<Void>() {
 			public void onFailure(Throwable caught) {
-				Info.display("Ошибка", "Данные  компании не обновлены");
+				Info.display("Ошибка", "Данные не удалены");
 				caught.printStackTrace();
 			}
 
@@ -392,7 +392,4 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 		});
 	}
 
-	void createUserDialogWindow() {
-
-	}
 }

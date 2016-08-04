@@ -85,6 +85,7 @@ public class ChooseType implements IsWidget, Editor<Type> {
 		CssFloatLayoutContainer searchPanel = new CssFloatLayoutContainer();
 		final TextBox searchBox = new TextBox();
 		searchBox.setStyleName("searchBox");
+		searchBox.getElement().setPropertyString("placeholder", "поиск по вхождению");
 		TextButton searchButton = new TextButton("найти");
 		searchButton.addSelectHandler(new SelectHandler() {
 
@@ -100,12 +101,12 @@ public class ChooseType implements IsWidget, Editor<Type> {
 		CssFloatLayoutContainer gridPanel = new CssFloatLayoutContainer();
 		gridPanel.add(grid, new CssFloatData(1));
 		gridPanel.setScrollMode(ScrollMode.AUTOY);
-		inner.add(gridPanel, new CssFloatData(1));
+		inner.add(gridPanel, new CssFloatData(1, new Margins(0, 0, 5, 0)));
 		selectButton = new TextButton("выбрать");
 		HorizontalPanel hp = new HorizontalPanel();
 		hp.add(selectButton);
 		inner.setStyleFloat(Style.Float.RIGHT);
-		inner.add(hp, new CssFloatData(0.3));
+		inner.add(hp, new CssFloatData(0.3, new Margins(0, 0, 5, 0)));
 		CssFloatLayoutContainer outer = new CssFloatLayoutContainer();
 		outer.add(inner, new CssFloatData(1));
 		return outer;

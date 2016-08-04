@@ -31,11 +31,13 @@ public class Organization implements IsWidget, EntryPoint {
 		if (vp == null) {
 			vp = new VerticalPanel();
 			vp.setSpacing(10);
-			PlainTabPanel tabPanel = new PlainTabPanel();
 
+			PlainTabPanel tabPanel = new PlainTabPanel();
 			tabPanel.setWidth(800);
+
 			final CompanyBinding companyBinding = new CompanyBinding();
 			final DirectoryBinding directoryBinding = new DirectoryBinding();
+
 			tabPanel.add(companyBinding, "Организации");
 			tabPanel.add(directoryBinding, "Справочники");
 

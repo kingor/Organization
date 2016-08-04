@@ -61,9 +61,9 @@ public class ChooseUser implements IsWidget, Editor<User> {
 
 	public Widget createEditor() {
 		CssFloatLayoutContainer inner = new CssFloatLayoutContainer();
-		ColumnConfig<User, String> surnameColumn = new ColumnConfig<User, String>(props.surname(), 100, "Фамилия");
+		ColumnConfig<User, String> surnameColumn = new ColumnConfig<User, String>(props.surname(), 200, "Фамилия");
 		ColumnConfig<User, String> nameColumn = new ColumnConfig<User, String>(props.name(), 100, "Имя");
-		ColumnConfig<User, String> patronymicColumn = new ColumnConfig<User, String>(props.patronymic(), 100, "Отчество");
+		ColumnConfig<User, String> patronymicColumn = new ColumnConfig<User, String>(props.patronymic(), 200, "Отчество");
 		List<ColumnConfig<User, ?>> columns = new ArrayList<ColumnConfig<User, ?>>();
 		columns.add(surnameColumn);
 		columns.add(nameColumn);
@@ -89,6 +89,7 @@ public class ChooseUser implements IsWidget, Editor<User> {
 		CssFloatLayoutContainer searchPanel = new CssFloatLayoutContainer();
 		final TextBox searchBox = new TextBox();
 		searchBox.setStyleName("searchBox");
+		searchBox.getElement().setPropertyString("placeholder", "поиск по вхождению");
 		TextButton searchButton = new TextButton("найти");
 		searchButton.addSelectHandler(new SelectHandler() {
 
@@ -98,13 +99,13 @@ public class ChooseUser implements IsWidget, Editor<User> {
 			}
 		});
 
-		searchPanel.add(searchBox, new CssFloatData(0.6, new Margins(0, 20, 0, 10)));
+		searchPanel.add(searchBox, new CssFloatData(0.7, new Margins(0, 20, 0, 10)));
 		searchPanel.add(searchButton);
 		inner.add(searchPanel, new CssFloatData(0.9, new Margins(10, 0, 10, 0)));
 		CssFloatLayoutContainer gridPanel = new CssFloatLayoutContainer();
 		gridPanel.add(grid, new CssFloatData(1));
 		gridPanel.setScrollMode(ScrollMode.AUTOY);
-		inner.add(gridPanel, new CssFloatData(1));
+		inner.add(gridPanel, new CssFloatData(1, new Margins(0, 0, 5, 0)));
 		selectButton = new TextButton("выбрать");
 		HorizontalPanel hp = new HorizontalPanel();
 		hp.add(selectButton);
