@@ -3,6 +3,7 @@ package by.mainsoft.organization.client.ui;
 import java.util.ArrayList;
 import java.util.List;
 
+import by.mainsoft.organization.client.Organization;
 import by.mainsoft.organization.client.service.UserService;
 import by.mainsoft.organization.client.service.UserServiceAsync;
 import by.mainsoft.organization.shared.domain.User;
@@ -125,7 +126,7 @@ public class ChooseUser implements IsWidget, Editor<User> {
 	public void refreshUserList(String searchParameter) {
 		userService.searchByString(searchParameter, new AsyncCallback<List<User>>() {
 			public void onFailure(Throwable caught) {
-				Info.display("Ошибка", "Данные не обновлены");
+				Info.display(Organization.ERROR_TYPE, Organization.ERROR_MESSAGE);
 			}
 
 			public void onSuccess(List<User> companyList) {

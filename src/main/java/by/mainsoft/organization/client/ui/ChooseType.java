@@ -3,6 +3,7 @@ package by.mainsoft.organization.client.ui;
 import java.util.ArrayList;
 import java.util.List;
 
+import by.mainsoft.organization.client.Organization;
 import by.mainsoft.organization.client.service.TypeService;
 import by.mainsoft.organization.client.service.TypeServiceAsync;
 import by.mainsoft.organization.shared.domain.Type;
@@ -117,7 +118,7 @@ public class ChooseType implements IsWidget, Editor<Type> {
 	public void refreshTypeList(String searchParameter) {
 		typeService.searchByString(searchParameter, new AsyncCallback<List<Type>>() {
 			public void onFailure(Throwable caught) {
-				Info.display("Ошибка", "Данные не обновлены");
+				Info.display(Organization.ERROR_TYPE, Organization.ERROR_MESSAGE);
 			}
 
 			public void onSuccess(List<Type> companyList) {

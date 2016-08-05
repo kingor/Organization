@@ -19,6 +19,8 @@ public class Organization implements IsWidget, EntryPoint {
 	/**
 	 * This is the entry point method.
 	 */
+	public static final String ERROR_MESSAGE = "Данные не обновлены";
+	public static final String ERROR_TYPE = "Ошибка";
 	private VerticalPanel vp;
 
 	public void onModuleLoad() {

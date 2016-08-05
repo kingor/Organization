@@ -2,6 +2,7 @@ package by.mainsoft.organization.client.ui;
 
 import java.util.List;
 
+import by.mainsoft.organization.client.Organization;
 import by.mainsoft.organization.client.service.CompanyService;
 import by.mainsoft.organization.client.service.CompanyServiceAsync;
 import by.mainsoft.organization.shared.domain.Company;
@@ -355,7 +356,7 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 	public void refreshCompanyList() {
 		companyService.getAll(new AsyncCallback<List<Company>>() {
 			public void onFailure(Throwable caught) {
-				Info.display("Ошибка", "Данные не обновлены");
+				Info.display(Organization.ERROR_TYPE, Organization.ERROR_MESSAGE);
 				caught.printStackTrace();
 			}
 
@@ -374,7 +375,7 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				Info.display("Ошибка", "Данные не обновлены");
+				Info.display("Ошибка", Organization.ERROR_MESSAGE);
 			}
 
 			@Override
