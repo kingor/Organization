@@ -17,9 +17,9 @@ background-repeat:no-repeat;
 background-position: 1px 0px;
 }
 
-.gwt-Button {
-border-radius: 10px;
-}
+/* .gwt-Button { */
+/* border-radius: 10px; */
+/* } */
 
 .sendButton {
   display: block;

@@ -10,9 +10,9 @@ import by.mainsoft.organization.shared.domain.UserProperties;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
+import com.google.gwt.dom.client.StyleInjector;
 import com.google.gwt.editor.client.Editor;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
@@ -20,7 +20,6 @@ import com.sencha.gxt.core.client.Style.SelectionMode;
 import com.sencha.gxt.core.client.dom.ScrollSupport.ScrollMode;
 import com.sencha.gxt.core.client.util.Margins;
 import com.sencha.gxt.data.shared.ListStore;
-import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.CssFloatLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.CssFloatLayoutContainer.CssFloatData;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
@@ -41,7 +40,9 @@ public class ChooseUser implements IsWidget, Editor<User> {
 	private UserProperties props;
 	private User user;
 	private Grid<User> grid;
-	private TextButton selectButton;
+	private CustomTextButton selectButton;
+
+	// private SearchPanel searchPanel;
 
 	private VerticalLayoutContainer container;
 
@@ -51,6 +52,7 @@ public class ChooseUser implements IsWidget, Editor<User> {
 			container = new VerticalLayoutContainer();
 			props = GWT.create(UserProperties.class);
 			userStore = new ListStore<User>(props.key());
+			// searchPanel = new SearchPanel();
 			refreshUserList("");
 
 			container.add(createEditor());
@@ -89,8 +91,11 @@ public class ChooseUser implements IsWidget, Editor<User> {
 		CssFloatLayoutContainer searchPanel = new CssFloatLayoutContainer();
 		final TextBox searchBox = new TextBox();
 		// searchBox.setStyleName("searchBox");
+		StyleInjector.injectAtEnd(".my1 { border:1px solid; border-radius:15px;"
+				+ "height:20px; padding-left:25px; background-image:url('images/search.png'); background-repeat:no-repeat; background-position: 2px;");
+		searchBox.setStyleName("my1");
 		searchBox.getElement().setPropertyString("placeholder", "поиск по вхождению");
-		TextButton searchButton = new TextButton("найти");
+		CustomTextButton searchButton = new CustomTextButton("найти");
 		searchButton.addSelectHandler(new SelectHandler() {
 
 			@Override
@@ -99,18 +104,19 @@ public class ChooseUser implements IsWidget, Editor<User> {
 			}
 		});
 
-		searchPanel.add(searchBox, new CssFloatData(0.7, new Margins(0, 20, 0, 10)));
+		searchPanel.add(searchBox, new CssFloatData(0.65, new Margins(0, 30, 0, 10)));
 		searchPanel.add(searchButton);
+
 		inner.add(searchPanel, new CssFloatData(0.9, new Margins(10, 0, 10, 0)));
 		CssFloatLayoutContainer gridPanel = new CssFloatLayoutContainer();
 		gridPanel.add(grid, new CssFloatData(1));
 		gridPanel.setScrollMode(ScrollMode.AUTOY);
 		inner.add(gridPanel, new CssFloatData(1, new Margins(0, 0, 5, 0)));
-		selectButton = new TextButton("выбрать");
-		HorizontalPanel hp = new HorizontalPanel();
-		hp.add(selectButton);
+		selectButton = new CustomTextButton("выбрать");
+		CssFloatLayoutContainer buttonPanel = new CssFloatLayoutContainer();
+		buttonPanel.add(selectButton);
 		inner.setStyleFloat(Style.Float.RIGHT);
-		inner.add(hp, new CssFloatData(0.3));
+		inner.add(buttonPanel, new CssFloatData(0.3));
 		CssFloatLayoutContainer outer = new CssFloatLayoutContainer();
 		outer.add(inner, new CssFloatData(1));
 		return outer;

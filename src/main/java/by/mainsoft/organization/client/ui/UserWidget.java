@@ -21,7 +21,6 @@ import com.sencha.gxt.core.client.util.Margins;
 import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.widget.core.client.Window;
 import com.sencha.gxt.widget.core.client.box.MessageBox;
-import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.CssFloatLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.CssFloatLayoutContainer.CssFloatData;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
@@ -83,7 +82,7 @@ public class UserWidget implements IsWidget, Editor<User> {
 		VerticalLayoutContainer outer = new VerticalLayoutContainer();
 		CssFloatLayoutContainer gridPanel = new CssFloatLayoutContainer();
 		ColumnConfig<User, String> surnameColumn = new ColumnConfig<User, String>(props.surname(), 200, "Фамилия");
-		ColumnConfig<User, String> nameColumn = new ColumnConfig<User, String>(props.name(), 200, "Имя");
+		ColumnConfig<User, String> nameColumn = new ColumnConfig<User, String>(props.name(), 100, "Имя");
 		ColumnConfig<User, String> patronymicColumn = new ColumnConfig<User, String>(props.patronymic(), 200, "Отчество");
 		List<ColumnConfig<User, ?>> columns = new ArrayList<ColumnConfig<User, ?>>();
 		columns.add(surnameColumn);
@@ -112,7 +111,7 @@ public class UserWidget implements IsWidget, Editor<User> {
 
 		createWindow();
 
-		TextButton addButton = new TextButton("добавить");
+		CustomTextButton addButton = new CustomTextButton("добавить");
 		addButton.addSelectHandler(new SelectHandler() {
 
 			@Override
@@ -122,7 +121,7 @@ public class UserWidget implements IsWidget, Editor<User> {
 				userWindow.show();
 			}
 		});
-		TextButton deleteButton = new TextButton("удалить");
+		CustomTextButton deleteButton = new CustomTextButton("удалить");
 		deleteButton.addSelectHandler(new SelectHandler() {
 
 			@Override
@@ -177,7 +176,7 @@ public class UserWidget implements IsWidget, Editor<User> {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				Info.display("Ошибка", "Данные  компании не обновлены");
+				Info.display("Ошибка", "Данные не обновлены");
 			}
 
 			@Override
@@ -225,7 +224,7 @@ public class UserWidget implements IsWidget, Editor<User> {
 		patronymicFieldLabel.setLabelWidth(50);
 		innerPanel.add(patronymicFieldLabel, new CssFloatData(1));
 
-		TextButton addTypeButton = new TextButton("добавить");
+		CustomTextButton addTypeButton = new CustomTextButton("добавить");
 		addTypeButton.addSelectHandler(new SelectHandler() {
 			@Override
 			public void onSelect(SelectEvent event) {

@@ -8,6 +8,7 @@ import by.mainsoft.organization.shared.domain.Company;
 import by.mainsoft.organization.shared.domain.CompanyProperties;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.StyleInjector;
 //import com.google.gwt.dom.client.Style;
 import com.google.gwt.editor.client.Editor;
 import com.google.gwt.editor.client.SimpleBeanEditorDriver;
@@ -23,7 +24,6 @@ import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.widget.core.client.ListView;
 import com.sencha.gxt.widget.core.client.Window;
 import com.sencha.gxt.widget.core.client.box.MessageBox;
-import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.CssFloatLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.CssFloatLayoutContainer.CssFloatData;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
@@ -55,6 +55,8 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 	private Window typeWindow;
 	private Window userWindow;
 
+	private ChooseUser chooseUser;// = new ChooseUser();
+
 	// editor fields
 	TextField address;
 	TextField name;
@@ -79,7 +81,7 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 			refreshCompanyList();
 
 			company = companyStore.get(0);
-
+			chooseUser = new ChooseUser();
 			panel = new CssFloatLayoutContainer();
 			panel.setHeight(HEIGHT);
 			panel.add(createList(), new CssFloatData(0.25));
@@ -113,7 +115,7 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 			}
 		});
 
-		TextButton addButton = new TextButton("добавить");
+		CustomTextButton addButton = new CustomTextButton("добавить");
 		addButton.addSelectHandler(new SelectHandler() {
 
 			@Override
@@ -123,7 +125,7 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 			}
 		});
 
-		TextButton deleteButton = new TextButton("удалить");
+		CustomTextButton deleteButton = new CustomTextButton("удалить");
 		deleteButton.addSelectHandler(new SelectHandler() {
 
 			@Override
@@ -205,7 +207,7 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 		CssFloatLayoutContainer employeePanel = new CssFloatLayoutContainer();
 		employee = new IntegerField();
 		employee.setName("employee");
-		name.setAllowBlank(false);
+		employee.setAllowBlank(false);
 		employee.setFormat(NumberFormat.getFormat("0"));
 		employee.setAllowNegative(false);
 		employee.addValidator(new MinNumberValidator<Integer>(0));
@@ -237,7 +239,7 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 		typeName = new TextField();
 		typeName.setName("typeName");
 		inner.add(new FieldLabel(typeName, "тип"), new CssFloatData(0.35));
-		TextButton typeButton = new TextButton("...");
+		CustomTextButton typeButton = new CustomTextButton("  ...  ");
 
 		typeButton.addSelectHandler(new SelectHandler() {
 
@@ -276,13 +278,13 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 		userShortName.setName("userShortName");
 		userPanel.add(new FieldLabel(userShortName, "сотрудник"), new CssFloatData(0.35));
 
-		TextButton managerButton = new TextButton("...");
+		CustomTextButton managerButton = new CustomTextButton("  ...  ");
 
 		managerButton.addSelectHandler(new SelectHandler() {
 
 			@Override
 			public void onSelect(SelectEvent event) {
-				final ChooseUser chooseUser = new ChooseUser();
+				// final ChooseUser chooseUser = new ChooseUser();
 
 				userWindow.setPixelSize(300, 210);
 				userWindow.setResizable(false);
@@ -313,6 +315,7 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 		date = new DateField(new DateTimePropertyEditor("MM/dd/yyyy"));
 		date.setName("date");
 		date.setAutoValidate(true);
+
 		userPanel.add(date, new CssFloatData(0.16));
 		inner.add(userPanel, new CssFloatData(1, new Margins(10, 30, 20, 0)));
 
@@ -320,7 +323,9 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 		 * Save button
 		 */
 
-		TextButton save = new TextButton("Сохранить");
+		CustomTextButton save = new CustomTextButton("сохранить");
+		StyleInjector.inject(".myCustomStyle { border:1px solid; border-radius:15px; }");
+		save.setStyleName("myCustomStyle");
 		save.addSelectHandler(new SelectHandler() {
 
 			@Override

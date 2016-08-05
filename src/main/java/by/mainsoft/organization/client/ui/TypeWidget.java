@@ -21,7 +21,6 @@ import com.sencha.gxt.core.client.util.Margins;
 import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.widget.core.client.Window;
 import com.sencha.gxt.widget.core.client.box.MessageBox;
-import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.CssFloatLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.CssFloatLayoutContainer.CssFloatData;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
@@ -106,7 +105,7 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 
 		createWindow();
 
-		TextButton addButton = new TextButton("добавить");
+		CustomTextButton addButton = new CustomTextButton("добавить");
 		addButton.addSelectHandler(new SelectHandler() {
 
 			@Override
@@ -116,7 +115,7 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 				typeWindow.show();
 			}
 		});
-		TextButton deleteButton = new TextButton("удалить");
+		CustomTextButton deleteButton = new CustomTextButton("удалить");
 		deleteButton.addSelectHandler(new SelectHandler() {
 
 			@Override
@@ -170,7 +169,7 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				Info.display("Ошибка", "Данные  не обновлены");
+				Info.display("Ошибка", "Данные не обновлены");
 			}
 
 			@Override
@@ -202,7 +201,7 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 		nameFieldLabel.setLabelWidth(20);
 		innerPanel.add(nameFieldLabel, new CssFloatData(1, new Margins(0, 0, 20, 0)));
 
-		TextButton addTypeButton = new TextButton("добавить");
+		CustomTextButton addTypeButton = new CustomTextButton("добавить");
 		addTypeButton.addSelectHandler(new SelectHandler() {
 			@Override
 			public void onSelect(SelectEvent event) {
