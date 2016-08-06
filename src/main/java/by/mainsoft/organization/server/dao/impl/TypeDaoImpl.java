@@ -25,8 +25,16 @@ public class TypeDaoImpl extends GenericDaoImpl<Type, Long> implements TypeDao {
 		logger.info("DAO - caused searchByString()");
 		Session session = sessionFactory.getCurrentSession();
 		@SuppressWarnings("unchecked")
-		List<Type> typeList = (List<Type>) session.createCriteria(Type.class)
-				.add(Restrictions.like("name", "%" + searchParameter + "%").ignoreCase()).list();
+		List<Type> typeList = (List<Type>) session.createCriteria(Type.class).add(Restrictions.like("name", "%" + searchParameter + "%").ignoreCase()).list();
+		return typeList;
+	}
+
+	@Override
+	public List<Type> searchByName(String name) {
+		logger.info("DAO - caused searchByName()");
+		Session session = sessionFactory.getCurrentSession();
+		@SuppressWarnings("unchecked")
+		List<Type> typeList = (List<Type>) session.createCriteria(Type.class).add(Restrictions.eq("name", name).ignoreCase()).list();
 		return typeList;
 	}
 

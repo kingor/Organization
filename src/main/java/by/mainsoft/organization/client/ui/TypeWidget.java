@@ -65,6 +65,7 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 			typeStore = new ListStore<Type>(props.key());
 			refreshTypeList();
 			typeWindow = new Window();
+
 			container.add(createEditor());
 
 			driver.initialize(this);
@@ -130,7 +131,6 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 		gridPanel.setScrollMode(ScrollMode.AUTOY);
 		gridPanel.add(grid, new CssFloatData(1));
 		outer.add(gridPanel, new VerticalLayoutData(1, -1));
-		// outer.setScrollMode(ScrollMode.AUTOY);
 		return outer;
 	}
 
@@ -165,7 +165,7 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 	}
 
 	void updateType(Type type) {
-		typeService.update(type, new AsyncCallback<Void>() {
+		typeService.create(type, new AsyncCallback<Long>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -173,7 +173,9 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 			}
 
 			@Override
-			public void onSuccess(Void result) {
+			public void onSuccess(Long result) {
+				if (result.equals(-1L))
+					Info.display(Organization.ERROR_TYPE, "Такой тип уже есть в БД");
 				refreshTypeList();
 			}
 		});

@@ -23,6 +23,13 @@ public class TypeServiceImpl implements TypeService {
 	@Transactional
 	public Long create(Type newInstance) {
 		logger.info("SERVICE - caused create()");
+		if (newInstance == null) {
+			return -1L;
+		}
+		List<Type> typeList = typeDao.searchByName(newInstance.getName());
+		if (typeList != null && typeList.size() > 0) {
+			return -1L;
+		}
 		return typeDao.create(newInstance);
 	}
 
@@ -43,7 +50,7 @@ public class TypeServiceImpl implements TypeService {
 	@Override
 	@Transactional
 	public void delete(Type persistentObject) {
-		logger.info("SERVICE - caused dalete()");
+		logger.info("SERVICE - caused dуlete()");
 		typeDao.delete(persistentObject);
 	}
 

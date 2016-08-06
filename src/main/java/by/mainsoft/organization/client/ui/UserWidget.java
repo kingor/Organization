@@ -151,9 +151,7 @@ public class UserWidget implements IsWidget, Editor<User> {
 				userStore.clear();
 				userStore.addAll(companyList);
 				user = userStore.get(0);
-				Info.display("Ура!", user.getName());
 				grid.getView().refresh(true);
-				// companyListView.getSelectionModel().select(0, true);
 			}
 		});
 	}

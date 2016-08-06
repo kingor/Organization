@@ -56,7 +56,7 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 	private Window typeWindow;
 	private Window userWindow;
 
-	private ChooseUser chooseUser;// = new ChooseUser();
+	private ChooseUser chooseUser;
 
 	// editor fields
 	TextField address;
@@ -145,13 +145,12 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 		listPanel.add(selectPanel, new VerticalLayoutData(1, -1));
 		listPanel.setBorders(true);
 		listPanel.setHeight(HEIGHT);
-		// outer.add(listPanel, new CssFloatData(0.25));
 		return listPanel;
 	}
 
 	private Widget createEditor() {
 
-		CssFloatLayoutContainer outer = new CssFloatLayoutContainer();
+		// CssFloatLayoutContainer outer = new CssFloatLayoutContainer();
 
 		/*
 		 * Form
@@ -176,10 +175,11 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 
 		data = new TextArea();
 		data.setName("data");
+		data.setEmptyText("сведения об организации");
 		data.setHeight(70);
 		FieldLabel dataLabel = new FieldLabel(data, "сведения");
 		dataLabel.setLabelSeparator("");
-		inner.add(dataLabel, new CssFloatData(0.5));
+		inner.add(dataLabel, new CssFloatData(0.6));
 
 		/*
 		 * Address field
@@ -189,7 +189,7 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 		address.setName("address");
 		FieldLabel addressLabel = new FieldLabel(address, "адрес");
 		addressLabel.setLabelSeparator("");
-		inner.add(addressLabel, new CssFloatData(0.5));
+		inner.add(addressLabel, new CssFloatData(0.4));
 
 		/*
 		 * Phone field
@@ -199,7 +199,7 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 		phone.setName("phone");
 		FieldLabel phoneFieldLabel = new FieldLabel(phone, "телефон");
 		phoneFieldLabel.setLabelSeparator("");
-		inner.add(phoneFieldLabel, new CssFloatData(0.5, new Margins(5, 0, 0, 0)));
+		inner.add(phoneFieldLabel, new CssFloatData(0.4, new Margins(5, 0, 0, 0)));
 
 		/*
 		 * Employee field
@@ -222,8 +222,12 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 		 */
 		info = new TextArea();
 		info.setName("info");
+		info.setEmptyText("дополнительная организация");
 		info.setHeight(70);
-		FieldLabel infoFieldLabel = new FieldLabel(info, "доп. информация");
+		FieldLabel infoFieldLabel = new FieldLabel(info, "доп.  информация");
+		infoFieldLabel.setLabelSeparator(" ");
+		infoFieldLabel.setLabelWidth(95);
+		infoFieldLabel.setLabelPad(10);
 		inner.add(infoFieldLabel, new CssFloatData(1, new Margins(0, 0, 10, 0)));
 
 		/*
@@ -239,7 +243,10 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 
 		typeName = new TextField();
 		typeName.setName("typeName");
-		inner.add(new FieldLabel(typeName, "тип"), new CssFloatData(0.35));
+		typeName.setEmptyText("тип из справочника");
+		FieldLabel typeFieldLabel = new FieldLabel(typeName, "тип");
+		typeFieldLabel.setLabelSeparator("");
+		inner.add(typeFieldLabel, new CssFloatData(0.35));
 		CustomTextButton typeButton = new CustomTextButton("  ...  ");
 
 		typeButton.addSelectHandler(new SelectHandler() {
@@ -277,7 +284,9 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 		CssFloatLayoutContainer userPanel = new CssFloatLayoutContainer();
 		userShortName = new TextField();
 		userShortName.setName("userShortName");
-		userPanel.add(new FieldLabel(userShortName, "сотрудник"), new CssFloatData(0.35));
+		FieldLabel userFieldLabel = new FieldLabel(userShortName, "сотрудник");
+		userFieldLabel.setLabelSeparator("");
+		userPanel.add(userFieldLabel, new CssFloatData(0.35));
 
 		CustomTextButton managerButton = new CustomTextButton("  ...  ");
 
@@ -375,7 +384,7 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				Info.display("Ошибка", Organization.ERROR_MESSAGE);
+				Info.display(Organization.ERROR_TYPE, Organization.ERROR_MESSAGE);
 			}
 
 			@Override
@@ -388,7 +397,7 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 	void deleteCompany() {
 		companyService.delete(company, new AsyncCallback<Void>() {
 			public void onFailure(Throwable caught) {
-				Info.display("Ошибка", "Данные не удалены");
+				Info.display(Organization.ERROR_TYPE, Organization.ERROR_MESSAGE);
 				caught.printStackTrace();
 			}
 
