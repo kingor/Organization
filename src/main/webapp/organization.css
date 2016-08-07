@@ -1,29 +1,36 @@
 /** Add css rules here for your application. */
 
-
 /** Example rules used by the template application (remove for your app) */
 h1 {
-  font-size: 2em;
-  font-weight: bold;
-  color: #777777;
-  margin: 40px 0px 70px;
-  text-align: center;
-}
-.gwt-TextBox {
-padding: 5px 5px 5px 5px;
-border-radius: 10px;
-background-image:url('images/search.png');
-background-repeat:no-repeat;
-background-position: 1px 0px;
+	font-size: 2em;
+	font-weight: bold;
+	color: #777777;
+	margin: 40px 0px 70px;
+	text-align: center;
 }
 
-/* .gwt-Button { */
-/* border-radius: 10px; */
-/* } */
+#myTextBox {
+	padding-left: 20px;
+	border-radius: 15px;
+	height: 20px;
+	background-image: url('images/search.png');
+	background-repeat: no-repeat;
+	background-position: 2px;
+}
+
+#myButton {
+	border:1px solid;
+	border-radius: 15px;
+	height: 20px;
+}
+
+#myLabel {
+	text-align: right;
+}
 
 .sendButton {
-  display: block;
-  font-size: 16pt;
+	display: block;
+	font-size: 16pt;
 }
 
 /*.searchBox{
@@ -36,18 +43,18 @@ background-position: 1px 0px;
 
 /** Most GWT widgets already have a style name defined */
 .gwt-DialogBox {
-  width: 400px;
+	width: 400px;
 }
 
 .dialogVPanel {
-  margin: 5px;
+	margin: 5px;
 }
 
 .serverResponseLabelError {
-  color: red;
+	color: red;
 }
 
 /** Set ids using widget.getElement().setId("idOfElement") */
 #closeButton {
-  margin: 15px 6px 6px;
+	margin: 15px 6px 6px;
 }

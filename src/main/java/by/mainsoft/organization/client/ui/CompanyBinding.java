@@ -9,7 +9,6 @@ import by.mainsoft.organization.shared.domain.Company;
 import by.mainsoft.organization.shared.domain.CompanyProperties;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.StyleInjector;
 //import com.google.gwt.dom.client.Style;
 import com.google.gwt.editor.client.Editor;
 import com.google.gwt.editor.client.SimpleBeanEditorDriver;
@@ -56,8 +55,6 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 	private Window typeWindow;
 	private Window userWindow;
 
-	private ChooseUser chooseUser;
-
 	// editor fields
 	TextField address;
 	TextField name;
@@ -82,7 +79,7 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 			refreshCompanyList();
 
 			company = companyStore.get(0);
-			chooseUser = new ChooseUser();
+			// chooseUser = new ChooseUser();
 			panel = new CssFloatLayoutContainer();
 			panel.setHeight(HEIGHT);
 			panel.add(createList(), new CssFloatData(0.25));
@@ -171,7 +168,6 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 		/*
 		 * Data row
 		 */
-
 		data = new TextArea();
 		data.setName("data");
 		data.setEmptyText("сведения об организации");
@@ -182,17 +178,14 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 		/*
 		 * Address field
 		 */
-
 		address = new TextField();
 		address.setName("address");
-		FieldLabel addressLabel = new FieldLabel(address, "адрес");
-		addressLabel.setLabelSeparator("");
+		FieldLabel addressLabel = new CustomFieldLabel(address, "адрес");
 		inner.add(addressLabel, new CssFloatData(0.4));
 
 		/*
 		 * Phone field
 		 */
-
 		phone = new TextField();
 		phone.setName("phone");
 		FieldLabel phoneFieldLabel = new CustomFieldLabel(phone, "телефон");
@@ -201,7 +194,6 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 		/*
 		 * Employee field
 		 */
-
 		CssFloatLayoutContainer employeePanel = new CssFloatLayoutContainer();
 		employee = new IntegerField();
 		employee.setName("employee");
@@ -210,7 +202,7 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 		employee.setAllowNegative(false);
 		employee.addValidator(new MinNumberValidator<Integer>(0));
 		FieldLabel emplFieldLabel = new CustomFieldLabel(employee, "кол. сотрудников");
-		employeePanel.add(emplFieldLabel, new CssFloatData(0.35));
+		employeePanel.add(emplFieldLabel, new CssFloatData(0.4));
 		inner.add(employeePanel, new CssFloatData(1, new Margins(10, 0, 10, 0)));
 
 		/*
@@ -221,26 +213,24 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 		info.setEmptyText("дополнительная организация");
 		info.setHeight(70);
 		FieldLabel infoFieldLabel = new CustomFieldLabel(info, "доп.  информация");
-		infoFieldLabel.setLabelWidth(95);
-		infoFieldLabel.setLabelPad(10);
+		infoFieldLabel.setLabelWidth(98);
+		infoFieldLabel.setLabelPad(12);
 		inner.add(infoFieldLabel, new CssFloatData(1, new Margins(0, 0, 10, 0)));
 
 		/*
 		 * Line
 		 */
-
 		HTML html = new HTML("<hr  style=\"width:100%;\" />");
 		inner.add(html, new CssFloatData(1, new Margins(0, 0, 10, 0)));
 
 		/*
 		 * Type row
 		 */
-
 		typeName = new TextField();
 		typeName.setName("typeName");
 		typeName.setEmptyText("тип из справочника");
 		FieldLabel typeFieldLabel = new CustomFieldLabel(typeName, "тип");
-		inner.add(typeFieldLabel, new CssFloatData(0.35));
+		inner.add(typeFieldLabel, new CssFloatData(0.4));
 		CustomTextButton typeButton = new CustomTextButton("  ...  ");
 
 		typeButton.addSelectHandler(new SelectHandler() {
@@ -256,7 +246,7 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 				typeWindow.setHeadingText("выбрать тип");
 				typeWindow.setExpanded(true);
 				typeWindow.add(chooseType);
-				chooseType.getSaveButton().addSelectHandler(new SelectHandler() {
+				chooseType.getSelectButton().addSelectHandler(new SelectHandler() {
 
 					@Override
 					public void onSelect(SelectEvent event) {
@@ -274,20 +264,19 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 		/*
 		 * User row
 		 */
-
 		CssFloatLayoutContainer userPanel = new CssFloatLayoutContainer();
 		userShortName = new TextField();
 		userShortName.setName("userShortName");
 		FieldLabel userFieldLabel = new CustomFieldLabel(userShortName, "сотрудник");
-		userPanel.add(userFieldLabel, new CssFloatData(0.35));
+		userPanel.add(userFieldLabel, new CssFloatData(0.4));
 
-		CustomTextButton managerButton = new CustomTextButton("  ...  ");
+		CustomTextButton userButton = new CustomTextButton("  ...  ");
 
-		managerButton.addSelectHandler(new SelectHandler() {
+		userButton.addSelectHandler(new SelectHandler() {
 
 			@Override
 			public void onSelect(SelectEvent event) {
-				// final ChooseUser chooseUser = new ChooseUser();
+				final ChooseUser chooseUser = new ChooseUser();
 
 				userWindow.setPixelSize(300, 210);
 				userWindow.setResizable(false);
@@ -296,7 +285,7 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 				userWindow.setHeadingText("выбрать сотрудника");
 				userWindow.setExpanded(true);
 				userWindow.add(chooseUser);
-				chooseUser.getSaveButton().addSelectHandler(new SelectHandler() {
+				chooseUser.getSelectButton().addSelectHandler(new SelectHandler() {
 
 					@Override
 					public void onSelect(SelectEvent event) {
@@ -309,12 +298,11 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 				userWindow.show();
 			}
 		});
-		userPanel.add(managerButton, new CssFloatData(0.05, new Margins(0, 30, 0, 0)));
+		userPanel.add(userButton, new CssFloatData(0.05, new Margins(0, 30, 0, 0)));
 
 		/*
 		 * Date field
 		 */
-
 		date = new DateField(new DateTimePropertyEditor("MM/dd/yyyy"));
 		date.setName("date");
 		date.setAutoValidate(true);
@@ -325,10 +313,7 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 		/*
 		 * Save button
 		 */
-
 		CustomTextButton save = new CustomTextButton("сохранить");
-		StyleInjector.inject(".myCustomStyle { border:1px solid; border-radius:15px; }");
-		save.setStyleName("myCustomStyle");
 		save.addSelectHandler(new SelectHandler() {
 
 			@Override
@@ -344,15 +329,13 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 		});
 		CssFloatLayoutContainer savePanel = new CssFloatLayoutContainer();
 		savePanel.setStyleFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
-		savePanel.add(save);// addButton(save);
+		savePanel.add(save);
 		inner.add(savePanel, new CssFloatData(0.95));
 		CssFloatLayoutContainer container = new CssFloatLayoutContainer();
 		container.add(inner, new CssFloatData(0.95, new Margins(15, 0, 10, 10)));
 		container.setBorders(true);
-		// outer.add(container, new CssFloatData(0.75));
-		// outer.setHeight(HEIGHT);
 
-		return container;// outer;
+		return container;
 	}
 
 	public void refreshCompanyList() {

@@ -11,16 +11,13 @@ import by.mainsoft.organization.shared.domain.TypeProperties;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
-import com.google.gwt.dom.client.StyleInjector;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.core.client.Style.SelectionMode;
 import com.sencha.gxt.core.client.dom.ScrollSupport.ScrollMode;
 import com.sencha.gxt.core.client.util.Margins;
 import com.sencha.gxt.data.shared.ListStore;
-import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.CssFloatLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.CssFloatLayoutContainer.CssFloatData;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
@@ -43,6 +40,8 @@ public class ChooseType implements IsWidget/* , Editor<Type> */{
 	private Grid<Type> grid;
 	private CustomTextButton selectButton;
 
+	private SearchPanel searchPanel;
+
 	private VerticalLayoutContainer container;
 
 	@Override
@@ -51,6 +50,7 @@ public class ChooseType implements IsWidget/* , Editor<Type> */{
 			container = new VerticalLayoutContainer();
 			props = GWT.create(TypeProperties.class);
 			typeStore = new ListStore<Type>(props.key());
+			searchPanel = new SearchPanel();
 			refreshTypeList("");
 
 			container.add(createWidget());
@@ -82,24 +82,32 @@ public class ChooseType implements IsWidget/* , Editor<Type> */{
 			}
 		});
 
-		CssFloatLayoutContainer searchPanel = new CssFloatLayoutContainer();
-		final TextBox searchBox = new TextBox();
-		// searchBox.setStyleName("searchBox");
-		StyleInjector.injectAtEnd(".my1 { border:1px solid; border-radius:15px;"
-				+ "height:20px; padding-left:25px; background-image:url('images/search.png'); background-repeat:no-repeat; background-position: 2px;");
-		searchBox.setStyleName("my1");
-		searchBox.getElement().setPropertyString("placeholder", "поиск по вхождению");
-		TextButton searchButton = new CustomTextButton("найти");
-		searchButton.addSelectHandler(new SelectHandler() {
+		// CssFloatLayoutContainer searchPanel = new CssFloatLayoutContainer();
+		// final TextBox searchBox = new TextBox();
+		// StyleInjector.injectAtEnd(".my1 { border:1px solid; border-radius:15px;"
+		// + "height:20px; padding-left:25px; background-image:url('images/search.png'); background-repeat:no-repeat; background-position: 2px;");
+		// searchBox.setStyleName("my1");
+		// searchBox.getElement().setPropertyString("placeholder", "поиск по вхождению");
+		// TextButton searchButton = new CustomTextButton("найти");
+		// searchButton.addSelectHandler(new SelectHandler() {
+		//
+		// @Override
+		// public void onSelect(SelectEvent event) {
+		// refreshTypeList(searchBox.getText());
+		// }
+		// });
+		//
+		// searchPanel.add(searchBox, new CssFloatData(0.65, new Margins(0, 30, 0, 10)));
+		// searchPanel.add(searchButton);
+
+		searchPanel.getSearchButton().addSelectHandler(new SelectHandler() {
 
 			@Override
 			public void onSelect(SelectEvent event) {
-				refreshTypeList(searchBox.getText());
+				refreshTypeList(searchPanel.getSearchText());
 			}
 		});
 
-		searchPanel.add(searchBox, new CssFloatData(0.65, new Margins(0, 30, 0, 10)));
-		searchPanel.add(searchButton);
 		inner.add(searchPanel, new CssFloatData(0.9, new Margins(10, 0, 10, 0)));
 		CssFloatLayoutContainer gridPanel = new CssFloatLayoutContainer();
 		gridPanel.add(grid, new CssFloatData(1));
@@ -137,7 +145,7 @@ public class ChooseType implements IsWidget/* , Editor<Type> */{
 		return type;
 	}
 
-	public HasSelectHandlers getSaveButton() {
+	public HasSelectHandlers getSelectButton() {
 		return selectButton;
 	}
 

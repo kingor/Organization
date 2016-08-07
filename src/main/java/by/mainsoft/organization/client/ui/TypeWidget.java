@@ -56,6 +56,7 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 	private Type type;
 	private Grid<Type> grid;
 	private Window typeWindow;
+
 	// editor fields
 	TextField name;
 
