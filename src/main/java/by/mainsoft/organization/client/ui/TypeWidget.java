@@ -71,8 +71,8 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 			typeStore = new ListStore<Type>(props.key());
 			refreshTypeList();
 			typeWindow = new Window();
-
 			container.add(createEditor());
+
 			driver.initialize(this);
 			driver.edit(type);
 

@@ -105,8 +105,6 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 			public void onSelectionChanged(SelectionChangedEvent<Company> event) {
 				if (event.getSelection().size() > 0) {
 					// edit(event.getSelection().get(0));
-					address.clearInvalid();
-					employee.clearInvalid();
 					company = event.getSelection().get(0);
 					driver.edit(company);
 				}

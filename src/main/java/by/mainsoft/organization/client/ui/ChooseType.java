@@ -82,24 +82,6 @@ public class ChooseType implements IsWidget/* , Editor<Type> */{
 			}
 		});
 
-		// CssFloatLayoutContainer searchPanel = new CssFloatLayoutContainer();
-		// final TextBox searchBox = new TextBox();
-		// StyleInjector.injectAtEnd(".my1 { border:1px solid; border-radius:15px;"
-		// + "height:20px; padding-left:25px; background-image:url('images/search.png'); background-repeat:no-repeat; background-position: 2px;");
-		// searchBox.setStyleName("my1");
-		// searchBox.getElement().setPropertyString("placeholder", "поиск по вхождению");
-		// TextButton searchButton = new CustomTextButton("найти");
-		// searchButton.addSelectHandler(new SelectHandler() {
-		//
-		// @Override
-		// public void onSelect(SelectEvent event) {
-		// refreshTypeList(searchBox.getText());
-		// }
-		// });
-		//
-		// searchPanel.add(searchBox, new CssFloatData(0.65, new Margins(0, 30, 0, 10)));
-		// searchPanel.add(searchButton);
-
 		searchPanel.getSearchButton().addSelectHandler(new SelectHandler() {
 
 			@Override

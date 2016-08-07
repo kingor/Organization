@@ -32,7 +32,7 @@ import com.sencha.gxt.widget.core.client.info.Info;
 import com.sencha.gxt.widget.core.client.selection.SelectionChangedEvent;
 import com.sencha.gxt.widget.core.client.selection.SelectionChangedEvent.SelectionChangedHandler;
 
-public class ChooseUser implements IsWidget, SelectHandler/* , Editor<User> */{
+public class ChooseUser implements IsWidget {
 
 	UserServiceAsync userService = GWT.create(UserService.class);
 	private ListStore<User> userStore;
@@ -88,24 +88,6 @@ public class ChooseUser implements IsWidget, SelectHandler/* , Editor<User> */{
 			}
 		});
 
-		// CssFloatLayoutContainer searchPanel = new CssFloatLayoutContainer();
-		// final TextBox searchBox = new TextBox();
-		// StyleInjector.injectAtEnd(".my1 { border:1px solid; border-radius:15px;"
-		// + "height:20px; padding-left:25px; background-image:url('images/search.png'); background-repeat:no-repeat; background-position: 2px;");
-		// searchBox.setStyleName("my1");
-		// searchBox.getElement().setPropertyString("placeholder", "поиск по вхождению");
-		// CustomTextButton searchButton = new CustomTextButton("найти");
-		// searchButton.addSelectHandler(new SelectHandler() {
-		//
-		// @Override
-		// public void onSelect(SelectEvent event) {
-		// refreshUserList(searchBox.getText());
-		// }
-		// });
-		//
-		// searchPanel.add(searchBox, new CssFloatData(0.65, new Margins(0, 30, 0, 10)));
-		// searchPanel.add(searchButton);
-
 		searchPanel.getSearchButton().addSelectHandler(new SelectHandler() {
 
 			@Override
@@ -150,12 +132,6 @@ public class ChooseUser implements IsWidget, SelectHandler/* , Editor<User> */{
 
 	public HasSelectHandlers getSelectButton() {
 		return selectButton;
-	}
-
-	@Override
-	public void onSelect(SelectEvent event) {
-		// TODO Auto-generated method stub
-
 	}
 
 }

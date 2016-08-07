@@ -70,7 +70,6 @@ public class UserWidget implements IsWidget, Editor<User> {
 			props = GWT.create(UserProperties.class);
 			userStore = new ListStore<User>(props.key());
 			refreshUserList();
-
 			container.add(createEditor());
 
 			driver.initialize(this);

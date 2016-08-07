@@ -47,7 +47,6 @@ public class Organization implements IsWidget, EntryPoint {
 
 			tabPanel.add(companyBinding, "Организации");
 			tabPanel.add(directoryBinding, "Справочники");
-
 			tabPanel.addSelectionHandler(new SelectionHandler<Widget>() {
 
 				@Override

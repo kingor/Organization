@@ -1,6 +1,5 @@
 package by.mainsoft.organization.client.ui;
 
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.widget.core.client.form.FieldLabel;
@@ -25,9 +24,9 @@ public class CustomFieldLabel extends FieldLabel {
 	public CustomFieldLabel(IsWidget widget, String label) {
 		super(widget, label);
 		this.setLabelSeparator("");
-		// this.setLabelWidth(95);
 		this.setLabelPad(10);
-		DOM.setElementAttribute(this.getElement(), "id", "myLabel");
+		// DOM.setElementAttribute(this.getElement(), "id", "myLabel");
+		this.getElement().setId("myLabel");
 	}
 
 	public CustomFieldLabel(IsWidget widget) {

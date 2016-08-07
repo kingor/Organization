@@ -1,6 +1,5 @@
 package by.mainsoft.organization.client.ui;
 
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
@@ -23,11 +22,9 @@ public class SearchPanel implements IsWidget {
 			searchPanel = new CssFloatLayoutContainer();
 
 			searchBox = new TextBox();
-			// StyleInjector.injectAtStart(".mySearchBox { border:1px solid; border-radius:15px; height:20px; padding-left:25px; background-image:url('images/search.png'); "
-			// + "background-repeat:no-repeat; background-position: 2px;");
-			// searchBox.setStyleName("mySearchBox");
 			searchBox.getElement().setPropertyString("placeholder", "поиск по вхождению");
-			DOM.setElementAttribute(searchBox.getElement(), "id", "myTextBox");
+			// DOM.setElementAttribute(searchBox.getElement(), "id", "myTextBox");
+			searchBox.getElement().setId("myTextBox");
 			searchPanel.add(searchBox, new CssFloatData(0.65, new Margins(0, 30, 0, 10)));
 			searchPanel.add(searchButton);
 		}
