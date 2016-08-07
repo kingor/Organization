@@ -21,11 +21,10 @@ public class SearchPanel implements IsWidget {
 		if (searchPanel == null) {
 			searchPanel = new CssFloatLayoutContainer();
 
-			// searchBox
 			searchButton = new CustomTextButton("найти");
 
-			StyleInjector.injectAtEnd(".my1 { border:1px solid; border-radius:15px;"
-					+ "height:20px; padding-left:25px; background-image:url('images/search.png'); background-repeat:no-repeat; background-position: 2px;");
+			StyleInjector.injectAtEnd(".my1 { border:1px solid; border-radius:15px; height:20px; padding-left:25px; background-image:url('images/search.png'); "
+					+ "background-repeat:no-repeat; background-position: 2px;");
 			searchBox.setStyleName("my1");
 			searchBox.getElement().setPropertyString("placeholder", "поиск по вхождению");
 

@@ -12,7 +12,6 @@ import by.mainsoft.organization.shared.domain.UserProperties;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.StyleInjector;
-import com.google.gwt.editor.client.Editor;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.TextBox;
@@ -34,7 +33,7 @@ import com.sencha.gxt.widget.core.client.info.Info;
 import com.sencha.gxt.widget.core.client.selection.SelectionChangedEvent;
 import com.sencha.gxt.widget.core.client.selection.SelectionChangedEvent.SelectionChangedHandler;
 
-public class ChooseUser implements IsWidget, Editor<User> {
+public class ChooseUser implements IsWidget/* , Editor<User> */{
 
 	UserServiceAsync userService = GWT.create(UserService.class);
 	private ListStore<User> userStore;
@@ -56,13 +55,13 @@ public class ChooseUser implements IsWidget, Editor<User> {
 			// searchPanel = new SearchPanel();
 			refreshUserList("");
 
-			container.add(createEditor());
+			container.add(createWidget());
 
 		}
 		return container;
 	}
 
-	public Widget createEditor() {
+	public Widget createWidget() {
 		CssFloatLayoutContainer inner = new CssFloatLayoutContainer();
 		ColumnConfig<User, String> surnameColumn = new ColumnConfig<User, String>(props.surname(), 200, "Фамилия");
 		ColumnConfig<User, String> nameColumn = new ColumnConfig<User, String>(props.name(), 100, "Имя");
@@ -91,7 +90,6 @@ public class ChooseUser implements IsWidget, Editor<User> {
 
 		CssFloatLayoutContainer searchPanel = new CssFloatLayoutContainer();
 		final TextBox searchBox = new TextBox();
-		// searchBox.setStyleName("searchBox");
 		StyleInjector.injectAtEnd(".my1 { border:1px solid; border-radius:15px;"
 				+ "height:20px; padding-left:25px; background-image:url('images/search.png'); background-repeat:no-repeat; background-position: 2px;");
 		searchBox.setStyleName("my1");

@@ -20,12 +20,16 @@ import com.sencha.gxt.core.client.Style.SelectionMode;
 import com.sencha.gxt.core.client.dom.ScrollSupport.ScrollMode;
 import com.sencha.gxt.core.client.util.Margins;
 import com.sencha.gxt.data.shared.ListStore;
+import com.sencha.gxt.widget.core.client.Dialog.PredefinedButton;
 import com.sencha.gxt.widget.core.client.Window;
 import com.sencha.gxt.widget.core.client.box.MessageBox;
+import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.CssFloatLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.CssFloatLayoutContainer.CssFloatData;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData;
+import com.sencha.gxt.widget.core.client.event.DialogHideEvent;
+import com.sencha.gxt.widget.core.client.event.DialogHideEvent.DialogHideHandler;
 import com.sencha.gxt.widget.core.client.event.HideEvent;
 import com.sencha.gxt.widget.core.client.event.HideEvent.HideHandler;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
@@ -45,6 +49,7 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 	}
 
 	TypeServiceAsync typeService = GWT.create(TypeService.class);
+	public static final String EQUAL_ERROR = "Такой тип уже есть в БД";
 	private ListStore<Type> typeStore;
 	private TypeDriver driver = GWT.create(TypeDriver.class);
 	private TypeProperties props;
@@ -67,9 +72,7 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 			typeWindow = new Window();
 
 			container.add(createEditor());
-
 			driver.initialize(this);
-
 			driver.edit(type);
 
 		}
@@ -117,12 +120,23 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 				typeWindow.show();
 			}
 		});
-		CustomTextButton deleteButton = new CustomTextButton("удалить");
+		TextButton deleteButton = new CustomTextButton("удалить");
 		deleteButton.addSelectHandler(new SelectHandler() {
 
 			@Override
 			public void onSelect(SelectEvent event) {
-				deleteType();
+				MessageBox box = new MessageBox(Organization.DELETE_CONFIRM, "");
+				box.setPredefinedButtons(PredefinedButton.YES, PredefinedButton.NO);
+				box.setIcon(MessageBox.ICONS.question());
+				box.setMessage(Organization.DELETE_CONFIRM_MESSAGE);
+				box.addDialogHideHandler(new DialogHideHandler() {
+					@Override
+					public void onDialogHide(DialogHideEvent event) {
+						if (event.getHideButton().equals(PredefinedButton.YES))
+							deleteType();
+					}
+				});
+				box.show();
 			}
 		});
 		buttons.add(addButton);
@@ -154,7 +168,6 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 		typeService.delete(type, new AsyncCallback<Void>() {
 			public void onFailure(Throwable caught) {
 				Info.display(Organization.ERROR_TYPE, Organization.ERROR_MESSAGE);
-				caught.printStackTrace();
 			}
 
 			public void onSuccess(Void result) {
@@ -175,7 +188,7 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 			@Override
 			public void onSuccess(Long result) {
 				if (result.equals(-1L))
-					Info.display(Organization.ERROR_TYPE, "Такой тип уже есть в БД");
+					Info.display(Organization.ERROR_TYPE, EQUAL_ERROR);
 				refreshTypeList();
 			}
 		});
@@ -198,8 +211,7 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 		});
 		name = new TextField();
 		name.setAllowBlank(false);
-		FieldLabel nameFieldLabel = new FieldLabel(name, "тип");
-		nameFieldLabel.setLabelSeparator("");
+		FieldLabel nameFieldLabel = new CustomFieldLabel(name, "тип");
 		nameFieldLabel.setLabelWidth(20);
 		innerPanel.add(nameFieldLabel, new CssFloatData(1, new Margins(0, 0, 20, 0)));
 
@@ -209,7 +221,7 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 			public void onSelect(SelectEvent event) {
 				type = driver.flush();
 				if (driver.hasErrors()) {
-					new MessageBox("Исправьте ошибки перед сохранением").show();
+					new MessageBox(Organization.VERIFIER_MESSAGE).show();
 					return;
 				}
 				updateType(type);

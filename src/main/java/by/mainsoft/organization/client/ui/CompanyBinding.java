@@ -155,7 +155,6 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 		/*
 		 * Form
 		 */
-
 		final CssFloatLayoutContainer inner = new CssFloatLayoutContainer();
 
 		/*
@@ -177,8 +176,7 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 		data.setName("data");
 		data.setEmptyText("сведения об организации");
 		data.setHeight(70);
-		FieldLabel dataLabel = new FieldLabel(data, "сведения");
-		dataLabel.setLabelSeparator("");
+		FieldLabel dataLabel = new CustomFieldLabel(data, "сведения");
 		inner.add(dataLabel, new CssFloatData(0.6));
 
 		/*
@@ -197,8 +195,7 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 
 		phone = new TextField();
 		phone.setName("phone");
-		FieldLabel phoneFieldLabel = new FieldLabel(phone, "телефон");
-		phoneFieldLabel.setLabelSeparator("");
+		FieldLabel phoneFieldLabel = new CustomFieldLabel(phone, "телефон");
 		inner.add(phoneFieldLabel, new CssFloatData(0.4, new Margins(5, 0, 0, 0)));
 
 		/*
@@ -212,8 +209,7 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 		employee.setFormat(NumberFormat.getFormat("0"));
 		employee.setAllowNegative(false);
 		employee.addValidator(new MinNumberValidator<Integer>(0));
-		FieldLabel emplFieldLabel = new FieldLabel(employee, "кол. сотрудников");
-		emplFieldLabel.setLabelSeparator("");
+		FieldLabel emplFieldLabel = new CustomFieldLabel(employee, "кол. сотрудников");
 		employeePanel.add(emplFieldLabel, new CssFloatData(0.35));
 		inner.add(employeePanel, new CssFloatData(1, new Margins(10, 0, 10, 0)));
 
@@ -224,8 +220,7 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 		info.setName("info");
 		info.setEmptyText("дополнительная организация");
 		info.setHeight(70);
-		FieldLabel infoFieldLabel = new FieldLabel(info, "доп.  информация");
-		infoFieldLabel.setLabelSeparator(" ");
+		FieldLabel infoFieldLabel = new CustomFieldLabel(info, "доп.  информация");
 		infoFieldLabel.setLabelWidth(95);
 		infoFieldLabel.setLabelPad(10);
 		inner.add(infoFieldLabel, new CssFloatData(1, new Margins(0, 0, 10, 0)));
@@ -244,8 +239,7 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 		typeName = new TextField();
 		typeName.setName("typeName");
 		typeName.setEmptyText("тип из справочника");
-		FieldLabel typeFieldLabel = new FieldLabel(typeName, "тип");
-		typeFieldLabel.setLabelSeparator("");
+		FieldLabel typeFieldLabel = new CustomFieldLabel(typeName, "тип");
 		inner.add(typeFieldLabel, new CssFloatData(0.35));
 		CustomTextButton typeButton = new CustomTextButton("  ...  ");
 
@@ -284,8 +278,7 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 		CssFloatLayoutContainer userPanel = new CssFloatLayoutContainer();
 		userShortName = new TextField();
 		userShortName.setName("userShortName");
-		FieldLabel userFieldLabel = new FieldLabel(userShortName, "сотрудник");
-		userFieldLabel.setLabelSeparator("");
+		FieldLabel userFieldLabel = new CustomFieldLabel(userShortName, "сотрудник");
 		userPanel.add(userFieldLabel, new CssFloatData(0.35));
 
 		CustomTextButton managerButton = new CustomTextButton("  ...  ");
@@ -342,7 +335,7 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 			public void onSelect(SelectEvent event) {
 				company = driver.flush();
 				if (driver.hasErrors()) {
-					new MessageBox("Исправьте ошибки перед сохранением").show();
+					new MessageBox(Organization.VERIFIER_MESSAGE).show();
 					return;
 				}
 				updateCompany(company);

@@ -16,13 +16,18 @@ import com.sencha.gxt.widget.core.client.PlainTabPanel;
  * Entry point classes define <code>onModuleLoad()</code>.
  */
 public class Organization implements IsWidget, EntryPoint {
+
+	public static final String ERROR_MESSAGE = "Данные не обновлены";
+	public static final String ERROR_TYPE = "Ошибка";
+	public static final String VERIFIER_MESSAGE = "Заполните необходимые поля";
+	public static final String DELETE_CONFIRM = "Удалить?";
+	public static final String DELETE_CONFIRM_MESSAGE = "Хотите удалить запись?";
+
+	private VerticalPanel container;
+
 	/**
 	 * This is the entry point method.
 	 */
-	public static final String ERROR_MESSAGE = "Данные не обновлены";
-	public static final String ERROR_TYPE = "Ошибка";
-	private VerticalPanel vp;
-
 	public void onModuleLoad() {
 
 		RootPanel.get("organizationPanel").add(asWidget());
@@ -30,9 +35,9 @@ public class Organization implements IsWidget, EntryPoint {
 
 	@Override
 	public Widget asWidget() {
-		if (vp == null) {
-			vp = new VerticalPanel();
-			vp.setSpacing(10);
+		if (container == null) {
+			container = new VerticalPanel();
+			container.setSpacing(10);
 
 			PlainTabPanel tabPanel = new PlainTabPanel();
 			tabPanel.setWidth(800);
@@ -50,9 +55,9 @@ public class Organization implements IsWidget, EntryPoint {
 					companyBinding.refreshCompanyList();
 				}
 			});
-			vp.add(tabPanel);
+			container.add(tabPanel);
 		}
-		return vp;
+		return container;
 	}
 
 }

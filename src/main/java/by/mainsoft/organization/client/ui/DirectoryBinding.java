@@ -45,10 +45,9 @@ public class DirectoryBinding implements IsWidget, Editor<Type> {
 			VerticalLayoutContainer choosePanel = new VerticalLayoutContainer();
 			CssFloatLayoutContainer cssPanel = new CssFloatLayoutContainer();
 			cssPanel.add(directoryList, new CssFloatData(1));
-			// cssPanel.setBorders(true);
 			choosePanel.add(cssPanel, new VerticalLayoutData(1, -1));
 			choosePanel.setBorders(true);
-			// choosePanel.setHeight(HEIGHT);
+
 			typePanel.setBorders(true);
 			userPanel.setBorders(true);
 			panel.add(choosePanel, new CssFloatData(0.15));

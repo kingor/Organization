@@ -20,12 +20,15 @@ import com.sencha.gxt.core.client.Style.SelectionMode;
 import com.sencha.gxt.core.client.dom.ScrollSupport.ScrollMode;
 import com.sencha.gxt.core.client.util.Margins;
 import com.sencha.gxt.data.shared.ListStore;
+import com.sencha.gxt.widget.core.client.Dialog.PredefinedButton;
 import com.sencha.gxt.widget.core.client.Window;
 import com.sencha.gxt.widget.core.client.box.MessageBox;
 import com.sencha.gxt.widget.core.client.container.CssFloatLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.CssFloatLayoutContainer.CssFloatData;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData;
+import com.sencha.gxt.widget.core.client.event.DialogHideEvent;
+import com.sencha.gxt.widget.core.client.event.DialogHideEvent.DialogHideHandler;
 import com.sencha.gxt.widget.core.client.event.HideEvent;
 import com.sencha.gxt.widget.core.client.event.HideEvent.HideHandler;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
@@ -66,7 +69,7 @@ public class UserWidget implements IsWidget, Editor<User> {
 			container.setHeight(DirectoryBinding.HEIGHT);
 			props = GWT.create(UserProperties.class);
 			userStore = new ListStore<User>(props.key());
-			refreshTypeList();
+			refreshUserList();
 
 			container.add(createEditor());
 
@@ -127,7 +130,18 @@ public class UserWidget implements IsWidget, Editor<User> {
 
 			@Override
 			public void onSelect(SelectEvent event) {
-				deleteUser();
+				MessageBox box = new MessageBox(Organization.DELETE_CONFIRM, "");
+				box.setPredefinedButtons(PredefinedButton.YES, PredefinedButton.NO);
+				box.setIcon(MessageBox.ICONS.question());
+				box.setMessage(Organization.DELETE_CONFIRM_MESSAGE);
+				box.addDialogHideHandler(new DialogHideHandler() {
+					@Override
+					public void onDialogHide(DialogHideEvent event) {
+						if (event.getHideButton().equals(PredefinedButton.YES))
+							deleteUser();
+					}
+				});
+				box.show();
 			}
 		});
 		buttons.add(addButton);
@@ -140,11 +154,10 @@ public class UserWidget implements IsWidget, Editor<User> {
 		return outer;
 	}
 
-	public void refreshTypeList() {
+	public void refreshUserList() {
 		userService.getAll(new AsyncCallback<List<User>>() {
 			public void onFailure(Throwable caught) {
 				Info.display(Organization.ERROR_TYPE, Organization.ERROR_MESSAGE);
-				caught.printStackTrace();
 			}
 
 			public void onSuccess(List<User> companyList) {
@@ -164,7 +177,7 @@ public class UserWidget implements IsWidget, Editor<User> {
 			}
 
 			public void onSuccess(Void result) {
-				refreshTypeList();
+				refreshUserList();
 				grid.getSelectionModel().select(1, true);
 			}
 		});
@@ -180,7 +193,7 @@ public class UserWidget implements IsWidget, Editor<User> {
 
 			@Override
 			public void onSuccess(Void result) {
-				refreshTypeList();
+				refreshUserList();
 			}
 		});
 	}
@@ -204,22 +217,19 @@ public class UserWidget implements IsWidget, Editor<User> {
 
 		name = new TextField();
 		name.setAllowBlank(false);
-		FieldLabel nameFieldLabel = new FieldLabel(name, "имя");
-		nameFieldLabel.setLabelSeparator("");
+		FieldLabel nameFieldLabel = new CustomFieldLabel(name, "имя");
 		nameFieldLabel.setLabelWidth(50);
 		innerPanel.add(nameFieldLabel, new CssFloatData(1));
 
 		surname = new TextField();
 		surname.setAllowBlank(false);
-		FieldLabel surnameFieldLabel = new FieldLabel(surname, "фамилия");
-		surnameFieldLabel.setLabelSeparator("");
+		FieldLabel surnameFieldLabel = new CustomFieldLabel(surname, "фамилия");
 		surnameFieldLabel.setLabelWidth(50);
 		innerPanel.add(surnameFieldLabel, new CssFloatData(1));
 
 		patronymic = new TextField();
 		patronymic.setAllowBlank(false);
-		FieldLabel patronymicFieldLabel = new FieldLabel(patronymic, "отчество");
-		patronymicFieldLabel.setLabelSeparator("");
+		FieldLabel patronymicFieldLabel = new CustomFieldLabel(patronymic, "отчество");
 		patronymicFieldLabel.setLabelWidth(50);
 		innerPanel.add(patronymicFieldLabel, new CssFloatData(1));
 
@@ -229,7 +239,7 @@ public class UserWidget implements IsWidget, Editor<User> {
 			public void onSelect(SelectEvent event) {
 				user = driver.flush();
 				if (driver.hasErrors()) {
-					new MessageBox("Исправьте ошибки перед сохранением").show();
+					new MessageBox(Organization.VERIFIER_MESSAGE).show();
 					return;
 				}
 				updateUser(user);

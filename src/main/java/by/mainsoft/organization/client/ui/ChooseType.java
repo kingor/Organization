@@ -12,7 +12,6 @@ import by.mainsoft.organization.shared.domain.TypeProperties;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.StyleInjector;
-import com.google.gwt.editor.client.Editor;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.TextBox;
@@ -21,6 +20,7 @@ import com.sencha.gxt.core.client.Style.SelectionMode;
 import com.sencha.gxt.core.client.dom.ScrollSupport.ScrollMode;
 import com.sencha.gxt.core.client.util.Margins;
 import com.sencha.gxt.data.shared.ListStore;
+import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.CssFloatLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.CssFloatLayoutContainer.CssFloatData;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
@@ -34,7 +34,7 @@ import com.sencha.gxt.widget.core.client.info.Info;
 import com.sencha.gxt.widget.core.client.selection.SelectionChangedEvent;
 import com.sencha.gxt.widget.core.client.selection.SelectionChangedEvent.SelectionChangedHandler;
 
-public class ChooseType implements IsWidget, Editor<Type> {
+public class ChooseType implements IsWidget/* , Editor<Type> */{
 
 	TypeServiceAsync typeService = GWT.create(TypeService.class);
 	private ListStore<Type> typeStore;
@@ -53,13 +53,13 @@ public class ChooseType implements IsWidget, Editor<Type> {
 			typeStore = new ListStore<Type>(props.key());
 			refreshTypeList("");
 
-			container.add(createEditor());
+			container.add(createWidget());
 
 		}
 		return container;
 	}
 
-	public Widget createEditor() {
+	public Widget createWidget() {
 		CssFloatLayoutContainer inner = new CssFloatLayoutContainer();
 		ColumnConfig<Type, String> nameColumn = new ColumnConfig<Type, String>(props.name(), 100, "Name");
 		List<ColumnConfig<Type, ?>> columns = new ArrayList<ColumnConfig<Type, ?>>();
@@ -89,7 +89,7 @@ public class ChooseType implements IsWidget, Editor<Type> {
 				+ "height:20px; padding-left:25px; background-image:url('images/search.png'); background-repeat:no-repeat; background-position: 2px;");
 		searchBox.setStyleName("my1");
 		searchBox.getElement().setPropertyString("placeholder", "поиск по вхождению");
-		CustomTextButton searchButton = new CustomTextButton("найти");
+		TextButton searchButton = new CustomTextButton("найти");
 		searchButton.addSelectHandler(new SelectHandler() {
 
 			@Override
@@ -106,12 +106,15 @@ public class ChooseType implements IsWidget, Editor<Type> {
 		gridPanel.setScrollMode(ScrollMode.AUTOY);
 		inner.add(gridPanel, new CssFloatData(1, new Margins(0, 0, 5, 0)));
 		selectButton = new CustomTextButton("выбрать");
+
 		CssFloatLayoutContainer buttonPanel = new CssFloatLayoutContainer();
 		buttonPanel.add(selectButton);
 		inner.setStyleFloat(Style.Float.RIGHT);
 		inner.add(buttonPanel, new CssFloatData(0.3));
+
 		CssFloatLayoutContainer outer = new CssFloatLayoutContainer();
 		outer.add(inner, new CssFloatData(1));
+
 		return outer;
 	}
 
