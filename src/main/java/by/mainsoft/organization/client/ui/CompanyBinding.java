@@ -118,6 +118,7 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 			public void onSelect(SelectEvent event) {
 				companyStore.add(new Company());
 				companyListView.getSelectionModel().select(companyListView.getItemCount() - 1, true);
+				name.focus();
 			}
 		});
 
@@ -376,6 +377,15 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 			}
 
 			public void onSuccess(Void result) {
+				name.clear();
+				address.clear();
+				data.clear();
+				phone.clear();
+				employee.clear();
+				info.clear();
+				typeName.clear();
+				userShortName.clear();
+				date.clear();
 				refreshCompanyList();
 			}
 		});

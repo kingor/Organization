@@ -222,6 +222,7 @@ public class UserWidget implements IsWidget, Editor<User> {
 
 		surname = new TextField();
 		surname.setAllowBlank(false);
+
 		FieldLabel surnameFieldLabel = new CustomFieldLabel(surname, "фамилия");
 		surnameFieldLabel.setLabelWidth(50);
 		innerPanel.add(surnameFieldLabel, new CssFloatData(1));

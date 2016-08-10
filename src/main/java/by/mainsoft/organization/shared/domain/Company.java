@@ -9,9 +9,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-
 @Entity
 public class Company implements Serializable {
 
@@ -30,12 +27,12 @@ public class Company implements Serializable {
 
 	@ManyToOne
 	@JoinColumn(name = "type")
-	@OnDelete(action = OnDeleteAction.CASCADE)
+	// @OnDelete(action = OnDeleteAction.CASCADE)
 	private Type type;
 
 	@ManyToOne
 	@JoinColumn(name = "manager")
-	@OnDelete(action = OnDeleteAction.CASCADE)
+	// @OnDelete(action = OnDeleteAction.CASCADE)
 	private User manager;
 	private Date date;
 

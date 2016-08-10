@@ -212,6 +212,7 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 		});
 		name = new TextField();
 		name.setAllowBlank(false);
+		name.focus();
 		FieldLabel nameFieldLabel = new CustomFieldLabel(name, "тип");
 		nameFieldLabel.setLabelWidth(20);
 		innerPanel.add(nameFieldLabel, new CssFloatData(1, new Margins(0, 0, 20, 0)));
