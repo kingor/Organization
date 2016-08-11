@@ -54,6 +54,7 @@ public class UserWidget implements IsWidget, Editor<User> {
 	private User user;
 	private Grid<User> grid;
 	private Window userWindow;
+	private CustomTextButton deleteButton;
 
 	// editor fields
 	TextField surname;
@@ -107,6 +108,7 @@ public class UserWidget implements IsWidget, Editor<User> {
 				if (event.getSelection().size() > 0) {
 					user = event.getSelection().get(0);
 					driver.edit(user);
+					deleteButton.setEnabled(true);
 				}
 
 			}
@@ -124,7 +126,8 @@ public class UserWidget implements IsWidget, Editor<User> {
 				userWindow.show();
 			}
 		});
-		CustomTextButton deleteButton = new CustomTextButton("удалить");
+		deleteButton = new CustomTextButton("удалить");
+		deleteButton.setEnabled(false);
 		deleteButton.addSelectHandler(new SelectHandler() {
 
 			@Override
@@ -162,7 +165,8 @@ public class UserWidget implements IsWidget, Editor<User> {
 			public void onSuccess(List<User> companyList) {
 				userStore.clear();
 				userStore.addAll(companyList);
-				user = userStore.get(0);
+				deleteButton.setEnabled(false);
+				// user = userStore.get(0);
 				grid.getView().refresh(true);
 			}
 		});
@@ -177,7 +181,7 @@ public class UserWidget implements IsWidget, Editor<User> {
 
 			public void onSuccess(Void result) {
 				refreshUserList();
-				grid.getSelectionModel().select(1, true);
+				// grid.getSelectionModel().select(1, true);
 			}
 		});
 	}

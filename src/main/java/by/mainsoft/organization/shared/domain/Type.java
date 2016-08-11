@@ -16,9 +16,19 @@ public class Type implements Serializable {
 	private Long id;
 	private String name;
 
+	// @OneToMany(mappedBy = "type")
+	// private Set<Company> companyList;
+
 	public Type() {
 
 	}
+
+	// public Type(Long id, String name, Set<Company> companyList) {
+	// super();
+	// this.id = id;
+	// this.name = name;
+	// this.companyList = companyList;
+	// }
 
 	public Type(Long id, String name) {
 		super();
@@ -41,6 +51,21 @@ public class Type implements Serializable {
 	public void setName(String name) {
 		this.name = name;
 	}
+
+	// @PreRemove
+	// private void removeAssociationsWithChilds() {
+	// for (Company c : companyList) {
+	// c.setType(null);
+	// }
+	// }
+
+	// public Set<Company> getCompanyList() {
+	// return companyList;
+	// }
+	//
+	// public void setCompanyList(Set<Company> companyList) {
+	// this.companyList = companyList;
+	// }
 
 	@Override
 	public int hashCode() {

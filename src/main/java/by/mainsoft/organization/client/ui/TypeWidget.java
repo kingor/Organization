@@ -56,9 +56,10 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 	private Type type;
 	private Grid<Type> grid;
 	private Window typeWindow;
+	private TextButton deleteButton;
 
 	// editor fields
-	TextField name;
+	TextField name = new TextField();
 
 	private VerticalLayoutContainer container;
 
@@ -89,7 +90,6 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 		List<ColumnConfig<Type, ?>> columns = new ArrayList<ColumnConfig<Type, ?>>();
 		columns.add(nameColumn);
 		grid = new Grid<Type>(typeStore, new ColumnModel<Type>(columns));
-
 		grid.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 		grid.getView().setForceFit(true);
 		grid.getView().setAutoExpandColumn(nameColumn);
@@ -104,6 +104,7 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 				if (event.getSelection().size() > 0) {
 					type = event.getSelection().get(0);
 					driver.edit(type);
+					deleteButton.setEnabled(true);
 				}
 
 			}
@@ -121,7 +122,8 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 				typeWindow.show();
 			}
 		});
-		TextButton deleteButton = new CustomTextButton("удалить");
+		deleteButton = new CustomTextButton("удалить");
+		deleteButton.setEnabled(false);
 		deleteButton.addSelectHandler(new SelectHandler() {
 
 			@Override
@@ -159,7 +161,8 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 			public void onSuccess(List<Type> companyList) {
 				typeStore.clear();
 				typeStore.addAll(companyList);
-				type = typeStore.get(0);
+				deleteButton.setEnabled(false);
+				// type = typeStore.get(0);
 				grid.getView().refresh(true);
 			}
 		});
@@ -173,7 +176,7 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 
 			public void onSuccess(Void result) {
 				refreshTypeList();
-				grid.getSelectionModel().select(1, true);
+				// grid.getSelectionModel().select(1, true);
 			}
 		});
 	}
@@ -210,9 +213,9 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 				deleteType();
 			}
 		});
-		name = new TextField();
+		// name = new TextField();
 		name.setAllowBlank(false);
-		name.focus();
+		// name.focus();
 		FieldLabel nameFieldLabel = new CustomFieldLabel(name, "тип");
 		nameFieldLabel.setLabelWidth(20);
 		innerPanel.add(nameFieldLabel, new CssFloatData(1, new Margins(0, 0, 20, 0)));
@@ -235,5 +238,9 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 		outerPanel.add(innerPanel, new CssFloatData(0.9, new Margins(10)));
 		typeWindow.add(outerPanel);
 
+	}
+
+	public void setFocus() {
+		name.focus();
 	}
 }

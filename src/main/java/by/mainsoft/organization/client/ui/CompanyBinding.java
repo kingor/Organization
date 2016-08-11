@@ -54,6 +54,7 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 	private ListView<Company, String> companyListView;
 	private Window typeWindow;
 	private Window userWindow;
+	private CustomTextButton deleteButton;
 
 	// editor fields
 	TextField address;
@@ -122,7 +123,7 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 			}
 		});
 
-		CustomTextButton deleteButton = new CustomTextButton("удалить");
+		deleteButton = new CustomTextButton("удалить");
 		deleteButton.addSelectHandler(new SelectHandler() {
 
 			@Override
@@ -347,6 +348,10 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 			public void onSuccess(List<Company> companyList) {
 				companyStore.clear();
 				companyStore.addAll(companyList);
+				if (companyStore.size() == 0)
+					deleteButton.setEnabled(false);
+				else
+					deleteButton.setEnabled(true);
 				company = companyStore.get(0);
 				companyListView.refresh();
 				companyListView.getSelectionModel().select(0, true);
