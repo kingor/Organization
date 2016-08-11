@@ -13,6 +13,9 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.editor.client.Editor;
 import com.google.gwt.editor.client.SimpleBeanEditorDriver;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
@@ -57,6 +60,7 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 	private Grid<Type> grid;
 	private Window typeWindow;
 	private TextButton deleteButton;
+	private TextButton addTypeButton;
 
 	// editor fields
 	TextField name = new TextField();
@@ -234,22 +238,25 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 		// name = new TextField();
 		name.setAllowBlank(false);
 		name.setValidateOnBlur(false);
+		name.addKeyUpHandler(new KeyUpHandler() {
+
+			@Override
+			public void onKeyUp(KeyUpEvent arg0) {
+				if (arg0.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+					create();
+				}
+			}
+		});
 
 		FieldLabel nameFieldLabel = new CustomFieldLabel(name, "тип");
 		nameFieldLabel.setLabelWidth(20);
 		innerPanel.add(nameFieldLabel, new CssFloatData(1, new Margins(0, 0, 20, 0)));
 
-		CustomTextButton addTypeButton = new CustomTextButton("добавить");
+		addTypeButton = new CustomTextButton("добавить");
 		addTypeButton.addSelectHandler(new SelectHandler() {
 			@Override
 			public void onSelect(SelectEvent event) {
-				type = driver.flush();
-				if (driver.hasErrors()) {
-					new MessageBox(Organization.VERIFIER_MESSAGE).show();
-					return;
-				}
-				updateType(type);
-				typeWindow.hide();
+				create();
 			}
 		});
 		innerPanel.setStyleFloat(Style.Float.RIGHT);
@@ -257,6 +264,16 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 		outerPanel.add(innerPanel, new CssFloatData(0.9, new Margins(10)));
 		typeWindow.add(outerPanel);
 
+	}
+
+	public void create() {
+		type = driver.flush();
+		if (driver.hasErrors()) {
+			new MessageBox(Organization.VERIFIER_MESSAGE).show();
+			return;
+		}
+		updateType(type);
+		typeWindow.hide();
 	}
 
 	public void setFocus() {

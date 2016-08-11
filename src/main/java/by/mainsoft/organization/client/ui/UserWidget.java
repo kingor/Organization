@@ -13,6 +13,9 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.editor.client.Editor;
 import com.google.gwt.editor.client.SimpleBeanEditorDriver;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
@@ -218,9 +221,20 @@ public class UserWidget implements IsWidget, Editor<User> {
 			}
 		});
 
+		KeyUpHandler keyHandler = new KeyUpHandler() {
+
+			@Override
+			public void onKeyUp(KeyUpEvent arg0) {
+				if (arg0.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+					create();
+				}
+			}
+		};
+
 		name = new TextField();
 		name.setAllowBlank(false);
 		name.setValidateOnBlur(false);
+		name.addKeyUpHandler(keyHandler);
 		FieldLabel nameFieldLabel = new CustomFieldLabel(name, "имя");
 		nameFieldLabel.setLabelWidth(50);
 		innerPanel.add(nameFieldLabel, new CssFloatData(1));
@@ -228,6 +242,7 @@ public class UserWidget implements IsWidget, Editor<User> {
 		surname = new TextField();
 		surname.setAllowBlank(false);
 		surname.setValidateOnBlur(false);
+		surname.addKeyUpHandler(keyHandler);
 
 		FieldLabel surnameFieldLabel = new CustomFieldLabel(surname, "фамилия");
 		surnameFieldLabel.setLabelWidth(50);
@@ -236,6 +251,7 @@ public class UserWidget implements IsWidget, Editor<User> {
 		patronymic = new TextField();
 		patronymic.setAllowBlank(false);
 		patronymic.setValidateOnBlur(false);
+		patronymic.addKeyUpHandler(keyHandler);
 		FieldLabel patronymicFieldLabel = new CustomFieldLabel(patronymic, "отчество");
 		patronymicFieldLabel.setLabelWidth(50);
 		innerPanel.add(patronymicFieldLabel, new CssFloatData(1));
@@ -244,13 +260,7 @@ public class UserWidget implements IsWidget, Editor<User> {
 		addTypeButton.addSelectHandler(new SelectHandler() {
 			@Override
 			public void onSelect(SelectEvent event) {
-				user = driver.flush();
-				if (driver.hasErrors()) {
-					new MessageBox(Organization.VERIFIER_MESSAGE).show();
-					return;
-				}
-				updateUser(user);
-				userWindow.hide();
+				create();
 			}
 		});
 		innerPanel.setStyleFloat(Style.Float.RIGHT);
@@ -258,5 +268,15 @@ public class UserWidget implements IsWidget, Editor<User> {
 		outerPanel.add(innerPanel, new CssFloatData(0.9, new Margins(10)));
 		userWindow.add(outerPanel);
 
+	}
+
+	public void create() {
+		user = driver.flush();
+		if (driver.hasErrors()) {
+			new MessageBox(Organization.VERIFIER_MESSAGE).show();
+			return;
+		}
+		updateUser(user);
+		userWindow.hide();
 	}
 }
