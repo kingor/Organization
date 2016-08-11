@@ -71,7 +71,7 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 			props = GWT.create(TypeProperties.class);
 			typeStore = new ListStore<Type>(props.key());
 			refreshTypeList();
-			typeWindow = new Window();
+
 			container.add(createEditor());
 
 			driver.initialize(this);
@@ -82,7 +82,7 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 	}
 
 	public Widget createEditor() {
-
+		typeWindow = new Window();
 		CssFloatLayoutContainer buttons = new CssFloatLayoutContainer();
 		VerticalLayoutContainer outer = new VerticalLayoutContainer();
 		CssFloatLayoutContainer gridPanel = new CssFloatLayoutContainer();
@@ -168,6 +168,23 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 		});
 	}
 
+	public void getTypeList() {
+		typeService.getAll(new AsyncCallback<List<Type>>() {
+			public void onFailure(Throwable caught) {
+				Info.display(Organization.ERROR_TYPE, Organization.ERROR_MESSAGE);
+				caught.printStackTrace();
+			}
+
+			public void onSuccess(List<Type> companyList) {
+				typeStore.clear();
+				typeStore.addAll(companyList);
+				deleteButton.setEnabled(false);
+				// type = typeStore.get(0);
+				grid.getView().refresh(true);
+			}
+		});
+	}
+
 	void deleteType() {
 		typeService.delete(type, new AsyncCallback<Void>() {
 			public void onFailure(Throwable caught) {
@@ -213,9 +230,11 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 				deleteType();
 			}
 		});
+
 		// name = new TextField();
 		name.setAllowBlank(false);
-		// name.focus();
+		name.setValidateOnBlur(false);
+
 		FieldLabel nameFieldLabel = new CustomFieldLabel(name, "тип");
 		nameFieldLabel.setLabelWidth(20);
 		innerPanel.add(nameFieldLabel, new CssFloatData(1, new Margins(0, 0, 20, 0)));

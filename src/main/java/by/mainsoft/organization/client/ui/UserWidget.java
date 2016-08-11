@@ -220,12 +220,14 @@ public class UserWidget implements IsWidget, Editor<User> {
 
 		name = new TextField();
 		name.setAllowBlank(false);
+		name.setValidateOnBlur(false);
 		FieldLabel nameFieldLabel = new CustomFieldLabel(name, "имя");
 		nameFieldLabel.setLabelWidth(50);
 		innerPanel.add(nameFieldLabel, new CssFloatData(1));
 
 		surname = new TextField();
 		surname.setAllowBlank(false);
+		surname.setValidateOnBlur(false);
 
 		FieldLabel surnameFieldLabel = new CustomFieldLabel(surname, "фамилия");
 		surnameFieldLabel.setLabelWidth(50);
@@ -233,6 +235,7 @@ public class UserWidget implements IsWidget, Editor<User> {
 
 		patronymic = new TextField();
 		patronymic.setAllowBlank(false);
+		patronymic.setValidateOnBlur(false);
 		FieldLabel patronymicFieldLabel = new CustomFieldLabel(patronymic, "отчество");
 		patronymicFieldLabel.setLabelWidth(50);
 		innerPanel.add(patronymicFieldLabel, new CssFloatData(1));
