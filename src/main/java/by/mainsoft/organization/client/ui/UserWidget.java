@@ -266,6 +266,7 @@ public class UserWidget implements IsWidget, Editor<User> {
 		innerPanel.setStyleFloat(Style.Float.RIGHT);
 		innerPanel.add(addTypeButton);
 		outerPanel.add(innerPanel, new CssFloatData(0.9, new Margins(10)));
+		userWindow.setFocusWidget(name);
 		userWindow.add(outerPanel);
 
 	}
@@ -292,6 +293,9 @@ public class UserWidget implements IsWidget, Editor<User> {
 			return;
 		}
 		updateUser(user);
+		name.clear();
+		surname.clear();
+		patronymic.clear();
 		userWindow.hide();
 	}
 }

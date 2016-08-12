@@ -73,7 +73,6 @@ public class DirectoryBinding implements IsWidget, Editor<Type> {
 		} else {
 			userPanel.hide();
 			typePanel.show();
-			typeWidget.setFocus();
 		}
 	}
 }

@@ -63,7 +63,7 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 	private TextButton addTypeButton;
 
 	// editor fields
-	TextField name = new TextField();
+	TextField name;
 
 	private VerticalLayoutContainer container;
 
@@ -86,7 +86,7 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 	}
 
 	public Widget createEditor() {
-		typeWindow = new Window();
+
 		CssFloatLayoutContainer buttons = new CssFloatLayoutContainer();
 		VerticalLayoutContainer outer = new VerticalLayoutContainer();
 		CssFloatLayoutContainer gridPanel = new CssFloatLayoutContainer();
@@ -222,6 +222,7 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 	void createWindow() {
 		CssFloatLayoutContainer outerPanel = new CssFloatLayoutContainer();
 		CssFloatLayoutContainer innerPanel = new CssFloatLayoutContainer();
+		typeWindow = new Window();
 		typeWindow.setPixelSize(250, 120);
 		typeWindow.setResizable(false);
 		typeWindow.setModal(true);
@@ -235,8 +236,9 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 			}
 		});
 
-		// name = new TextField();
+		name = new TextField();
 		name.setAllowBlank(false);
+		name.clear();
 		name.setValidateOnBlur(false);
 		name.addKeyUpHandler(new KeyUpHandler() {
 
@@ -262,6 +264,7 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 		innerPanel.setStyleFloat(Style.Float.RIGHT);
 		innerPanel.add(addTypeButton);
 		outerPanel.add(innerPanel, new CssFloatData(0.9, new Margins(10)));
+		typeWindow.setFocusWidget(name);
 		typeWindow.add(outerPanel);
 
 	}
@@ -279,10 +282,8 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 			return;
 		}
 		updateType(type);
+		name.clear();
 		typeWindow.hide();
 	}
 
-	public void setFocus() {
-		name.focus();
-	}
 }
