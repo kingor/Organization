@@ -62,7 +62,7 @@ public class Type implements Serializable {
 	// public Set<Company> getCompanyList() {
 	// return companyList;
 	// }
-	//
+
 	// public void setCompanyList(Set<Company> companyList) {
 	// this.companyList = companyList;
 	// }

@@ -272,6 +272,21 @@ public class UserWidget implements IsWidget, Editor<User> {
 
 	public void create() {
 		user = driver.flush();
+		if (user.getName().trim() == "") {
+			name.clear();
+			new MessageBox(Organization.VERIFIER_MESSAGE).show();
+			return;
+		}
+		if (user.getSurname().trim() == "") {
+			surname.clear();
+			new MessageBox(Organization.VERIFIER_MESSAGE).show();
+			return;
+		}
+		if (user.getPatronymic().trim() == "") {
+			patronymic.clear();
+			new MessageBox(Organization.VERIFIER_MESSAGE).show();
+			return;
+		}
 		if (driver.hasErrors()) {
 			new MessageBox(Organization.VERIFIER_MESSAGE).show();
 			return;

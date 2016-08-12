@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import by.mainsoft.organization.client.service.TypeService;
+import by.mainsoft.organization.server.dao.CompanyDao;
 import by.mainsoft.organization.server.dao.TypeDao;
 import by.mainsoft.organization.shared.domain.Type;
 
@@ -16,6 +17,9 @@ public class TypeServiceImpl implements TypeService {
 
 	@Autowired
 	TypeDao typeDao;
+
+	@Autowired
+	CompanyDao companyDao;
 
 	private static final Logger logger = Logger.getLogger(TypeService.class.getName());
 
@@ -51,6 +55,7 @@ public class TypeServiceImpl implements TypeService {
 	@Transactional
 	public void delete(Type persistentObject) {
 		logger.info("SERVICE - caused dуlete()");
+		// companyDao.setNullType(0L);
 		typeDao.delete(persistentObject);
 	}
 

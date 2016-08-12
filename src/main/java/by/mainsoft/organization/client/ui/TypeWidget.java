@@ -268,6 +268,12 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 
 	public void create() {
 		type = driver.flush();
+		if (type.getName().trim() == "") {
+			name.clear();
+			new MessageBox(Organization.VERIFIER_MESSAGE).show();
+			return;
+		}
+
 		if (driver.hasErrors()) {
 			new MessageBox(Organization.VERIFIER_MESSAGE).show();
 			return;
