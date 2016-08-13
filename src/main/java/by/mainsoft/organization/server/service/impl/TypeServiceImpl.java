@@ -54,8 +54,7 @@ public class TypeServiceImpl implements TypeService {
 	@Override
 	@Transactional
 	public void delete(Type persistentObject) {
-		logger.info("SERVICE - caused dуlete()");
-		// companyDao.setNullType(0L);
+		logger.info("SERVICE - caused delete()");
 		typeDao.delete(persistentObject);
 	}
 

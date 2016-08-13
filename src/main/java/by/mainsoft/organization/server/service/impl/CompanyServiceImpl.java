@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import by.mainsoft.organization.client.service.CompanyService;
 import by.mainsoft.organization.server.dao.CompanyDao;
 import by.mainsoft.organization.shared.domain.Company;
+import by.mainsoft.organization.shared.domain.Type;
 
 @Service("companyService")
 public class CompanyServiceImpl implements CompanyService {
@@ -52,6 +53,12 @@ public class CompanyServiceImpl implements CompanyService {
 	public List<Company> getAll() {
 		logger.info("SERVICE - caused getAll()");
 		return companyDao.getAll(Company.class);
+	}
+
+	@Override
+	@Transactional
+	public void setTypeNull(Type persistentObject) {
+		companyDao.setNullType(persistentObject);
 	}
 
 }

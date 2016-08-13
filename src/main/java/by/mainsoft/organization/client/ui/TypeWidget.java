@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import by.mainsoft.organization.client.Organization;
+import by.mainsoft.organization.client.service.CompanyService;
+import by.mainsoft.organization.client.service.CompanyServiceAsync;
 import by.mainsoft.organization.client.service.TypeService;
 import by.mainsoft.organization.client.service.TypeServiceAsync;
 import by.mainsoft.organization.shared.domain.Type;
@@ -52,6 +54,7 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 	}
 
 	TypeServiceAsync typeService = GWT.create(TypeService.class);
+	CompanyServiceAsync companyService = GWT.create(CompanyService.class);
 	public static final String EQUAL_ERROR = "Такой тип уже есть в БД";
 	private ListStore<Type> typeStore;
 	private TypeDriver driver = GWT.create(TypeDriver.class);
@@ -190,14 +193,22 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 	}
 
 	void deleteType() {
-		typeService.delete(type, new AsyncCallback<Void>() {
+		companyService.setTypeNull(type, new AsyncCallback<Void>() {
 			public void onFailure(Throwable caught) {
 				Info.display(Organization.ERROR_TYPE, Organization.ERROR_MESSAGE);
 			}
 
 			public void onSuccess(Void result) {
-				refreshTypeList();
-				// grid.getSelectionModel().select(1, true);
+				typeService.delete(type, new AsyncCallback<Void>() {
+					public void onFailure(Throwable caught) {
+						Info.display(Organization.ERROR_TYPE, Organization.ERROR_MESSAGE);
+					}
+
+					public void onSuccess(Void result1) {
+						refreshTypeList();
+						// grid.getSelectionModel().select(1, true);
+					}
+				});
 			}
 		});
 	}
