@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import by.mainsoft.organization.server.dao.CompanyDao;
 import by.mainsoft.organization.shared.domain.Company;
 import by.mainsoft.organization.shared.domain.Type;
+import by.mainsoft.organization.shared.domain.User;
 
 @Repository
 public class CompanyDaoImpl extends GenericDaoImpl<Company, Long> implements CompanyDao {
@@ -23,8 +24,9 @@ public class CompanyDaoImpl extends GenericDaoImpl<Company, Long> implements Com
 
 	@Override
 	public void setNullType(Type type) {
-		logger.info("DAO - caused setNull()");
+		logger.info("DAO - caused setNullType()");
 		Session session = sessionFactory.getCurrentSession();
+		@SuppressWarnings("unchecked")
 		List<Company> companyList = (List<Company>) session.createCriteria(Company.class).add(Restrictions.eq("type", type)).list();
 		// int result = session.createQuery("update Company set name = :nameParam").setString("nameParam", "asdas").executeUpdate();
 		for (Company company : companyList) {
@@ -33,5 +35,19 @@ public class CompanyDaoImpl extends GenericDaoImpl<Company, Long> implements Com
 			logger.info(company);
 		}
 
+	}
+
+	@Override
+	public void setNullUser(User user) {
+		logger.info("DAO - caused setNullUser()");
+		Session session = sessionFactory.getCurrentSession();
+		@SuppressWarnings("unchecked")
+		List<Company> companyList = (List<Company>) session.createCriteria(Company.class).add(Restrictions.eq("manager", user)).list();
+		// int result = session.createQuery("update Company set name = :nameParam").setString("nameParam", "asdas").executeUpdate();
+		for (Company company : companyList) {
+			company.setManager(null);
+			session.persist(company);
+			logger.info(company);
+		}
 	}
 }

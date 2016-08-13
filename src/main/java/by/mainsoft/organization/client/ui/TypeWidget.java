@@ -143,7 +143,7 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 					@Override
 					public void onDialogHide(DialogHideEvent event) {
 						if (event.getHideButton().equals(PredefinedButton.YES))
-							deleteType();
+							setNullType();
 					}
 				});
 				box.show();
@@ -192,25 +192,30 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 		});
 	}
 
-	void deleteType() {
+	void setNullType() {
 		companyService.setTypeNull(type, new AsyncCallback<Void>() {
 			public void onFailure(Throwable caught) {
 				Info.display(Organization.ERROR_TYPE, Organization.ERROR_MESSAGE);
 			}
 
 			public void onSuccess(Void result) {
-				typeService.delete(type, new AsyncCallback<Void>() {
-					public void onFailure(Throwable caught) {
-						Info.display(Organization.ERROR_TYPE, Organization.ERROR_MESSAGE);
-					}
-
-					public void onSuccess(Void result1) {
-						refreshTypeList();
-						// grid.getSelectionModel().select(1, true);
-					}
-				});
+				deleteType();
 			}
 		});
+	}
+
+	void deleteType() {
+		typeService.delete(type, new AsyncCallback<Void>() {
+			public void onFailure(Throwable caught) {
+				Info.display(Organization.ERROR_TYPE, Organization.ERROR_MESSAGE);
+			}
+
+			public void onSuccess(Void result1) {
+				refreshTypeList();
+				// grid.getSelectionModel().select(1, true);
+			}
+		});
+
 	}
 
 	void updateType(Type type) {

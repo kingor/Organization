@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import by.mainsoft.organization.client.Organization;
+import by.mainsoft.organization.client.service.CompanyService;
+import by.mainsoft.organization.client.service.CompanyServiceAsync;
 import by.mainsoft.organization.client.service.UserService;
 import by.mainsoft.organization.client.service.UserServiceAsync;
 import by.mainsoft.organization.shared.domain.User;
@@ -51,6 +53,7 @@ public class UserWidget implements IsWidget, Editor<User> {
 	}
 
 	UserServiceAsync userService = GWT.create(UserService.class);
+	CompanyServiceAsync companyService = GWT.create(CompanyService.class);
 	private ListStore<User> userStore;
 	private UserDriver driver = GWT.create(UserDriver.class);
 	private UserProperties props;
@@ -143,7 +146,7 @@ public class UserWidget implements IsWidget, Editor<User> {
 					@Override
 					public void onDialogHide(DialogHideEvent event) {
 						if (event.getHideButton().equals(PredefinedButton.YES))
-							deleteUser();
+							setNullType();
 					}
 				});
 				box.show();
@@ -171,6 +174,18 @@ public class UserWidget implements IsWidget, Editor<User> {
 				deleteButton.setEnabled(false);
 				// user = userStore.get(0);
 				grid.getView().refresh(true);
+			}
+		});
+	}
+
+	void setNullType() {
+		companyService.setUserNull(user, new AsyncCallback<Void>() {
+			public void onFailure(Throwable caught) {
+				Info.display(Organization.ERROR_TYPE, Organization.ERROR_MESSAGE);
+			}
+
+			public void onSuccess(Void result) {
+				deleteUser();
 			}
 		});
 	}

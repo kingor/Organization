@@ -4,6 +4,7 @@ import java.util.List;
 
 import by.mainsoft.organization.shared.domain.Company;
 import by.mainsoft.organization.shared.domain.Type;
+import by.mainsoft.organization.shared.domain.User;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
@@ -21,4 +22,6 @@ public interface CompanyService extends RemoteService {
 	public List<Company> getAll();
 
 	public void setTypeNull(Type persistentObject);
+
+	public void setUserNull(User persistentObject);
 }

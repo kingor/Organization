@@ -11,6 +11,7 @@ import by.mainsoft.organization.client.service.CompanyService;
 import by.mainsoft.organization.server.dao.CompanyDao;
 import by.mainsoft.organization.shared.domain.Company;
 import by.mainsoft.organization.shared.domain.Type;
+import by.mainsoft.organization.shared.domain.User;
 
 @Service("companyService")
 public class CompanyServiceImpl implements CompanyService {
@@ -59,6 +60,12 @@ public class CompanyServiceImpl implements CompanyService {
 	@Transactional
 	public void setTypeNull(Type persistentObject) {
 		companyDao.setNullType(persistentObject);
+	}
+
+	@Override
+	@Transactional
+	public void setUserNull(User persistentObject) {
+		companyDao.setNullUser(persistentObject);
 	}
 
 }
