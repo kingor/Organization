@@ -33,6 +33,8 @@ import com.sencha.gxt.widget.core.client.container.CssFloatLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.CssFloatLayoutContainer.CssFloatData;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData;
+import com.sencha.gxt.widget.core.client.event.CellDoubleClickEvent;
+import com.sencha.gxt.widget.core.client.event.CellDoubleClickEvent.CellDoubleClickHandler;
 import com.sencha.gxt.widget.core.client.event.DialogHideEvent;
 import com.sencha.gxt.widget.core.client.event.DialogHideEvent.DialogHideHandler;
 import com.sencha.gxt.widget.core.client.event.HideEvent;
@@ -64,6 +66,7 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 	private Window typeWindow;
 	private TextButton deleteButton;
 	private TextButton addTypeButton;
+	private int flag = 0;
 
 	// editor fields
 	TextField name;
@@ -104,6 +107,14 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 		grid.setHeight(270);
 		grid.setBorders(true);
 		grid.getView().setStripeRows(true);
+		grid.addCellDoubleClickHandler(new CellDoubleClickHandler() {
+
+			@Override
+			public void onCellClick(CellDoubleClickEvent event) {
+				flag = 1;
+				typeWindow.show();
+			}
+		});
 		grid.getSelectionModel().addSelectionChangedHandler(new SelectionChangedHandler<Type>() {
 
 			@Override
@@ -126,6 +137,7 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 			public void onSelect(SelectEvent event) {
 				typeStore.add(new Type());
 				grid.getSelectionModel().select(typeStore.size() - 1, true);
+				flag = 0;
 				typeWindow.show();
 			}
 		});
@@ -218,7 +230,7 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 
 	}
 
-	void updateType(Type type) {
+	void createType(Type type) {
 		typeService.create(type, new AsyncCallback<Long>() {
 
 			@Override
@@ -230,6 +242,21 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 			public void onSuccess(Long result) {
 				if (result.equals(-1L))
 					Info.display(Organization.ERROR_TYPE, EQUAL_ERROR);
+				refreshTypeList();
+			}
+		});
+	}
+
+	void updateType1(Type type) {
+		typeService.update(type, new AsyncCallback<Void>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				Info.display(Organization.ERROR_TYPE, Organization.ERROR_MESSAGE);
+			}
+
+			@Override
+			public void onSuccess(Void result) {
 				refreshTypeList();
 			}
 		});
@@ -248,7 +275,9 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 		typeWindow.addHideHandler(new HideHandler() {
 			@Override
 			public void onHide(HideEvent event) {
-				deleteType();
+				flag = 0;
+				if (type.getId() == null)
+					deleteType();
 			}
 		});
 
@@ -297,7 +326,10 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 			new MessageBox(Organization.VERIFIER_MESSAGE).show();
 			return;
 		}
-		updateType(type);
+		if (flag == 1)
+			updateType1(type);
+		else
+			createType(type);
 		name.clear();
 		typeWindow.hide();
 	}

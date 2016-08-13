@@ -32,6 +32,8 @@ import com.sencha.gxt.widget.core.client.container.CssFloatLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.CssFloatLayoutContainer.CssFloatData;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData;
+import com.sencha.gxt.widget.core.client.event.CellDoubleClickEvent;
+import com.sencha.gxt.widget.core.client.event.CellDoubleClickEvent.CellDoubleClickHandler;
 import com.sencha.gxt.widget.core.client.event.DialogHideEvent;
 import com.sencha.gxt.widget.core.client.event.DialogHideEvent.DialogHideHandler;
 import com.sencha.gxt.widget.core.client.event.HideEvent;
@@ -107,6 +109,15 @@ public class UserWidget implements IsWidget, Editor<User> {
 		grid.setBorders(true);
 		grid.setHeight(270);
 		grid.getView().setStripeRows(true);
+
+		grid.addCellDoubleClickHandler(new CellDoubleClickHandler() {
+
+			@Override
+			public void onCellClick(CellDoubleClickEvent event) {
+				userWindow.show();
+			}
+		});
+
 		grid.getSelectionModel().addSelectionChangedHandler(new SelectionChangedHandler<User>() {
 
 			@Override
@@ -230,9 +241,12 @@ public class UserWidget implements IsWidget, Editor<User> {
 		userWindow.setHeadingText("добавить сотрудника");
 		userWindow.setExpanded(true);
 		userWindow.addHideHandler(new HideHandler() {
+
 			@Override
 			public void onHide(HideEvent event) {
-				deleteUser();
+				if (user.getId() == null) {
+					deleteUser();
+				}
 			}
 		});
 

@@ -34,7 +34,8 @@ public class TypeServiceImpl implements TypeService {
 		if (typeList != null && typeList.size() > 0) {
 			return -1L;
 		}
-		return typeDao.create(newInstance);
+		typeDao.update(newInstance);
+		return 1L;
 	}
 
 	@Override
