@@ -1,5 +1,6 @@
 package by.mainsoft.organization.client.ui;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import by.mainsoft.organization.client.Organization;
@@ -56,6 +57,7 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 	private Window userWindow;
 	private CustomTextButton deleteButton;
 	private CustomTextButton addButton;
+	private int flag = 0;
 
 	// editor fields
 	TextField address;
@@ -78,7 +80,7 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 			typeWindow = new Window();
 			userWindow = new Window();
 			companyStore = new ListStore<Company>(props.key());
-			refreshCompanyList();
+			getCompanyListDb();
 
 			company = companyStore.get(0);
 
@@ -118,7 +120,9 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 
 			@Override
 			public void onSelect(SelectEvent event) {
-				companyStore.add(new Company());
+				flag = 1;
+				Company com = new Company();
+				companyStore.add(com);
 				companyListView.getSelectionModel().select(companyListView.getItemCount() - 1, true);
 				name.focus();
 			}
@@ -147,8 +151,6 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 	}
 
 	private Widget createEditor() {
-
-		// CssFloatLayoutContainer outer = new CssFloatLayoutContainer();
 
 		/*
 		 * Form
@@ -324,8 +326,12 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 					new MessageBox(Organization.VERIFIER_MESSAGE).show();
 					return;
 				}
-				updateCompany(company);
-				refreshCompanyList();
+				if (flag == 1)
+					createCompany(company);
+				else
+					updateCompany(company);
+
+				// refreshCompanyList();
 				// refreshCompanyList2();
 			}
 		});
@@ -340,7 +346,8 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 		return container;
 	}
 
-	public void refreshCompanyList() {
+	public void getCompanyListDb() {
+		flag = 0;
 		companyService.getAll(new AsyncCallback<List<Company>>() {
 			public void onFailure(Throwable caught) {
 				Info.display(Organization.ERROR_TYPE, Organization.ERROR_MESSAGE);
@@ -360,15 +367,15 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 		});
 	}
 
-	public void refreshCompanyList2() {
+	public void refreshCompanyListView() {
+		flag = 0;
 		if (companyStore.size() == 0)
 			deleteButton.setEnabled(false);
 		else
 			deleteButton.setEnabled(true);
-		// company = companyStore.get(0);
-		// companyStore.commitChanges();
 		companyListView.refresh();
 		companyListView.getSelectionModel().select(0, true);
+
 	}
 
 	void updateCompany(Company company) {
@@ -381,29 +388,32 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 
 			@Override
 			public void onSuccess(Void result) {
-				refreshCompanyList();
-				// refreshCompanyList2();
+				// refreshCompanyList();
+				refreshCompanyListView();
 			}
 		});
 	}
 
-	// void updateCompany(Company companyArg) {
-	// companyService.create(companyArg, new AsyncCallback<Long>() {
-	//
-	// @Override
-	// public void onFailure(Throwable caught) {
-	// Info.display(Organization.ERROR_TYPE, Organization.ERROR_MESSAGE);
-	// }
-	//
-	// @Override
-	// public void onSuccess(Long result) {
-	// // refreshCompanyList();
-	// companyStore.get(0).setId(result);
-	// // company.setId(result);
-	// refreshCompanyList2();
-	// }
-	// });
-	// }
+	void createCompany(Company companyArg) {
+		companyService.create(companyArg, new AsyncCallback<Long>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				Info.display(Organization.ERROR_TYPE, Organization.ERROR_MESSAGE);
+			}
+
+			@Override
+			public void onSuccess(Long result) {
+				// companyStore.get(companyStore.size() - 1).setId(result);
+				company.setId(result);
+				companyStore.update(company);
+				List<Company> compList = new ArrayList<Company>();
+				compList.addAll(companyStore.getAll());
+				companyStore.replaceAll(compList);
+				refreshCompanyListView();
+			}
+		});
+	}
 
 	void deleteCompany() {
 		companyService.delete(company, new AsyncCallback<Void>() {
@@ -423,8 +433,8 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 				userShortName.clear();
 				date.clear();
 				companyStore.remove(company);
-				refreshCompanyList();
-				// refreshCompanyList2();
+				// refreshCompanyList();
+				refreshCompanyListView();
 			}
 		});
 	}

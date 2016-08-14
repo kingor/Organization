@@ -51,7 +51,7 @@ public class Organization implements IsWidget, EntryPoint {
 
 				@Override
 				public void onSelection(SelectionEvent<Widget> event) {
-					companyBinding.refreshCompanyList();
+					companyBinding.getCompanyListDb();
 				}
 			});
 			container.add(tabPanel);
