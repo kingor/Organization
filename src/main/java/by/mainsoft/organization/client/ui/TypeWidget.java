@@ -66,7 +66,7 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 	private Window typeWindow;
 	private TextButton deleteButton;
 	private TextButton addTypeButton;
-	private int flag = 0;
+	private int updateFlag = 0;
 
 	// editor fields
 	TextField name;
@@ -80,7 +80,7 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 			container.setHeight(DirectoryBinding.HEIGHT);
 			props = GWT.create(TypeProperties.class);
 			typeStore = new ListStore<Type>(props.key());
-			refreshTypeList();
+			getTypeListDb();
 
 			container.add(createEditor());
 
@@ -111,7 +111,7 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 
 			@Override
 			public void onCellClick(CellDoubleClickEvent event) {
-				flag = 1;
+				updateFlag = 1;
 				typeWindow.show();
 			}
 		});
@@ -137,7 +137,7 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 			public void onSelect(SelectEvent event) {
 				typeStore.add(new Type());
 				grid.getSelectionModel().select(typeStore.size() - 1, true);
-				flag = 0;
+				updateFlag = 0;
 				typeWindow.show();
 			}
 		});
@@ -170,7 +170,7 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 		return outer;
 	}
 
-	public void refreshTypeList() {
+	public void getTypeListDb() {
 		typeService.getAll(new AsyncCallback<List<Type>>() {
 			public void onFailure(Throwable caught) {
 				Info.display(Organization.ERROR_TYPE, Organization.ERROR_MESSAGE);
@@ -187,21 +187,10 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 		});
 	}
 
-	public void getTypeList() {
-		typeService.getAll(new AsyncCallback<List<Type>>() {
-			public void onFailure(Throwable caught) {
-				Info.display(Organization.ERROR_TYPE, Organization.ERROR_MESSAGE);
-				caught.printStackTrace();
-			}
-
-			public void onSuccess(List<Type> companyList) {
-				typeStore.clear();
-				typeStore.addAll(companyList);
-				deleteButton.setEnabled(false);
-				// type = typeStore.get(0);
-				grid.getView().refresh(true);
-			}
-		});
+	public void refreshTypeListView() {
+		deleteButton.setEnabled(false);
+		// type = typeStore.get(0);
+		grid.getView().refresh(true);
 	}
 
 	void setNullType() {
@@ -223,15 +212,15 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 			}
 
 			public void onSuccess(Void result1) {
-				refreshTypeList();
+				getTypeListDb();
 				// grid.getSelectionModel().select(1, true);
 			}
 		});
 
 	}
 
-	void createType(Type type) {
-		typeService.create(type, new AsyncCallback<Long>() {
+	void createType(Type typeArg) {
+		typeService.create(typeArg, new AsyncCallback<Long>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -242,12 +231,20 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 			public void onSuccess(Long result) {
 				if (result.equals(-1L))
 					Info.display(Organization.ERROR_TYPE, EQUAL_ERROR);
-				refreshTypeList();
+				else {
+					type.setId(result);
+					typeStore.update(type);
+					List<Type> typList = new ArrayList<Type>();
+					typList.addAll(typeStore.getAll());
+					typeStore.replaceAll(typList);
+					refreshTypeListView();
+				}
+				// getTypeListDb();
 			}
 		});
 	}
 
-	void updateType1(Type type) {
+	void updateType(Type type) {
 		typeService.update(type, new AsyncCallback<Void>() {
 
 			@Override
@@ -257,7 +254,8 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 
 			@Override
 			public void onSuccess(Void result) {
-				refreshTypeList();
+				// getTypeListDb();
+				refreshTypeListView();
 			}
 		});
 	}
@@ -275,7 +273,7 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 		typeWindow.addHideHandler(new HideHandler() {
 			@Override
 			public void onHide(HideEvent event) {
-				flag = 0;
+				updateFlag = 0;
 				if (type.getId() == null)
 					deleteType();
 			}
@@ -326,8 +324,8 @@ public class TypeWidget implements IsWidget, Editor<Type> {
 			new MessageBox(Organization.VERIFIER_MESSAGE).show();
 			return;
 		}
-		if (flag == 1)
-			updateType1(type);
+		if (updateFlag == 1)
+			updateType(type);
 		else
 			createType(type);
 		name.clear();

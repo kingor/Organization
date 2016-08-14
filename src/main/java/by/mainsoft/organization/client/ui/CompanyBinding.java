@@ -57,7 +57,7 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 	private Window userWindow;
 	private CustomTextButton deleteButton;
 	private CustomTextButton addButton;
-	private int flag = 0;
+	private int createFlag = 0;
 
 	// editor fields
 	TextField address;
@@ -120,7 +120,7 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 
 			@Override
 			public void onSelect(SelectEvent event) {
-				flag = 1;
+				createFlag = 1;
 				Company com = new Company();
 				companyStore.add(com);
 				companyListView.getSelectionModel().select(companyListView.getItemCount() - 1, true);
@@ -326,7 +326,7 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 					new MessageBox(Organization.VERIFIER_MESSAGE).show();
 					return;
 				}
-				if (flag == 1)
+				if (createFlag == 1)
 					createCompany(company);
 				else
 					updateCompany(company);
@@ -347,7 +347,7 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 	}
 
 	public void getCompanyListDb() {
-		flag = 0;
+		createFlag = 0;
 		companyService.getAll(new AsyncCallback<List<Company>>() {
 			public void onFailure(Throwable caught) {
 				Info.display(Organization.ERROR_TYPE, Organization.ERROR_MESSAGE);
@@ -368,7 +368,7 @@ public class CompanyBinding implements IsWidget, Editor<Company> {
 	}
 
 	public void refreshCompanyListView() {
-		flag = 0;
+		createFlag = 0;
 		if (companyStore.size() == 0)
 			deleteButton.setEnabled(false);
 		else
